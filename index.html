@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>RunCalc</title>
+</head>
+<body>
+
+<h1>RunCalc</h1>
+<p>Calculateur d'allure et de vitesse</p>
+
+<h2>Allure → km/h</h2>
+
+<input type="number" id="pace" placeholder="min/km">
+<button onclick="calc()">Calculer</button>
+
+<p id="result"></p>
+
+<script>
+function calc() {
+    let pace = document.getElementById("pace").value;
+    let speed = 60 / pace;
+
+    document.getElementById("result").innerHTML =
+        "Vitesse : " + speed.toFixed(2) + " km/h";
+}
+</script>
+
+</body>
+</html>
