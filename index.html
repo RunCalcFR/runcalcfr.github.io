@@ -100,6 +100,20 @@ button {
 
 <div class="container">
 
+<!-- 🔐 COMPTE -->
+<div class="card">
+  <h2>🔐 Compte utilisateur</h2>
+
+  <input id="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Mot de passe">
+
+  <button onclick="signup()">Créer un compte</button>
+  <button onclick="login()">Connexion</button>
+  <button onclick="logout()">Déconnexion</button>
+
+  <div class="result" id="authMsg"></div>
+</div>
+
 <!-- VO2 -->
 <div class="card">
   <h2>VO2 Max</h2>
@@ -172,6 +186,39 @@ firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
 const db = firebase.firestore();
+
+
+// 🔐 AUTH
+function signup() {
+  let email = document.getElementById("email").value;
+  let password = document.getElementById("password").value;
+
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(() => {
+      document.getElementById("authMsg").innerText = "Compte créé ✔";
+    })
+    .catch(e => {
+      document.getElementById("authMsg").innerText = e.message;
+    });
+}
+
+function login() {
+  let email = document.getElementById("email").value;
+  let password = document.getElementById("password").value;
+
+  auth.signInWithEmailAndPassword(email, password)
+    .then(() => {
+      document.getElementById("authMsg").innerText = "Connecté ✔";
+    })
+    .catch(e => {
+      document.getElementById("authMsg").innerText = e.message;
+    });
+}
+
+function logout() {
+  auth.signOut();
+  document.getElementById("authMsg").innerText = "Déconnecté";
+}
 
 
 // VO2
