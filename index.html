@@ -104,7 +104,6 @@ button {
   <p>Ton coach running intelligent</p>
 </header>
 
-<!-- MENU PAGES -->
 <nav>
   <a href="#vo2">VO2</a>
   <a href="#speed">Vitesse</a>
@@ -219,12 +218,20 @@ function logout() {
 }
 
 
-// VO2
+// VO2 (CORRIGÉ)
 function calcVO2() {
   let d = Number(distance.value);
   let t = Number(timeMin.value);
-  let vo2 = 0.2 * ((d * 1000) / t) + 3.5;
-  vo2Result.innerText = "VO2 max : " + vo2.toFixed(1);
+
+  if (d <= 0 || t <= 0) {
+    vo2Result.innerText = "Valeurs invalides";
+    return;
+  }
+
+  let speedKmH = (d / t) * 60;
+  let vo2 = 3.5 * speedKmH;
+
+  vo2Result.innerText = "VO2 max estimée : " + vo2.toFixed(1);
 }
 
 
