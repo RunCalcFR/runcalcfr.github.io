@@ -1,28 +1,123 @@
 <!DOCTYPE html>
-<html>
+
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>RunCalc</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RunCalc - Calcul running</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #0f172a;
+      color: white;
+      text-align: center;
+    }
+
+```
+header {
+  padding: 30px;
+  background: #1e293b;
+}
+
+h1 {
+  margin: 0;
+  font-size: 2.2em;
+}
+
+.container {
+  padding: 20px;
+  max-width: 600px;
+  margin: auto;
+}
+
+.card {
+  background: #1e293b;
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 10px;
+}
+
+input {
+  padding: 10px;
+  width: 90%;
+  margin: 5px 0;
+  border-radius: 5px;
+  border: none;
+}
+
+button {
+  padding: 10px;
+  width: 95%;
+  background: #22c55e;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #16a34a;
+}
+
+.result {
+  margin-top: 10px;
+  font-weight: bold;
+}
+```
+
+  </style>
 </head>
+
 <body>
 
-<h1>RunCalc</h1>
-<p>Calculateur d'allure et de vitesse</p>
+<header>
+  <h1>🏃 RunCalc</h1>
+  <p>Calculateur d’allure, vitesse et performances</p>
+</header>
 
-<h2>Allure → km/h</h2>
+<div class="container">
 
-<input type="number" id="pace" placeholder="min/km">
-<button onclick="calc()">Calculer</button>
+  <div class="card">
+    <h2>Allure → Vitesse</h2>
+    <input id="pace" placeholder="Allure (min/km ex: 4:30)">
+    <button onclick="calcSpeed()">Calculer</button>
+    <div class="result" id="speedResult"></div>
+  </div>
 
-<p id="result"></p>
+  <div class="card">
+    <h2>Distance / Temps</h2>
+    <input id="time" placeholder="Temps (minutes ex: 30)">
+    <input id="speed" placeholder="Vitesse (km/h ex: 12)">
+    <button onclick="calcDistance()">Calculer</button>
+    <div class="result" id="distResult"></div>
+  </div>
+
+</div>
 
 <script>
-function calc() {
-    let pace = document.getElementById("pace").value;
-    let speed = 60 / pace;
+function calcSpeed() {
+  let pace = document.getElementById("pace").value;
+  let parts = pace.split(":");
+  let min = parseInt(parts[0]);
+  let sec = parseInt(parts[1] || 0);
 
-    document.getElementById("result").innerHTML =
-        "Vitesse : " + speed.toFixed(2) + " km/h";
+  let totalMin = min + sec/60;
+  let speed = 60 / totalMin;
+
+  document.getElementById("speedResult").innerText =
+    "Vitesse : " + speed.toFixed(2) + " km/h";
+}
+
+function calcDistance() {
+  let time = parseFloat(document.getElementById("time").value);
+  let speed = parseFloat(document.getElementById("speed").value);
+
+  let distance = (time / 60) * speed;
+
+  document.getElementById("distResult").innerText =
+    "Distance : " + distance.toFixed(2) + " km";
 }
 </script>
 
