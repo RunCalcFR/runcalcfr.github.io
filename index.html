@@ -90,10 +90,6 @@ button {
 }
 </style>
 
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-
 </head>
 
 <body>
@@ -106,79 +102,35 @@ button {
 <nav>
   <a href="#vo2">VO2</a>
   <a href="#speed">Vitesse</a>
-  <a href="#distanceCard">Distance</a>
-  <a href="#plan">Plan 5K</a>
-  <a href="#fc">FC</a>
-  <a href="#rank">Classement</a>
+  <a href="#distance">Distance</a>
 </nav>
 
 <div class="container">
 
-<!-- COMPTE -->
-<div class="card">
-  <h2>🔐 Compte utilisateur</h2>
-  <input id="email" placeholder="Email">
-  <input id="password" type="password" placeholder="Mot de passe">
-
-  <button onclick="signup()">Créer compte</button>
-  <button onclick="login()">Connexion</button>
-  <button onclick="logout()">Déconnexion</button>
-
-  <div class="result" id="authMsg"></div>
-</div>
-
 <!-- VO2 -->
 <div class="card" id="vo2">
   <h2>VO2 Max</h2>
-  <input id="distance" placeholder="Distance (km)">
-  <input id="timeMin" placeholder="Temps (min)">
+  <input id="vo2_distance" placeholder="Distance (km)">
+  <input id="vo2_time" placeholder="Temps (min)">
   <button onclick="calcVO2()">Calculer VO2</button>
-  <div class="result" id="vo2Result"></div>
+  <div class="result" id="vo2_result"></div>
 </div>
 
 <!-- SPEED -->
 <div class="card" id="speed">
   <h2>Allure → Vitesse</h2>
-  <input id="pace" placeholder="4:30 min/km">
+  <input id="pace" placeholder="ex: 4:30">
   <button onclick="calcSpeed()">Calculer</button>
-  <div class="result" id="speedResult"></div>
+  <div class="result" id="speed_result"></div>
 </div>
 
 <!-- DISTANCE -->
-<div class="card" id="distanceCard">
+<div class="card" id="distance">
   <h2>Distance</h2>
-  <input id="time" placeholder="Temps (min)">
-  <input id="speed" placeholder="Vitesse (km/h)">
+  <input id="dist_time" placeholder="Temps (min)">
+  <input id="dist_speed" placeholder="Vitesse (km/h)">
   <button onclick="calcDistance()">Calculer</button>
-  <div class="result" id="distResult"></div>
-</div>
-
-<!-- PLAN -->
-<div class="card" id="plan">
-  <h2>Plan 4 semaines - 5 km 17:30</h2>
-  <input id="time5k" placeholder="Ton temps 5 km">
-  <button onclick="analyseNiveau()">Analyser + programme</button>
-  <div class="result" id="levelResult"></div>
-  <div id="planResult"></div>
-</div>
-
-<!-- FC -->
-<div class="card" id="fc">
-  <h2>📊 Analyse séance (FC)</h2>
-  <input id="fcmax" placeholder="FC max">
-  <input id="fcmoy" placeholder="FC moyenne séance">
-  <button onclick="analyseFC()">Analyser séance</button>
-  <div class="result" id="fcResult"></div>
-</div>
-
-<!-- CLASSEMENT -->
-<div class="card" id="rank">
-  <h2>🏁 Classement mondial</h2>
-  <input id="name" placeholder="Nom">
-  <input id="rankTime" placeholder="Temps 5 km (min)">
-  <button onclick="addRunner()">Ajouter</button>
-  <div class="result" id="rankMsg"></div>
-  <div id="rankList"></div>
+  <div class="result" id="dist_result"></div>
 </div>
 
 </div>
@@ -187,160 +139,63 @@ button {
 
 <script>
 
-// FIREBASE
-const firebaseConfig = {
-  apiKey: "AIzaSyCRtSV6MHQbUZuldnUvtT-_WXb5DmzxTek",
-  authDomain: "runcalc-ef00e.firebaseapp.com",
-  projectId: "runcalc-ef00e"
-};
-
-firebase.initializeApp(firebaseConfig);
-
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-
-// AUTH
-function signup() {
-  auth.createUserWithEmailAndPassword(email.value, password.value)
-    .then(() => authMsg.innerText = "Compte créé ✔");
-}
-
-function login() {
-  auth.signInWithEmailAndPassword(email.value, password.value)
-    .then(() => authMsg.innerText = "Connecté ✔");
-}
-
-function logout() {
-  auth.signOut();
-  authMsg.innerText = "Déconnecté";
-}
-
-
-// VO2 (CORRIGÉ)
+// VO2 MAX
 function calcVO2() {
-  const d = Number(document.getElementById("distance").value);
-  const t = Number(document.getElementById("timeMin").value);
+  const d = parseFloat(document.getElementById("vo2_distance").value);
+  const t = parseFloat(document.getElementById("vo2_time").value);
 
-  if (!d || !t || d <= 0 || t <= 0) {
-    document.getElementById("vo2Result").innerText = "Valeurs invalides";
+  if (isNaN(d) || isNaN(t) || d <= 0 || t <= 0) {
+    document.getElementById("vo2_result").innerText = "Valeurs invalides";
     return;
   }
 
-  const speedKmH = (d / t) * 60;
-  const vo2 = 3.5 * speedKmH;
+  const speed = (d / t) * 60;
+  const vo2 = 3.5 * speed;
 
-  document.getElementById("vo2Result").innerText =
-    "VO2 max estimée : " + vo2.toFixed(1);
+  document.getElementById("vo2_result").innerText =
+    "VO2 max : " + vo2.toFixed(1);
 }
 
 
 // SPEED
 function calcSpeed() {
-  let p = pace.value.split(":");
+  const val = document.getElementById("pace").value.split(":");
 
-  if (!p[0] || !p[1]) {
-    speedResult.innerText = "Format invalide (ex: 4:30)";
+  if (val.length !== 2) {
+    document.getElementById("speed_result").innerText = "Format invalide";
     return;
   }
 
-  let speed = 60 / (Number(p[0]) + Number(p[1]) / 60);
-  speedResult.innerText = speed.toFixed(2) + " km/h";
+  const min = Number(val[0]);
+  const sec = Number(val[1]);
+
+  if (isNaN(min) || isNaN(sec)) {
+    document.getElementById("speed_result").innerText = "Valeurs invalides";
+    return;
+  }
+
+  const speed = 60 / (min + sec / 60);
+
+  document.getElementById("speed_result").innerText =
+    speed.toFixed(2) + " km/h";
 }
 
 
-// DISTANCE (CORRIGÉ)
+// DISTANCE
 function calcDistance() {
-  const t = Number(document.getElementById("time").value);
-  const s = Number(document.getElementById("speed").value);
+  const t = parseFloat(document.getElementById("dist_time").value);
+  const s = parseFloat(document.getElementById("dist_speed").value);
 
-  if (!t || !s || t <= 0 || s <= 0) {
-    document.getElementById("distResult").innerText = "Valeurs invalides";
+  if (isNaN(t) || isNaN(s) || t <= 0 || s <= 0) {
+    document.getElementById("dist_result").innerText = "Valeurs invalides";
     return;
   }
 
   const dist = (t / 60) * s;
 
-  document.getElementById("distResult").innerText =
+  document.getElementById("dist_result").innerText =
     dist.toFixed(2) + " km";
 }
-
-
-// PLAN
-function analyseNiveau() {
-  let t = Number(time5k.value);
-
-  let level =
-    t > 25 ? "Débutant" :
-    t > 21 ? "Intermédiaire" :
-    "Avancé";
-
-  levelResult.innerText = "Niveau : " + level;
-
-  planResult.innerHTML = `
-  S1: footing + 8x400m<br>
-  S2: 10x400m + seuil<br>
-  S3: 5x800m<br>
-  S4: affûtage + test 5 km
-  `;
-}
-
-
-// FC
-function analyseFC() {
-  let max = Number(fcmax.value);
-  let moy = Number(fcmoy.value);
-
-  let ratio = (moy / max) * 100;
-
-  let type =
-    ratio < 70 ? "🟢 Récupération" :
-    ratio < 80 ? "🔵 Footing" :
-    ratio < 88 ? "🟠 Seuil" :
-    "🔴 Fractionné";
-
-  fcResult.innerHTML =
-    "Intensité : " + ratio.toFixed(1) + "%<br>" + type;
-}
-
-
-// CLASSEMENT
-async function addRunner() {
-  let user = auth.currentUser;
-
-  if (!user) {
-    rankMsg.innerText = "Connecte-toi";
-    return;
-  }
-
-  await db.collection("runners").add({
-    name: name.value,
-    time: Number(rankTime.value),
-    email: user.email
-  });
-
-  rankMsg.innerText = "Ajouté ✔";
-  loadRanking();
-}
-
-async function loadRanking() {
-  let snap = await db.collection("runners")
-    .orderBy("time", "asc")
-    .get();
-
-  let html = "";
-  let i = 1;
-
-  snap.forEach(doc => {
-    let d = doc.data();
-    html += `${i}. ${d.name} - ${d.time} min<br>`;
-    i++;
-  });
-
-  rankList.innerHTML = html;
-}
-
-loadRanking();
 
 </script>
 
