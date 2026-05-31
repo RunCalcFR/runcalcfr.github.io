@@ -161,16 +161,15 @@ button {
   <div id="planResult"></div>
 </div>
 
-<!-- 🔥 NOUVEAU OBJECTIF COURSE -->
+<!-- OBJECTIF -->
 <div class="card" id="objectif">
   <h2>🎯 Objectif course personnalisé</h2>
 
-  <input id="obj_distance" placeholder="Distance (5 / 10 / 21 km)">
+  <input id="obj_distance" placeholder="Distance (5 / 10 / 21)">
   <input id="obj_record" placeholder="Ton record actuel (min)">
   <input id="obj_target" placeholder="Objectif chrono (min)">
 
   <button onclick="generatePlan()">Créer mon plan</button>
-
   <div id="obj_result" class="result"></div>
 </div>
 
@@ -220,81 +219,107 @@ function logout(){ auth.signOut(); authMsg.innerText="Déconnecté"; }
 
 // VO2
 function calcVO2(){
-  const d=Number(vo2_distance.value);
-  const t=Number(vo2_time.value);
+  const d = Number(vo2_distance.value);
+  const t = Number(vo2_time.value);
 
-  if(!d||!t){vo2_result.innerText="Valeurs invalides";return;}
+  if(isNaN(d) || isNaN(t) || d <= 0 || t <= 0){
+    vo2_result.innerText = "Valeurs invalides";
+    return;
+  }
 
-  const v=(d/t)*60;
-  vo2_result.innerText="VO2 : "+(3.5*v).toFixed(1);
+  const speed = (d / t) * 60;
+  vo2_result.innerText = "VO2 : " + (3.5 * speed).toFixed(1);
 }
 
 
 // SPEED
 function calcSpeed(){
-  const p=pace.value.split(":");
-  const v=60/(Number(p[0])+Number(p[1])/60);
-  speed_result.innerText=v.toFixed(2)+" km/h";
+  const p = pace.value.split(":");
+  if(p.length !== 2){
+    speed_result.innerText = "Format invalide";
+    return;
+  }
+
+  const speed = 60 / (Number(p[0]) + Number(p[1]) / 60);
+  speed_result.innerText = speed.toFixed(2) + " km/h";
 }
 
 
 // DISTANCE
 function calcDistance(){
-  const t=Number(dist_time.value);
-  const s=Number(dist_speed.value);
+  const t = Number(dist_time.value);
+  const s = Number(dist_speed.value);
 
-  if(!t||!s){dist_result.innerText="Valeurs invalides";return;}
+  if(isNaN(t) || isNaN(s) || t <= 0 || s <= 0){
+    dist_result.innerText = "Valeurs invalides";
+    return;
+  }
 
-  dist_result.innerText=((t/60)*s).toFixed(2)+" km";
+  dist_result.innerText = ((t / 60) * s).toFixed(2) + " km";
 }
 
 
 // PLAN
 function analyseNiveau(){
-  const t=Number(time5k.value);
+  const t = Number(time5k.value);
+
+  if(isNaN(t)){
+    levelResult.innerText = "Valeur invalide";
+    return;
+  }
 
   levelResult.innerText =
-    t>25?"Débutant":t>21?"Intermédiaire":"Avancé";
+    t > 25 ? "Débutant" : t > 21 ? "Intermédiaire" : "Avancé";
 
-  planResult.innerHTML=
+  planResult.innerHTML =
   "S1: 8x400m<br>S2: 10x400m seuil<br>S3: 6x800m<br>S4: test";
 }
 
 
-// 🔥 NOUVEAU PLAN OBJECTIF
+// OBJECTIF (CORRIGÉ)
 function generatePlan(){
-  const d=obj_distance.value;
-  const rec=Number(obj_record.value);
-  const tar=Number(obj_target.value);
+  const d = obj_distance.value.trim();
+  const rec = Number(obj_record.value);
+  const tar = Number(obj_target.value);
 
-  if(!d||!rec||!tar){
-    obj_result.innerText="Valeurs invalides";
+  if(d === "" || isNaN(rec) || isNaN(tar) || rec <= 0 || tar <= 0){
+    obj_result.innerText = "Valeurs invalides";
     return;
   }
 
-  let plan="";
+  let plan = "";
 
-  if(d=="5"){
-    plan="5km: fractionné + 400m rapides + tempo";
-  } else if(d=="10"){
-    plan="10km: seuil + 1000m + endurance";
-  } else {
-    plan="21km: endurance + sorties longues + seuil long";
+  if(d === "5"){
+    plan = "5km : fractionné + 400m rapides + tempo";
+  } 
+  else if(d === "10"){
+    plan = "10km : seuil + 1000m + endurance";
+  } 
+  else if(d === "21"){
+    plan = "21km : endurance + sortie longue + seuil long";
+  } 
+  else {
+    plan = "Distance non reconnue (5 / 10 / 21)";
   }
 
-  obj_result.innerHTML=
-  "Objectif: "+tar+" min<br>"+
-  "Record: "+rec+" min<br><br>"+
-  "Plan:<br>"+plan;
+  obj_result.innerHTML =
+    "Objectif : " + tar + " min<br>" +
+    "Record : " + rec + " min<br><br>" +
+    "Plan : " + plan;
 }
 
 
 // FC
 function analyseFC(){
-  const max=Number(fcmax.value);
-  const moy=Number(fcmoy.value);
+  const max = Number(fcmax.value);
+  const moy = Number(fcmoy.value);
 
-  fcResult.innerText="FC: "+((moy/max)*100).toFixed(1)+"%";
+  if(isNaN(max) || isNaN(moy) || max <= 0){
+    fcResult.innerText = "Valeurs invalides";
+    return;
+  }
+
+  fcResult.innerText = "FC: " + ((moy / max) * 100).toFixed(1) + "%";
 }
 
 
@@ -310,16 +335,16 @@ async function addRunner(){
 }
 
 async function loadRanking(){
-  const snap=await db.collection("runners").orderBy("time").get();
+  const snap = await db.collection("runners").orderBy("time").get();
 
-  let html="";
-  let i=1;
+  let html = "";
+  let i = 1;
 
   snap.forEach(d=>{
-    html+=i+++". "+d.data().name+" - "+d.data().time+" min<br>";
+    html += i++ + ". " + d.data().name + " - " + d.data().time + " min<br>";
   });
 
-  rankList.innerHTML=html;
+  rankList.innerHTML = html;
 }
 
 loadRanking();
