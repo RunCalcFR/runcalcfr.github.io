@@ -11,13 +11,6 @@ body {
   font-family: Arial, sans-serif;
   background: #0b1220;
   color: white;
-  transition: 0.3s;
-}
-
-/* MODE CLAIR */
-body.light {
-  background: #f5f7ff;
-  color: black;
 }
 
 header {
@@ -31,26 +24,6 @@ header h1 {
   font-size: 28px;
 }
 
-/* BOUTON THEME */
-#themeBtn {
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  background: white;
-  color: black;
-  z-index: 1000;
-}
-
-body.light #themeBtn {
-  background: black;
-  color: white;
-}
-
 nav {
   display: flex;
   flex-wrap: wrap;
@@ -58,10 +31,6 @@ nav {
   justify-content: center;
   padding: 10px;
   background: #111a2e;
-}
-
-body.light nav {
-  background: #e9ecff;
 }
 
 nav a {
@@ -85,12 +54,6 @@ nav a {
   background: #111a2e;
   padding: 18px;
   border-radius: 15px;
-  transition: 0.3s;
-}
-
-body.light .card {
-  background: white;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 input {
@@ -103,11 +66,6 @@ input {
   color: white;
 }
 
-body.light input {
-  background: #f0f0f0;
-  color: black;
-}
-
 button {
   width: 100%;
   margin-top: 10px;
@@ -117,16 +75,11 @@ button {
   background: #22c55e;
   color: black;
   font-weight: bold;
-  cursor: pointer;
 }
 
 .result {
   margin-top: 10px;
   color: #60ffa8;
-}
-
-body.light .result {
-  color: green;
 }
 
 .footer {
@@ -137,7 +90,6 @@ body.light .result {
 }
 </style>
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
@@ -145,9 +97,6 @@ body.light .result {
 </head>
 
 <body>
-
-<!-- BOUTON MODE -->
-<button id="themeBtn" onclick="toggleTheme()">🌙 Mode</button>
 
 <header>
   <h1>🏃 RunCalc</h1>
@@ -159,6 +108,7 @@ body.light .result {
   <a href="#speed">Vitesse</a>
   <a href="#distance">Distance</a>
   <a href="#plan">Plan</a>
+  <a href="#objectif">Objectif</a>
   <a href="#fc">FC</a>
   <a href="#rank">Classement</a>
 </nav>
@@ -211,6 +161,19 @@ body.light .result {
   <div id="planResult"></div>
 </div>
 
+<!-- 🔥 NOUVEAU OBJECTIF COURSE -->
+<div class="card" id="objectif">
+  <h2>🎯 Objectif course personnalisé</h2>
+
+  <input id="obj_distance" placeholder="Distance (5 / 10 / 21 km)">
+  <input id="obj_record" placeholder="Ton record actuel (min)">
+  <input id="obj_target" placeholder="Objectif chrono (min)">
+
+  <button onclick="generatePlan()">Créer mon plan</button>
+
+  <div id="obj_result" class="result"></div>
+</div>
+
 <!-- FC -->
 <div class="card" id="fc">
   <h2>Fréquence cardiaque</h2>
@@ -236,12 +199,7 @@ body.light .result {
 
 <script>
 
-/* MODE CLAIR / SOMBRE */
-function toggleTheme() {
-  document.body.classList.toggle("light");
-}
-
-/* FIREBASE */
+// FIREBASE
 const firebaseConfig = {
   apiKey: "AIzaSyCRtSV6MHQbUZuldnUvtT-_WXb5DmzxTek",
   authDomain: "runcalc-ef00e.firebaseapp.com",
@@ -249,107 +207,119 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-/* AUTH */
-function signup() {
-  auth.createUserWithEmailAndPassword(email.value, password.value)
-    .then(() => authMsg.innerText = "Inscription OK");
+
+// AUTH
+function signup(){ auth.createUserWithEmailAndPassword(email.value,password.value).then(()=>authMsg.innerText="OK"); }
+function login(){ auth.signInWithEmailAndPassword(email.value,password.value).then(()=>authMsg.innerText="OK"); }
+function logout(){ auth.signOut(); authMsg.innerText="Déconnecté"; }
+
+
+// VO2
+function calcVO2(){
+  const d=Number(vo2_distance.value);
+  const t=Number(vo2_time.value);
+
+  if(!d||!t){vo2_result.innerText="Valeurs invalides";return;}
+
+  const v=(d/t)*60;
+  vo2_result.innerText="VO2 : "+(3.5*v).toFixed(1);
 }
 
-function login() {
-  auth.signInWithEmailAndPassword(email.value, password.value)
-    .then(() => authMsg.innerText = "Connecté");
+
+// SPEED
+function calcSpeed(){
+  const p=pace.value.split(":");
+  const v=60/(Number(p[0])+Number(p[1])/60);
+  speed_result.innerText=v.toFixed(2)+" km/h";
 }
 
-function logout() {
-  auth.signOut();
-  authMsg.innerText = "Déconnecté";
+
+// DISTANCE
+function calcDistance(){
+  const t=Number(dist_time.value);
+  const s=Number(dist_speed.value);
+
+  if(!t||!s){dist_result.innerText="Valeurs invalides";return;}
+
+  dist_result.innerText=((t/60)*s).toFixed(2)+" km";
 }
 
-/* VO2 */
-function calcVO2() {
-  const d = parseFloat(document.getElementById("vo2_distance").value);
-  const t = parseFloat(document.getElementById("vo2_time").value);
 
-  if (isNaN(d) || isNaN(t) || d <= 0 || t <= 0) {
-    vo2_result.innerText = "Valeurs invalides";
+// PLAN
+function analyseNiveau(){
+  const t=Number(time5k.value);
+
+  levelResult.innerText =
+    t>25?"Débutant":t>21?"Intermédiaire":"Avancé";
+
+  planResult.innerHTML=
+  "S1: 8x400m<br>S2: 10x400m seuil<br>S3: 6x800m<br>S4: test";
+}
+
+
+// 🔥 NOUVEAU PLAN OBJECTIF
+function generatePlan(){
+  const d=obj_distance.value;
+  const rec=Number(obj_record.value);
+  const tar=Number(obj_target.value);
+
+  if(!d||!rec||!tar){
+    obj_result.innerText="Valeurs invalides";
     return;
   }
 
-  const speed = (d / t) * 60;
-  const vo2 = 3.5 * speed;
+  let plan="";
 
-  vo2_result.innerText = "VO2 max : " + vo2.toFixed(1);
-}
-
-/* SPEED */
-function calcSpeed() {
-  const p = pace.value.split(":");
-  const speed = 60 / (Number(p[0]) + Number(p[1]) / 60);
-  speed_result.innerText = speed.toFixed(2) + " km/h";
-}
-
-/* DISTANCE */
-function calcDistance() {
-  const t = parseFloat(document.getElementById("dist_time").value);
-  const s = parseFloat(document.getElementById("dist_speed").value);
-
-  if (isNaN(t) || isNaN(s) || t <= 0 || s <= 0) {
-    dist_result.innerText = "Valeurs invalides";
-    return;
+  if(d=="5"){
+    plan="5km: fractionné + 400m rapides + tempo";
+  } else if(d=="10"){
+    plan="10km: seuil + 1000m + endurance";
+  } else {
+    plan="21km: endurance + sorties longues + seuil long";
   }
 
-  const dist = (t / 60) * s;
-  dist_result.innerText = dist.toFixed(2) + " km";
+  obj_result.innerHTML=
+  "Objectif: "+tar+" min<br>"+
+  "Record: "+rec+" min<br><br>"+
+  "Plan:<br>"+plan;
 }
 
-/* PLAN */
-function analyseNiveau() {
-  let t = Number(time5k.value);
 
-  let level =
-    t > 25 ? "Débutant" :
-    t > 21 ? "Intermédiaire" :
-    "Avancé";
+// FC
+function analyseFC(){
+  const max=Number(fcmax.value);
+  const moy=Number(fcmoy.value);
 
-  levelResult.innerText = "Niveau : " + level;
+  fcResult.innerText="FC: "+((moy/max)*100).toFixed(1)+"%";
 }
 
-/* FC */
-function analyseFC() {
-  let max = Number(fcmax.value);
-  let moy = Number(fcmoy.value);
 
-  let ratio = (moy / max) * 100;
-
-  fcResult.innerText = "Intensité : " + ratio.toFixed(1) + "%";
-}
-
-/* CLASSEMENT */
-async function addRunner() {
+// CLASSEMENT
+async function addRunner(){
   await db.collection("runners").add({
-    name: name.value,
-    time: Number(rankTime.value)
+    name:name.value,
+    time:Number(rankTime.value)
   });
 
-  rankMsg.innerText = "Ajouté";
+  rankMsg.innerText="Ajouté";
   loadRanking();
 }
 
-async function loadRanking() {
-  const snap = await db.collection("runners").orderBy("time").get();
+async function loadRanking(){
+  const snap=await db.collection("runners").orderBy("time").get();
 
-  let html = "";
-  let i = 1;
+  let html="";
+  let i=1;
 
-  snap.forEach(doc => {
-    const d = doc.data();
-    html += i++ + ". " + d.name + " - " + d.time + " min<br>";
+  snap.forEach(d=>{
+    html+=i+++". "+d.data().name+" - "+d.data().time+" min<br>";
   });
 
-  rankList.innerHTML = html;
+  rankList.innerHTML=html;
 }
 
 loadRanking();
