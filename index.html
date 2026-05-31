@@ -24,11 +24,6 @@ header h1 {
   font-size: 28px;
 }
 
-header p {
-  margin: 5px 0 0;
-  opacity: 0.9;
-}
-
 .container {
   max-width: 800px;
   margin: auto;
@@ -41,12 +36,6 @@ header p {
   background: #111a2e;
   padding: 18px;
   border-radius: 15px;
-}
-
-h2 {
-  margin-top: 0;
-  font-size: 18px;
-  color: #22c55e;
 }
 
 input {
@@ -73,7 +62,6 @@ button {
 .result {
   margin-top: 10px;
   color: #60ffa8;
-  font-weight: bold;
 }
 
 .footer {
@@ -102,7 +90,7 @@ button {
 
 <!-- LOGIN -->
 <div class="card">
-  <h2>🔐 Compte utilisateur</h2>
+  <h2>🔐 Compte</h2>
   <input id="email" placeholder="Email">
   <input id="password" type="password" placeholder="Mot de passe">
 
@@ -122,18 +110,45 @@ button {
   <div class="result" id="vo2Result"></div>
 </div>
 
+<!-- VITESSE -->
+<div class="card">
+  <h2>Allure → Vitesse</h2>
+  <input id="pace" placeholder="4:30">
+  <button onclick="calcSpeed()">Calculer</button>
+  <div class="result" id="speedResult"></div>
+</div>
+
+<!-- DISTANCE -->
+<div class="card">
+  <h2>Distance</h2>
+  <input id="time" placeholder="Temps (min)">
+  <input id="speed" placeholder="Vitesse (km/h)">
+  <button onclick="calcDistance()">Calculer</button>
+  <div class="result" id="distResult"></div>
+</div>
+
+<!-- PLAN -->
+<div class="card">
+  <h2>Plan 4 semaines - 5 km 17:30</h2>
+
+  <input id="time5k" placeholder="Ton temps 5 km">
+  <button onclick="analyseNiveau()">Analyser + programme</button>
+
+  <div class="result" id="levelResult"></div>
+  <div id="planResult"></div>
+</div>
+
 <!-- CLASSEMENT GLOBAL -->
 <div class="card">
-  <h2>🏁 Classement mondial coureurs</h2>
+  <h2>🏁 Classement mondial</h2>
 
-  <input id="name" placeholder="Ton prénom">
+  <input id="name" placeholder="Nom">
   <input id="rankTime" placeholder="Temps 5 km (min)">
 
-  <button onclick="addRunner()">Ajouter performance</button>
+  <button onclick="addRunner()">Ajouter</button>
 
   <div class="result" id="rankMsg"></div>
 
-  <h3>Classement :</h3>
   <div id="rankList"></div>
 </div>
 
@@ -158,15 +173,13 @@ const db = firebase.firestore();
 
 // AUTH
 function signup() {
-  auth.createUserWithEmailAndPassword(
-    email.value, password.value
-  ).then(() => authMsg.innerText = "Compte créé ✔");
+  auth.createUserWithEmailAndPassword(email.value, password.value)
+    .then(() => authMsg.innerText = "Compte créé ✔");
 }
 
 function login() {
-  auth.signInWithEmailAndPassword(
-    email.value, password.value
-  ).then(() => authMsg.innerText = "Connecté ✔");
+  auth.signInWithEmailAndPassword(email.value, password.value)
+    .then(() => authMsg.innerText = "Connecté ✔");
 }
 
 function logout() {
@@ -186,29 +199,73 @@ function calcVO2() {
 }
 
 
-// CLASSEMENT GLOBAL (FIREBASE)
+// VITESSE
+function calcSpeed() {
+  let p = pace.value.split(":");
+  let speed = 60 / (Number(p[0]) + Number(p[1] || 0) / 60);
+
+  speedResult.innerText = speed.toFixed(2) + " km/h";
+}
+
+
+// DISTANCE
+function calcDistance() {
+  let t = Number(time.value);
+  let s = Number(speed.value);
+
+  distResult.innerText = ((t / 60) * s).toFixed(2) + " km";
+}
+
+
+// PLAN
+function analyseNiveau() {
+  let t = Number(time5k.value);
+
+  let level =
+    t > 25 ? "Débutant" :
+    t > 21 ? "Intermédiaire" :
+    "Avancé";
+
+  levelResult.innerText = "Niveau : " + level;
+  planResult.innerHTML = getPlan();
+}
+
+function getPlan() {
+  return `
+<b>Semaine 1</b><br>
+Footing + 8x400m<br><br>
+
+<b>Semaine 2</b><br>
+10x400m + seuil<br><br>
+
+<b>Semaine 3</b><br>
+5x800m + endurance<br><br>
+
+<b>Semaine 4</b><br>
+Affûtage + test 5 km 🎯
+`;
+}
+
+
+// CLASSEMENT GLOBAL
 async function addRunner() {
   let user = auth.currentUser;
 
   if (!user) {
-    rankMsg.innerText = "Connecte-toi d'abord";
+    rankMsg.innerText = "Connecte-toi";
     return;
   }
 
   await db.collection("runners").add({
     name: name.value,
     time: Number(rankTime.value),
-    email: user.email,
-    uid: user.uid,
-    createdAt: Date.now()
+    email: user.email
   });
 
-  rankMsg.innerText = "Ajouté en ligne ✔";
+  rankMsg.innerText = "Ajouté ✔";
   loadRanking();
 }
 
-
-// AFFICHAGE GLOBAL
 async function loadRanking() {
   let snap = await db.collection("runners")
     .orderBy("time", "asc")
