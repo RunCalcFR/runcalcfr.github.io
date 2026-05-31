@@ -42,11 +42,6 @@ header p {
   padding: 18px;
   border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-  transition: 0.2s;
-}
-
-.card:hover {
-  transform: translateY(-3px);
 }
 
 h2 {
@@ -105,14 +100,17 @@ button:hover {
 </header>
 
 <div class="container">
-  <div class="card">
-  <h2>VO2 Max (estimation)</h2>
-  <input id="distance" placeholder="Distance (km ex: 5)">
-  <input id="timeMin" placeholder="Temps (minutes ex: 20)">
-  <button onclick="calcVO2()">Calculer VO2 max</button>
-  <div class="result" id="vo2Result"></div>
-</div>
 
+  <!-- VO2 MAX -->
+  <div class="card">
+    <h2>VO2 Max (estimation)</h2>
+    <input id="distance" placeholder="Distance (km ex: 5)">
+    <input id="timeMin" placeholder="Temps (minutes ex: 20)">
+    <button onclick="calcVO2()">Calculer VO2 max</button>
+    <div class="result" id="vo2Result"></div>
+  </div>
+
+  <!-- ALLURE -->
   <div class="card">
     <h2>Allure → Vitesse</h2>
     <input id="pace" placeholder="Ex: 4:30 min/km">
@@ -120,6 +118,7 @@ button:hover {
     <div class="result" id="speedResult"></div>
   </div>
 
+  <!-- DISTANCE -->
   <div class="card">
     <h2>Distance</h2>
     <input id="time" placeholder="Temps (min)">
@@ -133,12 +132,16 @@ button:hover {
 <div class="footer">
 RunCalc © 2026
 </div>
-function calcVO2() {
-  let distance = parseFloat(document.getElementById("distance").value);
-  let time = parseFloat(document.getElementById("timeMin").value);
 
-  if (!distance || !time) {
-    document.getElementById("vo2Result").innerText = "Remplis tous les champs";
+<script>
+
+// VO2 MAX
+function calcVO2() {
+  let distance = Number(document.getElementById("distance").value);
+  let time = Number(document.getElementById("timeMin").value);
+
+  if (distance <= 0 || time <= 0) {
+    document.getElementById("vo2Result").innerText = "Erreur : valeurs invalides";
     return;
   }
 
@@ -148,7 +151,8 @@ function calcVO2() {
   document.getElementById("vo2Result").innerText =
     "VO2 max estimé : " + vo2.toFixed(1) + " ml/kg/min";
 }
-<script>
+
+// ALLURE → VITESSE
 function calcSpeed() {
   let pace = document.getElementById("pace").value;
   let parts = pace.split(":");
@@ -163,6 +167,7 @@ function calcSpeed() {
     "Vitesse : " + speed.toFixed(2) + " km/h";
 }
 
+// DISTANCE
 function calcDistance() {
   let time = parseFloat(document.getElementById("time").value);
   let speed = parseFloat(document.getElementById("speed").value);
@@ -172,6 +177,7 @@ function calcDistance() {
   document.getElementById("distResult").innerText =
     "Distance : " + dist.toFixed(2) + " km";
 }
+
 </script>
 
 </body>
