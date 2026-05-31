@@ -217,20 +217,21 @@ function logout() {
 }
 
 
-// VO2 (FIXÉ)
+// VO2 (CORRIGÉ)
 function calcVO2() {
-  let d = parseFloat(document.getElementById("distance").value);
-  let t = parseFloat(document.getElementById("timeMin").value);
+  const d = Number(document.getElementById("distance").value);
+  const t = Number(document.getElementById("timeMin").value);
 
-  if (isNaN(d) || isNaN(t) || d <= 0 || t <= 0) {
-    vo2Result.innerText = "Valeurs invalides";
+  if (!d || !t || d <= 0 || t <= 0) {
+    document.getElementById("vo2Result").innerText = "Valeurs invalides";
     return;
   }
 
-  let speedKmH = (d / t) * 60;
-  let vo2 = 3.5 * speedKmH;
+  const speedKmH = (d / t) * 60;
+  const vo2 = 3.5 * speedKmH;
 
-  vo2Result.innerText = "VO2 max estimée : " + vo2.toFixed(1);
+  document.getElementById("vo2Result").innerText =
+    "VO2 max estimée : " + vo2.toFixed(1);
 }
 
 
@@ -248,19 +249,20 @@ function calcSpeed() {
 }
 
 
-// DISTANCE (FIXÉ)
+// DISTANCE (CORRIGÉ)
 function calcDistance() {
-  let t = parseFloat(document.getElementById("time").value);
-  let s = parseFloat(document.getElementById("speed").value);
+  const t = Number(document.getElementById("time").value);
+  const s = Number(document.getElementById("speed").value);
 
-  if (isNaN(t) || isNaN(s) || t <= 0 || s <= 0) {
-    distResult.innerText = "Valeurs invalides";
+  if (!t || !s || t <= 0 || s <= 0) {
+    document.getElementById("distResult").innerText = "Valeurs invalides";
     return;
   }
 
-  let dist = (t / 60) * s;
+  const dist = (t / 60) * s;
 
-  distResult.innerText = dist.toFixed(2) + " km";
+  document.getElementById("distResult").innerText =
+    dist.toFixed(2) + " km";
 }
 
 
