@@ -100,14 +100,13 @@ button {
 
 <div class="container">
 
-<!-- 🔐 COMPTE -->
+<!-- LOGIN -->
 <div class="card">
   <h2>🔐 Compte utilisateur</h2>
-
   <input id="email" placeholder="Email">
   <input id="password" type="password" placeholder="Mot de passe">
 
-  <button onclick="signup()">Créer un compte</button>
+  <button onclick="signup()">Créer compte</button>
   <button onclick="login()">Connexion</button>
   <button onclick="logout()">Déconnexion</button>
 
@@ -123,42 +122,14 @@ button {
   <div class="result" id="vo2Result"></div>
 </div>
 
-<!-- ALLURE -->
+<!-- CLASSEMENT GLOBAL -->
 <div class="card">
-  <h2>Allure → Vitesse</h2>
-  <input id="pace" placeholder="4:30">
-  <button onclick="calcSpeed()">Calculer</button>
-  <div class="result" id="speedResult"></div>
-</div>
-
-<!-- DISTANCE -->
-<div class="card">
-  <h2>Distance</h2>
-  <input id="time" placeholder="Temps (min)">
-  <input id="speed" placeholder="Vitesse (km/h)">
-  <button onclick="calcDistance()">Calculer</button>
-  <div class="result" id="distResult"></div>
-</div>
-
-<!-- PLAN -->
-<div class="card">
-  <h2>Plan 4 semaines - 5 km 17:30</h2>
-
-  <input id="time5k" placeholder="Ton temps 5 km">
-  <button onclick="analyseNiveau()">Analyser + programme</button>
-
-  <div class="result" id="levelResult"></div>
-  <div id="planResult"></div>
-</div>
-
-<!-- CLASSEMENT LOCAL -->
-<div class="card">
-  <h2>🏁 Classement coureurs</h2>
+  <h2>🏁 Classement mondial coureurs</h2>
 
   <input id="name" placeholder="Ton prénom">
   <input id="rankTime" placeholder="Temps 5 km (min)">
 
-  <button onclick="addRunner()">Ajouter au classement</button>
+  <button onclick="addRunner()">Ajouter performance</button>
 
   <div class="result" id="rankMsg"></div>
 
@@ -172,14 +143,11 @@ button {
 
 <script>
 
-// FIREBASE CONFIG
+// FIREBASE
 const firebaseConfig = {
   apiKey: "AIzaSyCRtSV6MHQbUZuldnUvtT-_WXb5DmzxTek",
   authDomain: "runcalc-ef00e.firebaseapp.com",
-  projectId: "runcalc-ef00e",
-  storageBucket: "runcalc-ef00e.firebasestorage.app",
-  messagingSenderId: "418917411336",
-  appId: "1:418917411336:web:786a904c192d4b2c1dbfbd"
+  projectId: "runcalc-ef00e"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -188,154 +156,77 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 
 
-// 🔐 AUTH
+// AUTH
 function signup() {
-  let email = document.getElementById("email").value;
-  let password = document.getElementById("password").value;
-
-  auth.createUserWithEmailAndPassword(email, password)
-    .then(() => {
-      document.getElementById("authMsg").innerText = "Compte créé ✔";
-    })
-    .catch(e => {
-      document.getElementById("authMsg").innerText = e.message;
-    });
+  auth.createUserWithEmailAndPassword(
+    email.value, password.value
+  ).then(() => authMsg.innerText = "Compte créé ✔");
 }
 
 function login() {
-  let email = document.getElementById("email").value;
-  let password = document.getElementById("password").value;
-
-  auth.signInWithEmailAndPassword(email, password)
-    .then(() => {
-      document.getElementById("authMsg").innerText = "Connecté ✔";
-    })
-    .catch(e => {
-      document.getElementById("authMsg").innerText = e.message;
-    });
+  auth.signInWithEmailAndPassword(
+    email.value, password.value
+  ).then(() => authMsg.innerText = "Connecté ✔");
 }
 
 function logout() {
   auth.signOut();
-  document.getElementById("authMsg").innerText = "Déconnecté";
+  authMsg.innerText = "Déconnecté";
 }
 
 
 // VO2
 function calcVO2() {
-  let d = Number(document.getElementById("distance").value);
-  let t = Number(document.getElementById("timeMin").value);
+  let d = Number(distance.value);
+  let t = Number(timeMin.value);
 
   let vo2 = 0.2 * ((d * 1000) / t) + 3.5;
 
-  document.getElementById("vo2Result").innerText =
-    "VO2 max : " + vo2.toFixed(1);
+  vo2Result.innerText = "VO2 max : " + vo2.toFixed(1);
 }
 
-// SPEED
-function calcSpeed() {
-  let p = document.getElementById("pace").value.split(":");
-  let speed = 60 / (Number(p[0]) + Number(p[1] || 0) / 60);
 
-  document.getElementById("speedResult").innerText =
-    speed.toFixed(2) + " km/h";
+// CLASSEMENT GLOBAL (FIREBASE)
+async function addRunner() {
+  let user = auth.currentUser;
+
+  if (!user) {
+    rankMsg.innerText = "Connecte-toi d'abord";
+    return;
+  }
+
+  await db.collection("runners").add({
+    name: name.value,
+    time: Number(rankTime.value),
+    email: user.email,
+    uid: user.uid,
+    createdAt: Date.now()
+  });
+
+  rankMsg.innerText = "Ajouté en ligne ✔";
+  loadRanking();
 }
 
-// DISTANCE
-function calcDistance() {
-  let t = Number(document.getElementById("time").value);
-  let s = Number(document.getElementById("speed").value);
 
-  document.getElementById("distResult").innerText =
-    ((t / 60) * s).toFixed(2) + " km";
+// AFFICHAGE GLOBAL
+async function loadRanking() {
+  let snap = await db.collection("runners")
+    .orderBy("time", "asc")
+    .get();
+
+  let html = "";
+  let i = 1;
+
+  snap.forEach(doc => {
+    let d = doc.data();
+    html += `${i}. ${d.name} (${d.email}) - ${d.time} min<br>`;
+    i++;
+  });
+
+  rankList.innerHTML = html;
 }
 
-// PLAN
-function analyseNiveau() {
-  let time = Number(document.getElementById("time5k").value);
-
-  let level = time > 25 ? "Débutant" :
-              time > 21 ? "Intermédiaire" :
-              "Avancé";
-
-  document.getElementById("levelResult").innerText =
-    "Niveau : " + level;
-
-  document.getElementById("planResult").innerHTML = getPlan();
-}
-
-function getPlan() {
-  return `
-<b>Semaine 1</b><br>
-Lundi : footing 30 min<br>
-Mardi : 8x400m<br>
-Mercredi : repos<br>
-Jeudi : footing 35 min<br>
-Vendredi : seuil 15 min<br>
-Samedi : repos<br>
-Dimanche : 45 min<br><br>
-
-<b>Semaine 2</b><br>
-Lundi : footing 35 min<br>
-Mardi : 10x400m<br>
-Mercredi : repos<br>
-Jeudi : 20 min seuil<br>
-Vendredi : footing léger<br>
-Samedi : repos<br>
-Dimanche : 50 min<br><br>
-
-<b>Semaine 3</b><br>
-Lundi : footing 40 min<br>
-Mardi : 5x800m<br>
-Mercredi : repos<br>
-Jeudi : 25 min seuil<br>
-Vendredi : footing<br>
-Samedi : repos<br>
-Dimanche : 55 min<br><br>
-
-<b>Semaine 4</b><br>
-Prépa test 5 km 🎯 objectif 17:30
-`;
-}
-
-// CLASSEMENT LOCAL
-function getRunners() {
-  return JSON.parse(localStorage.getItem("runners") || "[]");
-}
-
-function saveRunners(r) {
-  localStorage.setItem("runners", JSON.stringify(r));
-}
-
-function addRunner() {
-  let name = document.getElementById("name").value;
-  let time = Number(document.getElementById("rankTime").value);
-
-  if (!name || !time) return;
-
-  let runners = getRunners();
-
-  runners.push({ name, time });
-
-  runners.sort((a,b) => a.time - b.time);
-
-  saveRunners(runners);
-
-  document.getElementById("rankMsg").innerText = "Ajouté !";
-
-  showRanking();
-}
-
-function showRanking() {
-  let runners = getRunners();
-
-  document.getElementById("rankList").innerHTML =
-    runners.map((r,i) =>
-      (i+1) + ". " + r.name + " - " + r.time + " min"
-    ).join("<br>");
-}
-
-showRanking();
+loadRanking();
 
 </script>
 
