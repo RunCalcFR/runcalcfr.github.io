@@ -105,6 +105,13 @@ button:hover {
 </header>
 
 <div class="container">
+  <div class="card">
+  <h2>VO2 Max (estimation)</h2>
+  <input id="distance" placeholder="Distance (km ex: 5)">
+  <input id="timeMin" placeholder="Temps (minutes ex: 20)">
+  <button onclick="calcVO2()">Calculer VO2 max</button>
+  <div class="result" id="vo2Result"></div>
+</div>
 
   <div class="card">
     <h2>Allure → Vitesse</h2>
@@ -126,7 +133,21 @@ button:hover {
 <div class="footer">
 RunCalc © 2026
 </div>
+function calcVO2() {
+  let distance = parseFloat(document.getElementById("distance").value);
+  let time = parseFloat(document.getElementById("timeMin").value);
 
+  if (!distance || !time) {
+    document.getElementById("vo2Result").innerText = "Remplis tous les champs";
+    return;
+  }
+
+  let speed = (distance * 1000) / time;
+  let vo2 = 0.2 * speed + 3.5;
+
+  document.getElementById("vo2Result").innerText =
+    "VO2 max estimé : " + vo2.toFixed(1) + " ml/kg/min";
+}
 <script>
 function calcSpeed() {
   let pace = document.getElementById("pace").value;
