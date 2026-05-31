@@ -11,6 +11,13 @@ body {
   font-family: Arial, sans-serif;
   background: #0b1220;
   color: white;
+  transition: 0.3s;
+}
+
+/* MODE CLAIR */
+body.light {
+  background: #f5f7ff;
+  color: black;
 }
 
 header {
@@ -24,6 +31,26 @@ header h1 {
   font-size: 28px;
 }
 
+/* BOUTON THEME */
+#themeBtn {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  background: white;
+  color: black;
+  z-index: 1000;
+}
+
+body.light #themeBtn {
+  background: black;
+  color: white;
+}
+
 nav {
   display: flex;
   flex-wrap: wrap;
@@ -31,6 +58,10 @@ nav {
   justify-content: center;
   padding: 10px;
   background: #111a2e;
+}
+
+body.light nav {
+  background: #e9ecff;
 }
 
 nav a {
@@ -54,6 +85,12 @@ nav a {
   background: #111a2e;
   padding: 18px;
   border-radius: 15px;
+  transition: 0.3s;
+}
+
+body.light .card {
+  background: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 input {
@@ -66,6 +103,11 @@ input {
   color: white;
 }
 
+body.light input {
+  background: #f0f0f0;
+  color: black;
+}
+
 button {
   width: 100%;
   margin-top: 10px;
@@ -75,11 +117,16 @@ button {
   background: #22c55e;
   color: black;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .result {
   margin-top: 10px;
   color: #60ffa8;
+}
+
+body.light .result {
+  color: green;
 }
 
 .footer {
@@ -98,6 +145,9 @@ button {
 </head>
 
 <body>
+
+<!-- BOUTON MODE -->
+<button id="themeBtn" onclick="toggleTheme()">🌙 Mode</button>
 
 <header>
   <h1>🏃 RunCalc</h1>
@@ -186,7 +236,12 @@ button {
 
 <script>
 
-// FIREBASE
+/* MODE CLAIR / SOMBRE */
+function toggleTheme() {
+  document.body.classList.toggle("light");
+}
+
+/* FIREBASE */
 const firebaseConfig = {
   apiKey: "AIzaSyCRtSV6MHQbUZuldnUvtT-_WXb5DmzxTek",
   authDomain: "runcalc-ef00e.firebaseapp.com",
@@ -197,8 +252,7 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-
-// AUTH
+/* AUTH */
 function signup() {
   auth.createUserWithEmailAndPassword(email.value, password.value)
     .then(() => authMsg.innerText = "Inscription OK");
@@ -214,8 +268,7 @@ function logout() {
   authMsg.innerText = "Déconnecté";
 }
 
-
-// VO2 (corrigé)
+/* VO2 */
 function calcVO2() {
   const d = parseFloat(document.getElementById("vo2_distance").value);
   const t = parseFloat(document.getElementById("vo2_time").value);
@@ -231,18 +284,14 @@ function calcVO2() {
   vo2_result.innerText = "VO2 max : " + vo2.toFixed(1);
 }
 
-
-// SPEED
+/* SPEED */
 function calcSpeed() {
   const p = pace.value.split(":");
-  if (p.length !== 2) return speed_result.innerText = "Format invalide";
-
   const speed = 60 / (Number(p[0]) + Number(p[1]) / 60);
   speed_result.innerText = speed.toFixed(2) + " km/h";
 }
 
-
-// DISTANCE (corrigé)
+/* DISTANCE */
 function calcDistance() {
   const t = parseFloat(document.getElementById("dist_time").value);
   const s = parseFloat(document.getElementById("dist_speed").value);
@@ -256,8 +305,7 @@ function calcDistance() {
   dist_result.innerText = dist.toFixed(2) + " km";
 }
 
-
-// PLAN
+/* PLAN */
 function analyseNiveau() {
   let t = Number(time5k.value);
 
@@ -267,25 +315,19 @@ function analyseNiveau() {
     "Avancé";
 
   levelResult.innerText = "Niveau : " + level;
-
-  planResult.innerHTML =
-    "S1: footing + 8x400m<br>S2: 10x400m<br>S3: 5x800m<br>S4: test";
 }
 
-
-// FC
+/* FC */
 function analyseFC() {
   let max = Number(fcmax.value);
   let moy = Number(fcmoy.value);
 
   let ratio = (moy / max) * 100;
 
-  fcResult.innerText =
-    "Intensité : " + ratio.toFixed(1) + "%";
+  fcResult.innerText = "Intensité : " + ratio.toFixed(1) + "%";
 }
 
-
-// CLASSEMENT
+/* CLASSEMENT */
 async function addRunner() {
   await db.collection("runners").add({
     name: name.value,
