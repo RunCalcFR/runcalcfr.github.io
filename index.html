@@ -284,11 +284,34 @@ function generatePlan(){
     plan;
 }
 
-// FC
+// FC (CORRIGÉ + ZONES)
 function analyseFC(){
   const max = Number(fcmax.value);
   const moy = Number(fcmoy.value);
-  fcResult.innerText = ((moy / max) * 100).toFixed(1) + "%";
+
+  if(isNaN(max) || isNaN(moy) || max <= 0){
+    fcResult.innerText = "Valeurs invalides";
+    return;
+  }
+
+  const pct = (moy / max) * 100;
+
+  let zone = "";
+
+  if(pct < 70){
+    zone = "Footing de récupération";
+  }
+  else if(pct < 80){
+    zone = "Footing endurance fondamentale";
+  }
+  else if(pct < 90){
+    zone = "Seuil / effort soutenu";
+  }
+  else{
+    zone = "Effort maximal";
+  }
+
+  fcResult.innerText = pct.toFixed(1) + "% - " + zone;
 }
 
 // CLASSEMENT
