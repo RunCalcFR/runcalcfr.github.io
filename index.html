@@ -24,6 +24,25 @@ header h1 {
   font-size: 28px;
 }
 
+/* MENU */
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  padding: 10px;
+  background: #111a2e;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  padding: 8px 12px;
+  background: #22c55e;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
 .container {
   max-width: 800px;
   margin: auto;
@@ -72,7 +91,6 @@ button {
 }
 </style>
 
-<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
@@ -85,6 +103,16 @@ button {
   <h1>🏃 RunCalc</h1>
   <p>Ton coach running intelligent</p>
 </header>
+
+<!-- MENU PAGES -->
+<nav>
+  <a href="#vo2">VO2</a>
+  <a href="#speed">Vitesse</a>
+  <a href="#distance">Distance</a>
+  <a href="#plan">Plan 5K</a>
+  <a href="#fc">FC</a>
+  <a href="#rank">Classement</a>
+</nav>
 
 <div class="container">
 
@@ -102,7 +130,7 @@ button {
 </div>
 
 <!-- VO2 -->
-<div class="card">
+<div class="card" id="vo2">
   <h2>VO2 Max</h2>
   <input id="distance" placeholder="Distance (km)">
   <input id="timeMin" placeholder="Temps (min)">
@@ -110,8 +138,8 @@ button {
   <div class="result" id="vo2Result"></div>
 </div>
 
-<!-- VITESSE -->
-<div class="card">
+<!-- SPEED -->
+<div class="card" id="speed">
   <h2>Allure → Vitesse</h2>
   <input id="pace" placeholder="4:30 min/km">
   <button onclick="calcSpeed()">Calculer</button>
@@ -119,7 +147,7 @@ button {
 </div>
 
 <!-- DISTANCE -->
-<div class="card">
+<div class="card" id="distance">
   <h2>Distance</h2>
   <input id="time" placeholder="Temps (min)">
   <input id="speed" placeholder="Vitesse (km/h)">
@@ -128,37 +156,29 @@ button {
 </div>
 
 <!-- PLAN -->
-<div class="card">
+<div class="card" id="plan">
   <h2>Plan 4 semaines - 5 km 17:30</h2>
-
   <input id="time5k" placeholder="Ton temps 5 km">
   <button onclick="analyseNiveau()">Analyser + programme</button>
-
   <div class="result" id="levelResult"></div>
   <div id="planResult"></div>
 </div>
 
-<!-- FC ANALYSE -->
-<div class="card">
+<!-- FC -->
+<div class="card" id="fc">
   <h2>📊 Analyse séance (FC)</h2>
-
   <input id="fcmax" placeholder="FC max">
   <input id="fcmoy" placeholder="FC moyenne séance">
-
   <button onclick="analyseFC()">Analyser séance</button>
-
   <div class="result" id="fcResult"></div>
 </div>
 
 <!-- CLASSEMENT -->
-<div class="card">
+<div class="card" id="rank">
   <h2>🏁 Classement mondial</h2>
-
   <input id="name" placeholder="Nom">
   <input id="rankTime" placeholder="Temps 5 km (min)">
-
   <button onclick="addRunner()">Ajouter</button>
-
   <div class="result" id="rankMsg"></div>
   <div id="rankList"></div>
 </div>
@@ -203,9 +223,7 @@ function logout() {
 function calcVO2() {
   let d = Number(distance.value);
   let t = Number(timeMin.value);
-
   let vo2 = 0.2 * ((d * 1000) / t) + 3.5;
-
   vo2Result.innerText = "VO2 max : " + vo2.toFixed(1);
 }
 
@@ -214,7 +232,6 @@ function calcVO2() {
 function calcSpeed() {
   let p = pace.value.split(":");
   let speed = 60 / (Number(p[0]) + Number(p[1] || 0) / 60);
-
   speedResult.innerText = speed.toFixed(2) + " km/h";
 }
 
@@ -223,7 +240,6 @@ function calcSpeed() {
 function calcDistance() {
   let t = Number(time.value);
   let s = Number(speed.value);
-
   distResult.innerText = ((t / 60) * s).toFixed(2) + " km";
 }
 
@@ -238,6 +254,7 @@ function analyseNiveau() {
     "Avancé";
 
   levelResult.innerText = "Niveau : " + level;
+
   planResult.innerHTML = `
   S1: footing + 8x400m<br>
   S2: 10x400m + seuil<br>
@@ -247,7 +264,7 @@ function analyseNiveau() {
 }
 
 
-// FC ANALYSE (NOUVEAU)
+// FC
 function analyseFC() {
   let max = Number(fcmax.value);
   let moy = Number(fcmoy.value);
