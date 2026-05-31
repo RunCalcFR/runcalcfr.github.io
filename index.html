@@ -106,7 +106,7 @@ button {
 <nav>
   <a href="#vo2">VO2</a>
   <a href="#speed">Vitesse</a>
-  <a href="#distance">Distance</a>
+  <a href="#distanceCard">Distance</a>
   <a href="#plan">Plan 5K</a>
   <a href="#fc">FC</a>
   <a href="#rank">Classement</a>
@@ -145,7 +145,7 @@ button {
 </div>
 
 <!-- DISTANCE -->
-<div class="card" id="distance">
+<div class="card" id="distanceCard">
   <h2>Distance</h2>
   <input id="time" placeholder="Temps (min)">
   <input id="speed" placeholder="Vitesse (km/h)">
@@ -217,10 +217,10 @@ function logout() {
 }
 
 
-// VO2 (ULTRA SAFE + SANS NAN)
+// VO2 (FIXÉ)
 function calcVO2() {
-  let d = parseFloat(distance.value);
-  let t = parseFloat(timeMin.value);
+  let d = parseFloat(document.getElementById("distance").value);
+  let t = parseFloat(document.getElementById("timeMin").value);
 
   if (isNaN(d) || isNaN(t) || d <= 0 || t <= 0) {
     vo2Result.innerText = "Valeurs invalides";
@@ -248,17 +248,19 @@ function calcSpeed() {
 }
 
 
-// DISTANCE
+// DISTANCE (FIXÉ)
 function calcDistance() {
-  let t = parseFloat(time.value);
-  let s = parseFloat(speed.value);
+  let t = parseFloat(document.getElementById("time").value);
+  let s = parseFloat(document.getElementById("speed").value);
 
-  if (isNaN(t) || isNaN(s)) {
+  if (isNaN(t) || isNaN(s) || t <= 0 || s <= 0) {
     distResult.innerText = "Valeurs invalides";
     return;
   }
 
-  distResult.innerText = ((t / 60) * s).toFixed(2) + " km";
+  let dist = (t / 60) * s;
+
+  distResult.innerText = dist.toFixed(2) + " km";
 }
 
 
@@ -284,13 +286,8 @@ function analyseNiveau() {
 
 // FC
 function analyseFC() {
-  let max = parseFloat(fcmax.value);
-  let moy = parseFloat(fcmoy.value);
-
-  if (isNaN(max) || isNaN(moy) || max <= 0) {
-    fcResult.innerText = "Valeurs invalides";
-    return;
-  }
+  let max = Number(fcmax.value);
+  let moy = Number(fcmoy.value);
 
   let ratio = (moy / max) * 100;
 
