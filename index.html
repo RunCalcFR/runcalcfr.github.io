@@ -1,58 +1,79 @@
 <!DOCTYPE html>
-
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RunCalc - Calcul running</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #0f172a;
-      color: white;
-      text-align: center;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RunCalc</title>
 
-```
-header {
-  padding: 30px;
-  background: #1e293b;
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b1220;
+  color: white;
 }
 
-h1 {
+header {
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  padding: 25px;
+  text-align: center;
+}
+
+header h1 {
   margin: 0;
-  font-size: 2.2em;
+  font-size: 28px;
+}
+
+header p {
+  margin: 5px 0 0;
+  opacity: 0.9;
 }
 
 .container {
-  padding: 20px;
-  max-width: 600px;
+  max-width: 800px;
   margin: auto;
+  padding: 20px;
+  display: grid;
+  gap: 15px;
 }
 
 .card {
-  background: #1e293b;
-  padding: 15px;
-  margin: 15px 0;
-  border-radius: 10px;
+  background: #111a2e;
+  padding: 18px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  transition: 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 18px;
+  color: #22c55e;
 }
 
 input {
-  padding: 10px;
-  width: 90%;
-  margin: 5px 0;
-  border-radius: 5px;
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  border-radius: 10px;
   border: none;
+  outline: none;
+  background: #0b1220;
+  color: white;
 }
 
 button {
-  padding: 10px;
-  width: 95%;
-  background: #22c55e;
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
   border: none;
-  border-radius: 5px;
-  color: white;
+  border-radius: 10px;
+  background: #22c55e;
+  color: black;
   font-weight: bold;
   cursor: pointer;
 }
@@ -64,47 +85,58 @@ button:hover {
 .result {
   margin-top: 10px;
   font-weight: bold;
+  color: #60ffa8;
 }
-```
 
-  </style>
+.footer {
+  text-align: center;
+  opacity: 0.5;
+  font-size: 12px;
+  padding: 20px;
+}
+</style>
 </head>
 
 <body>
 
 <header>
   <h1>🏃 RunCalc</h1>
-  <p>Calculateur d’allure, vitesse et performances</p>
+  <p>Ton coach running intelligent</p>
 </header>
 
 <div class="container">
 
   <div class="card">
     <h2>Allure → Vitesse</h2>
-    <input id="pace" placeholder="Allure (min/km ex: 4:30)">
+    <input id="pace" placeholder="Ex: 4:30 min/km">
     <button onclick="calcSpeed()">Calculer</button>
     <div class="result" id="speedResult"></div>
   </div>
 
   <div class="card">
-    <h2>Distance / Temps</h2>
-    <input id="time" placeholder="Temps (minutes ex: 30)">
-    <input id="speed" placeholder="Vitesse (km/h ex: 12)">
+    <h2>Distance</h2>
+    <input id="time" placeholder="Temps (min)">
+    <input id="speed" placeholder="Vitesse (km/h)">
     <button onclick="calcDistance()">Calculer</button>
     <div class="result" id="distResult"></div>
   </div>
 
 </div>
 
+<div class="footer">
+RunCalc © 2026
+</div>
+
 <script>
 function calcSpeed() {
   let pace = document.getElementById("pace").value;
   let parts = pace.split(":");
+
   let min = parseInt(parts[0]);
   let sec = parseInt(parts[1] || 0);
 
-  let totalMin = min + sec/60;
-  let speed = 60 / totalMin;
+  let total = min + sec / 60;
+  let speed = 60 / total;
 
   document.getElementById("speedResult").innerText =
     "Vitesse : " + speed.toFixed(2) + " km/h";
@@ -114,10 +146,10 @@ function calcDistance() {
   let time = parseFloat(document.getElementById("time").value);
   let speed = parseFloat(document.getElementById("speed").value);
 
-  let distance = (time / 60) * speed;
+  let dist = (time / 60) * speed;
 
   document.getElementById("distResult").innerText =
-    "Distance : " + distance.toFixed(2) + " km";
+    "Distance : " + dist.toFixed(2) + " km";
 }
 </script>
 
