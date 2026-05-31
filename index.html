@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RunCalc - Quel est ton niveau running ?</title>
+<title>RunCalc</title>
 
 <style>
 body {
@@ -11,20 +11,21 @@ body {
   font-family: Arial, sans-serif;
   background: #0b1220;
   color: white;
-  text-align: center;
 }
 
 header {
-  padding: 40px 20px;
   background: linear-gradient(90deg, #22c55e, #16a34a);
+  padding: 25px;
+  text-align: center;
 }
 
-h1 {
-  font-size: 32px;
+header h1 {
   margin: 0;
+  font-size: 28px;
 }
 
-p {
+header p {
+  margin: 5px 0 0;
   opacity: 0.9;
 }
 
@@ -38,55 +39,45 @@ p {
 
 .card {
   background: #111a2e;
-  padding: 20px;
+  padding: 18px;
   border-radius: 15px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
 
-button {
-  width: 100%;
-  padding: 15px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 10px;
-  background: #22c55e;
-  color: black;
-  font-weight: bold;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #16a34a;
+h2 {
+  margin-top: 0;
+  font-size: 18px;
+  color: #22c55e;
 }
 
 input {
   width: 100%;
   padding: 12px;
-  margin-top: 10px;
+  margin-top: 8px;
   border-radius: 10px;
   border: none;
   background: #0b1220;
   color: white;
 }
 
-.result {
-  margin-top: 15px;
+button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #22c55e;
+  color: black;
   font-weight: bold;
-  color: #60ffa8;
-  font-size: 18px;
 }
 
-.badge {
-  display: inline-block;
-  padding: 8px 12px;
-  border-radius: 20px;
-  background: #1f2937;
-  margin: 5px;
-  font-size: 12px;
+.result {
+  margin-top: 10px;
+  color: #60ffa8;
+  font-weight: bold;
 }
 
 .footer {
+  text-align: center;
   opacity: 0.5;
   font-size: 12px;
   padding: 20px;
@@ -98,68 +89,142 @@ input {
 
 <header>
   <h1>🏃 RunCalc</h1>
-  <p>Découvre ton niveau en course à pied en 10 secondes</p>
+  <p>Ton coach running intelligent</p>
 </header>
 
 <div class="container">
 
-  <div class="card">
-    <h2>🔥 Test rapide</h2>
-    <p>Entre ton temps sur 5 km</p>
+<!-- VO2 -->
+<div class="card">
+  <h2>VO2 Max</h2>
+  <input id="distance" placeholder="Distance (km)">
+  <input id="timeMin" placeholder="Temps (min)">
+  <button onclick="calcVO2()">Calculer VO2</button>
+  <div class="result" id="vo2Result"></div>
+</div>
 
-    <input id="time5k" placeholder="Ex : 20 (minutes)">
-    <button onclick="testLevel()">Découvrir mon niveau</button>
+<!-- ALLURE -->
+<div class="card">
+  <h2>Allure → Vitesse</h2>
+  <input id="pace" placeholder="4:30">
+  <button onclick="calcSpeed()">Calculer</button>
+  <div class="result" id="speedResult"></div>
+</div>
 
-    <div class="result" id="result"></div>
-  </div>
+<!-- DISTANCE -->
+<div class="card">
+  <h2>Distance</h2>
+  <input id="time" placeholder="Temps (min)">
+  <input id="speed" placeholder="Vitesse (km/h)">
+  <button onclick="calcDistance()">Calculer</button>
+  <div class="result" id="distResult"></div>
+</div>
 
-  <div class="card">
-    <h2>🎯 Ce que tu vas obtenir</h2>
+<!-- PLAN -->
+<div class="card">
+  <h2>Plan 4 semaines - 5 km 17:30</h2>
 
-    <div class="badge">Ton niveau</div>
-    <div class="badge">Ton VO2 max</div>
-    <div class="badge">Ton objectif 5 km</div>
-    <div class="badge">Ton plan d’entraînement</div>
-  </div>
+  <input id="time5k" placeholder="Ton temps 5 km">
+  <button onclick="analyseNiveau()">Analyser + programme</button>
 
-  <div class="card">
-    <h2>⚡ Objectif ultime</h2>
-    <p>Arriver à courir 5 km en 17:30</p>
-  </div>
+  <div class="result" id="levelResult"></div>
+  <div id="planResult"></div>
+</div>
 
 </div>
 
-<div class="footer">
-RunCalc © 2026
-</div>
+<div class="footer">RunCalc © 2026</div>
 
 <script>
 
-function testLevel() {
-  let t = Number(document.getElementById("time5k").value);
+// VO2
+function calcVO2() {
+  let d = Number(document.getElementById("distance").value);
+  let t = Number(document.getElementById("timeMin").value);
 
-  let msg = "";
+  let speed = (d * 1000) / t;
+  let vo2 = 0.2 * speed + 3.5;
+
+  document.getElementById("vo2Result").innerText =
+    "VO2 max : " + vo2.toFixed(1);
+}
+
+// SPEED
+function calcSpeed() {
+  let p = document.getElementById("pace").value.split(":");
+  let min = Number(p[0]);
+  let sec = Number(p[1] || 0);
+
+  let speed = 60 / (min + sec / 60);
+
+  document.getElementById("speedResult").innerText =
+    speed.toFixed(2) + " km/h";
+}
+
+// DISTANCE
+function calcDistance() {
+  let t = Number(document.getElementById("time").value);
+  let s = Number(document.getElementById("speed").value);
+
+  document.getElementById("distResult").innerText =
+    ((t / 60) * s).toFixed(2) + " km";
+}
+
+// NIVEAU + PROGRAMME 4 SEMAINES
+function analyseNiveau() {
+  let time = Number(document.getElementById("time5k").value);
+
   let level = "";
 
-  if (t > 25) {
-    level = "Débutant";
-    msg = "Tu débutes → énorme potentiel 💪";
-  } 
-  else if (t > 21) {
-    level = "Intermédiaire";
-    msg = "Bon niveau → tu peux progresser vite ⚡";
-  } 
-  else if (t > 18) {
-    level = "Avancé";
-    msg = "Très fort 🔥 proche élite";
-  } 
-  else {
-    level = "Niveau élite";
-    msg = "Incroyable 💀 objectif 17:30 atteint ou proche";
-  }
+  if (time > 25) level = "Débutant";
+  else if (time > 21) level = "Intermédiaire";
+  else level = "Avancé";
 
-  document.getElementById("result").innerHTML =
-    "Niveau : " + level + "<br>" + msg;
+  document.getElementById("levelResult").innerText =
+    "Niveau : " + level;
+
+  document.getElementById("planResult").innerHTML = getPlan();
+}
+
+// PROGRAMME COMPLET 4 SEMAINES
+function getPlan() {
+  return `
+<b>Semaine 1</b><br>
+Lundi : footing 30 min<br>
+Mardi : 8x400m<br>
+Mercredi : repos<br>
+Jeudi : footing 35 min<br>
+Vendredi : seuil 15 min<br>
+Samedi : repos<br>
+Dimanche : 45 min<br><br>
+
+<b>Semaine 2</b><br>
+Lundi : footing 35 min<br>
+Mardi : 10x400m<br>
+Mercredi : repos<br>
+Jeudi : 20 min seuil<br>
+Vendredi : footing léger<br>
+Samedi : repos<br>
+Dimanche : 50 min<br><br>
+
+<b>Semaine 3</b><br>
+Lundi : footing 40 min<br>
+Mardi : 5x800m<br>
+Mercredi : repos<br>
+Jeudi : 25 min seuil<br>
+Vendredi : footing<br>
+Samedi : repos<br>
+Dimanche : 55 min<br><br>
+
+<b>Semaine 4 (objectif)</b><br>
+Lundi : footing 30 min<br>
+Mardi : 6x400m léger<br>
+Mercredi : repos<br>
+Jeudi : 20 min facile<br>
+Vendredi : repos<br>
+Samedi : activation<br>
+Dimanche : TEST 5 KM 🎯 (17:30 objectif)
+`;
 }
 
 </script>
