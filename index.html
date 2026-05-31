@@ -41,7 +41,6 @@ header p {
   background: #111a2e;
   padding: 18px;
   border-radius: 15px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
 
 h2 {
@@ -56,7 +55,6 @@ input {
   margin-top: 8px;
   border-radius: 10px;
   border: none;
-  outline: none;
   background: #0b1220;
   color: white;
 }
@@ -70,17 +68,12 @@ button {
   background: #22c55e;
   color: black;
   font-weight: bold;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #16a34a;
 }
 
 .result {
   margin-top: 10px;
-  font-weight: bold;
   color: #60ffa8;
+  font-weight: bold;
 }
 
 .footer {
@@ -101,81 +94,137 @@ button:hover {
 
 <div class="container">
 
-  <!-- VO2 MAX -->
-  <div class="card">
-    <h2>VO2 Max (estimation)</h2>
-    <input id="distance" placeholder="Distance (km ex: 5)">
-    <input id="timeMin" placeholder="Temps (minutes ex: 20)">
-    <button onclick="calcVO2()">Calculer VO2 max</button>
-    <div class="result" id="vo2Result"></div>
-  </div>
+<!-- VO2 -->
+<div class="card">
+  <h2>VO2 Max</h2>
+  <input id="distance" placeholder="Distance (km)">
+  <input id="timeMin" placeholder="Temps (min)">
+  <button onclick="calcVO2()">Calculer VO2</button>
+  <div class="result" id="vo2Result"></div>
+</div>
 
-  <!-- ALLURE -->
-  <div class="card">
-    <h2>Allure → Vitesse</h2>
-    <input id="pace" placeholder="Ex: 4:30 min/km">
-    <button onclick="calcSpeed()">Calculer</button>
-    <div class="result" id="speedResult"></div>
-  </div>
+<!-- ALLURE -->
+<div class="card">
+  <h2>Allure → Vitesse</h2>
+  <input id="pace" placeholder="4:30">
+  <button onclick="calcSpeed()">Calculer</button>
+  <div class="result" id="speedResult"></div>
+</div>
 
-  <!-- DISTANCE -->
-  <div class="card">
-    <h2>Distance</h2>
-    <input id="time" placeholder="Temps (min)">
-    <input id="speed" placeholder="Vitesse (km/h)">
-    <button onclick="calcDistance()">Calculer</button>
-    <div class="result" id="distResult"></div>
-  </div>
+<!-- DISTANCE -->
+<div class="card">
+  <h2>Distance</h2>
+  <input id="time" placeholder="Temps (min)">
+  <input id="speed" placeholder="Vitesse (km/h)">
+  <button onclick="calcDistance()">Calculer</button>
+  <div class="result" id="distResult"></div>
+</div>
+
+<!-- PLAN -->
+<div class="card">
+  <h2>Plan 4 semaines - 5 km 17:30</h2>
+
+  <input id="time5k" placeholder="Ton temps 5 km">
+  <button onclick="analyseNiveau()">Analyser + programme</button>
+
+  <div class="result" id="levelResult"></div>
+  <div id="planResult"></div>
+</div>
 
 </div>
 
-<div class="footer">
-RunCalc © 2026
-</div>
+<div class="footer">RunCalc © 2026</div>
 
 <script>
 
-// VO2 MAX
+// VO2
 function calcVO2() {
-  let distance = Number(document.getElementById("distance").value);
-  let time = Number(document.getElementById("timeMin").value);
+  let d = Number(document.getElementById("distance").value);
+  let t = Number(document.getElementById("timeMin").value);
 
-  if (distance <= 0 || time <= 0) {
-    document.getElementById("vo2Result").innerText = "Erreur : valeurs invalides";
-    return;
-  }
-
-  let speed = (distance * 1000) / time;
+  let speed = (d * 1000) / t;
   let vo2 = 0.2 * speed + 3.5;
 
   document.getElementById("vo2Result").innerText =
-    "VO2 max estimé : " + vo2.toFixed(1) + " ml/kg/min";
+    "VO2 max : " + vo2.toFixed(1);
 }
 
-// ALLURE → VITESSE
+// SPEED
 function calcSpeed() {
-  let pace = document.getElementById("pace").value;
-  let parts = pace.split(":");
+  let p = document.getElementById("pace").value.split(":");
+  let min = Number(p[0]);
+  let sec = Number(p[1] || 0);
 
-  let min = parseInt(parts[0]);
-  let sec = parseInt(parts[1] || 0);
-
-  let total = min + sec / 60;
-  let speed = 60 / total;
+  let speed = 60 / (min + sec / 60);
 
   document.getElementById("speedResult").innerText =
-    "Vitesse : " + speed.toFixed(2) + " km/h";
+    speed.toFixed(2) + " km/h";
 }
 
 // DISTANCE
 function calcDistance() {
-  let time = parseFloat(document.getElementById("time").value);
-  let speed = parseFloat(document.getElementById("speed").value);
-
-  let dist = (time / 60) * speed;
+  let t = Number(document.getElementById("time").value);
+  let s = Number(document.getElementById("speed").value);
 
   document.getElementById("distResult").innerText =
-    "Distance : " + dist.toFixed(2) + " km";
+    ((t / 60) * s).toFixed(2) + " km";
+}
+
+// NIVEAU + PROGRAMME 4 SEMAINES
+function analyseNiveau() {
+  let time = Number(document.getElementById("time5k").value);
+
+  let level = "";
+
+  if (time > 25) level = "Débutant";
+  else if (time > 21) level = "Intermédiaire";
+  else level = "Avancé";
+
+  document.getElementById("levelResult").innerText =
+    "Niveau : " + level;
+
+  document.getElementById("planResult").innerHTML = getPlan();
+}
+
+// PROGRAMME COMPLET 4 SEMAINES
+function getPlan() {
+  return `
+<b>Semaine 1</b><br>
+Lundi : footing 30 min<br>
+Mardi : 8x400m<br>
+Mercredi : repos<br>
+Jeudi : footing 35 min<br>
+Vendredi : seuil 15 min<br>
+Samedi : repos<br>
+Dimanche : 45 min<br><br>
+
+<b>Semaine 2</b><br>
+Lundi : footing 35 min<br>
+Mardi : 10x400m<br>
+Mercredi : repos<br>
+Jeudi : 20 min seuil<br>
+Vendredi : footing léger<br>
+Samedi : repos<br>
+Dimanche : 50 min<br><br>
+
+<b>Semaine 3</b><br>
+Lundi : footing 40 min<br>
+Mardi : 5x800m<br>
+Mercredi : repos<br>
+Jeudi : 25 min seuil<br>
+Vendredi : footing<br>
+Samedi : repos<br>
+Dimanche : 55 min<br><br>
+
+<b>Semaine 4 (objectif)</b><br>
+Lundi : footing 30 min<br>
+Mardi : 6x400m léger<br>
+Mercredi : repos<br>
+Jeudi : 20 min facile<br>
+Vendredi : repos<br>
+Samedi : activation<br>
+Dimanche : TEST 5 KM 🎯 (17:30 objectif)
+`;
 }
 
 </script>
