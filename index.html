@@ -56,7 +56,7 @@ padding:15px;
 border-radius:12px;
 }
 
-input,select{
+input{
 width:100%;
 padding:10px;
 margin-top:8px;
@@ -84,23 +84,21 @@ font-weight:bold;
 }
 </style>
 
-<!-- FIREBASE (UNE SEULE FOIS) -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <script>
 const firebaseConfig = {
-  apiKey: "AIzaSyBFpxJIxLgmbxKfdEaanhN4kuhWAf9pkTE",
-  authDomain: "runcalc-38716.firebaseapp.com",
-  projectId: "runcalc-38716",
-  storageBucket: "runcalc-38716.appspot.com",
-  messagingSenderId: "1065168370740",
-  appId: "1:1065168370740:web:1c67250311a2bb665f5e61"
+  apiKey: "YOUR_KEY",
+  authDomain: "YOUR_DOMAIN",
+  projectId: "YOUR_PROJECT",
+  storageBucket: "YOUR_BUCKET",
+  messagingSenderId: "YOUR_ID",
+  appId: "YOUR_APP_ID"
 };
 
 firebase.initializeApp(firebaseConfig);
-
 const auth = firebase.auth();
 const db = firebase.firestore();
 </script>
@@ -123,10 +121,11 @@ const db = firebase.firestore();
 </nav>
 
 <div class="container">
-  <h2 id="accueil">🏠 Dashboard</h2>
+
+<!-- DASHBOARD -->
+<h2 id="accueil">🏠 Dashboard</h2>
 
 <div class="grid">
-
 <div class="card">
 <h3>VO2 Max</h3>
 <div id="homeVo2">--</div>
@@ -136,291 +135,208 @@ const db = firebase.firestore();
 <h3>Objectif</h3>
 <div>5 km rapide</div>
 </div>
-
 </div>
 
-<h2 id="calculs">📊 Calculs</h2>
-
-<div class="grid">
-
-<!-- VO2 MAX -->
-<div class="card">
-<h3>VO2 Max</h3>
-<input id="vo2_distance" placeholder="Distance km ex: 5">
-<input id="vo2_time" placeholder="Temps min ex: 20">
-<button onclick="calcVO2()">Calculer</button>
-<div id="vo2_result" class="result"></div>
-</div>
-
-<!-- VITESSE -->
-<div class="card">
-<h3>Vitesse</h3>
-<input id="pace" placeholder="Allure min/km ex: 4:30">
-<button onclick="calcSpeed()">Calculer</button>
-<div id="speed_result" class="result"></div>
-</div>
-
-<!-- DISTANCE -->
-<div class="card">
-<h3>Distance</h3>
-<input id="dist_time" placeholder="Temps min ex: 30">
-<input id="dist_speed" placeholder="Vitesse km/h ex: 12">
-<button onclick="calcDistance()">Calculer</button>
-<div id="dist_result" class="result"></div>
-</div>
-
-<!-- FC -->
-<div class="card">
-<h3>Fréquence cardiaque</h3>
-<input id="fcmax" placeholder="FC max ex: 200">
-<input id="fcmoy" placeholder="FC moyenne ex: 160">
-<button onclick="analyseFC()">Analyser</button>
-<div id="fcResult" class="result"></div>
-</div>
-
-</div>
-<!-- ===================== -->
 <!-- CALCULS -->
-<!-- ===================== -->
-
 <h2 id="calculs">📊 Calculs</h2>
 
 <div class="grid">
 
-<!-- VO2 MAX -->
 <div class="card">
 <h3>VO2 Max</h3>
-<input id="vo2_distance" placeholder="Distance km ex: 5">
-<input id="vo2_time" placeholder="Temps min ex: 20">
+<input id="vo2_distance" placeholder="km">
+<input id="vo2_time" placeholder="min">
 <button onclick="calcVO2()">Calculer</button>
 <div id="vo2_result" class="result"></div>
 </div>
 
-<!-- VITESSE -->
 <div class="card">
 <h3>Vitesse</h3>
-<input id="pace" placeholder="Allure min/km (ex: 4:30)">
+<input id="pace" placeholder="4:30">
 <button onclick="calcSpeed()">Calculer</button>
 <div id="speed_result" class="result"></div>
 </div>
 
-<!-- DISTANCE -->
 <div class="card">
 <h3>Distance</h3>
-<input id="dist_time" placeholder="Temps en minutes ex: 30">
-<input id="dist_speed" placeholder="Vitesse km/h ex: 12">
+<input id="dist_time" placeholder="min">
+<input id="dist_speed" placeholder="km/h">
 <button onclick="calcDistance()">Calculer</button>
 <div id="dist_result" class="result"></div>
 </div>
 
-<!-- FREQUENCE CARDIAQUE -->
 <div class="card">
-<h3>Fréquence cardiaque</h3>
-<input id="fcmax" placeholder="FC max ex: 200">
-<input id="fcmoy" placeholder="FC moyenne ex: 160">
+<h3>FC</h3>
+<input id="fcmax" placeholder="FC max">
+<input id="fcmoy" placeholder="FC moyenne">
 <button onclick="analyseFC()">Analyser</button>
 <div id="fcResult" class="result"></div>
 </div>
 
 </div>
-<!-- ===================== -->
-<!-- CALCULS -->
-<!-- ===================== -->
 
-<h2 id="calculs">📊 Calculs</h2>
+<!-- PERFORMANCE -->
+<h2 id="perf">🚀 Performance</h2>
 
 <div class="grid">
 
-<!-- VO2 MAX -->
 <div class="card">
-<h3>VO2 Max</h3>
-<input id="vo2_distance" placeholder="Distance km ex: 5">
-<input id="vo2_time" placeholder="Temps min ex: 20">
-<button onclick="calcVO2()">Calculer</button>
-<div id="vo2_result" class="result"></div>
+<h3>Plan 5 km</h3>
+<input id="time5k" placeholder="5 km (min)">
+<button onclick="plan5k()">OK</button>
+<div id="planResult"></div>
 </div>
 
-<!-- VITESSE -->
 <div class="card">
-<h3>Vitesse</h3>
-<input id="pace" placeholder="Allure min/km (ex: 4:30)">
-<button onclick="calcSpeed()">Calculer</button>
-<div id="speed_result" class="result"></div>
+<h3>Estimation</h3>
+<input id="est_dist">
+<input id="est_time">
+<button onclick="estimate()">OK</button>
+<div id="estResult"></div>
 </div>
 
-<!-- DISTANCE -->
 <div class="card">
-<h3>Distance</h3>
-<input id="dist_time" placeholder="Temps en minutes ex: 30">
-<input id="dist_speed" placeholder="Vitesse km/h ex: 12">
-<button onclick="calcDistance()">Calculer</button>
-<div id="dist_result" class="result"></div>
-</div>
-
-<!-- FREQUENCE CARDIAQUE -->
-<div class="card">
-<h3>Fréquence cardiaque</h3>
-<input id="fcmax" placeholder="FC max ex: 200">
-<input id="fcmoy" placeholder="FC moyenne ex: 160">
-<button onclick="analyseFC()">Analyser</button>
-<div id="fcResult" class="result"></div>
+<h3>Allures</h3>
+<input id="allure5k">
+<button onclick="calcAllures()">OK</button>
+<div id="allureResult"></div>
 </div>
 
 </div>
-<!-- ===================== -->
+
 <!-- CLASSEMENT -->
-<!-- ===================== -->
-
 <h2 id="classement">🏆 Classement</h2>
 
 <div class="card">
-
-<h3>Ajouter un coureur</h3>
-
-<input id="name" placeholder="Nom du coureur (ex: Lucas)">
-<input id="rankTime" placeholder="Temps en minutes (ex: 19.30)">
-
+<input id="name" placeholder="Nom">
+<input id="rankTime" placeholder="Temps">
 <button onclick="addRunner()">Ajouter</button>
-
-<div id="rankList" style="margin-top:10px;"></div>
-
+<div id="rankList"></div>
 </div>
 
-<script>
-// =====================
-// FIREBASE CLASSEMENT
-// =====================
-
-// Ajouter un coureur
-async function addRunner() {
-    const nameValue = document.getElementById("name").value;
-    const timeValue = Number(document.getElementById("rankTime").value);
-
-    if (!nameValue || !timeValue || timeValue <= 0) {
-        alert("Nom et temps valides obligatoires");
-        return;
-    }
-
-    await db.collection("runners").add({
-        name: nameValue,
-        time: timeValue
-    });
-
-    document.getElementById("name").value = "";
-    document.getElementById("rankTime").value = "";
-
-    loadRanking();
-}
-
-// Charger classement
-async function loadRanking() {
-    const snap = await db.collection("runners").orderBy("time").get();
-
-    let html = "";
-    let i = 1;
-
-    snap.forEach(doc => {
-        const data = doc.data();
-        html += `${i++}. ${data.name} - ${data.time} min<br>`;
-    });
-
-    document.getElementById("rankList").innerHTML = html || "Aucun coureur";
-}
-
-// Auto-load
-loadRanking();
-<!-- ===================== -->
 <!-- PROFIL -->
-<!-- ===================== -->
-
 <h2 id="profil">👤 Profil</h2>
 
 <div class="card">
-
-<h3>Profil coureur</h3>
-
-<input id="profilNom" placeholder="Nom complet">
-<input id="profilAge" placeholder="Âge (ex: 14)">
-<input id="profilPoids" placeholder="Poids (kg ex: 60)">
-<input id="profilFcMax" placeholder="FC max (ex: 200)">
-
-<button onclick="saveProfile()">Sauvegarder profil</button>
-
+<input id="profilNom" placeholder="Nom">
+<input id="profilAge" placeholder="Âge">
+<input id="profilPoids" placeholder="Poids">
+<input id="profilFcMax" placeholder="FC max">
+<button onclick="saveProfile()">Sauvegarder</button>
 </div>
 
-<!-- ===================== -->
-<!-- AUTH (OPTIONNEL UI) -->
-<!-- ===================== -->
-
+<!-- LOGIN -->
 <div class="card">
 <h3>Connexion</h3>
-
 <input id="email" placeholder="Email">
 <input id="password" type="password" placeholder="Mot de passe">
-
-<button onclick="signup()">Créer compte</button>
-<button onclick="login()">Connexion</button>
-<button onclick="logout()">Déconnexion</button>
+<button onclick="signup()">Créer</button>
+<button onclick="login()">Login</button>
+<button onclick="logout()">Logout</button>
+</div>
 
 </div>
 
 <script>
-// =====================
-// AUTH FIREBASE PROPRE
-// =====================
 
-function signup() {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-
-    if (!email || !password) {
-        alert("Email ou mot de passe manquant");
-        return;
-    }
-
-    auth.createUserWithEmailAndPassword(email, password)
-        .catch(e => alert(e.message));
+// VO2
+function calcVO2(){
+let d=Number(vo2_distance.value);
+let t=Number(vo2_time.value);
+if(!d||!t)return vo2_result.innerText="Erreur";
+let vo2=(3.5*(d/t*60)).toFixed(1);
+vo2_result.innerText="VO2: "+vo2;
+homeVo2.innerText=vo2;
 }
 
-function login() {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-
-    if (!email || !password) {
-        alert("Email ou mot de passe manquant");
-        return;
-    }
-
-    auth.signInWithEmailAndPassword(email, password)
-        .catch(e => alert(e.message));
+// SPEED
+function calcSpeed(){
+let v=pace.value;
+if(!v.includes(":"))return speed_result.innerText="4:30";
+let [m,s]=v.split(":").map(Number);
+speed_result.innerText=(60/(m+s/60)).toFixed(2)+" km/h";
 }
 
-function logout() {
-    auth.signOut();
+// DISTANCE
+function calcDistance(){
+let t=Number(dist_time.value);
+let v=Number(dist_speed.value);
+if(!t||!v)return dist_result.innerText="Erreur";
+dist_result.innerText=((t/60)*v).toFixed(2)+" km";
 }
 
-// =====================
-// PROFIL FIRESTORE PROPRE
-// =====================
-
-function saveProfile() {
-    const user = auth.currentUser;
-
-    if (!user) {
-        alert("Connecte-toi d'abord");
-        return;
-    }
-
-    const nom = document.getElementById("profilNom").value;
-    const age = document.getElementById("profilAge").value;
-    const poids = document.getElementById("profilPoids").value;
-    const fc = document.getElementById("profilFcMax").value;
-
-    db.collection("profiles").doc(user.uid).set({
-        nom: nom || "",
-        age: age || "",
-        poids: poids || "",
-        fc: fc || ""
-    });
+// FC
+function analyseFC(){
+let max=Number(fcmax.value);
+let moy=Number(fcmoy.value);
+if(!max||!moy)return fcResult.innerText="Erreur";
+let p=(moy/max)*100;
+fcResult.innerText=p.toFixed(1)+"%";
 }
+
+// PLAN
+function plan5k(){
+let t=Number(time5k.value);
+planResult.innerText=t>25?"Débutant":t>21?"Inter":"Avancé";
+}
+
+// EST
+function estimate(){
+let d=Number(est_dist.value);
+let t=Number(est_time.value);
+estResult.innerHTML=[5,10,21,42].map(x=>
+x+" km "+(t*Math.pow(x/d,1.06)).toFixed(1)
+).join("<br>");
+}
+
+// ALLURES
+function calcAllures(){
+let t=Number(allure5k.value);
+let a=t/5;
+allureResult.innerHTML="EF "+(a+1.1).toFixed(2);
+}
+
+// FIREBASE
+async function addRunner(){
+await db.collection("runners").add({
+name:name.value,
+time:Number(rankTime.value)
+});
+loadRanking();
+}
+
+async function loadRanking(){
+let snap=await db.collection("runners").orderBy("time").get();
+let html="",i=1;
+snap.forEach(d=>{
+html+=i+++". "+d.data().name+" - "+d.data().time+"<br>";
+});
+rankList.innerHTML=html;
+}
+loadRanking();
+
+// AUTH
+function signup(){
+auth.createUserWithEmailAndPassword(email.value,password.value);
+}
+function login(){
+auth.signInWithEmailAndPassword(email.value,password.value);
+}
+function logout(){auth.signOut();}
+
+// PROFILE
+function saveProfile(){
+let u=auth.currentUser;
+if(!u)return;
+db.collection("profiles").doc(u.uid).set({
+nom:profilNom.value,
+age:profilAge.value,
+poids:profilPoids.value,
+fc:profilFcMax.value
+});
+}
+
 </script>
+
+</body>
+</html>
