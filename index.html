@@ -144,8 +144,8 @@ const db = firebase.firestore();
 
 <div class="card">
 <h3>VO2 Max</h3>
-<input id="vo2_distance" placeholder="km">
-<input id="vo2_time" placeholder="min">
+<input id="vo2_distance" placeholder="km ex: 5">
+<input id="vo2_time" placeholder="min ex: 20">
 <button onclick="calcVO2()">Calculer</button>
 <div id="vo2_result" class="result"></div>
 </div>
@@ -182,22 +182,22 @@ const db = firebase.firestore();
 
 <div class="card">
 <h3>Plan 5 km</h3>
-<input id="time5k" placeholder="5 km (min)">
+<input id="time5k" placeholder="5 km temps">
 <button onclick="plan5k()">OK</button>
 <div id="planResult"></div>
 </div>
 
 <div class="card">
 <h3>Estimation</h3>
-<input id="est_dist">
-<input id="est_time">
+<input id="est_dist" placeholder="Distance (ex: 10 km)">
+<input id="est_time" placeholder="Temps (ex: 45 min)">
 <button onclick="estimate()">OK</button>
 <div id="estResult"></div>
 </div>
 
 <div class="card">
 <h3>Allures</h3>
-<input id="allure5k">
+<input id="allure5k" placeholder="Temps 5 km (ex: 20 min)">
 <button onclick="calcAllures()">OK</button>
 <div id="allureResult"></div>
 </div>
@@ -230,7 +230,7 @@ const db = firebase.firestore();
 <h3>Connexion</h3>
 <input id="email" placeholder="Email">
 <input id="password" type="password" placeholder="Mot de passe">
-<button onclick="signup()">Créer</button>
+<button onclick="signup()">Signup</button>
 <button onclick="login()">Login</button>
 <button onclick="logout()">Logout</button>
 </div>
@@ -239,7 +239,8 @@ const db = firebase.firestore();
 
 <script>
 
-// VO2
+// ===================== CALCULS =====================
+
 function calcVO2(){
 let d=Number(vo2_distance.value);
 let t=Number(vo2_time.value);
@@ -249,7 +250,6 @@ vo2_result.innerText="VO2: "+vo2;
 homeVo2.innerText=vo2;
 }
 
-// SPEED
 function calcSpeed(){
 let v=pace.value;
 if(!v.includes(":"))return speed_result.innerText="4:30";
@@ -257,7 +257,6 @@ let [m,s]=v.split(":").map(Number);
 speed_result.innerText=(60/(m+s/60)).toFixed(2)+" km/h";
 }
 
-// DISTANCE
 function calcDistance(){
 let t=Number(dist_time.value);
 let v=Number(dist_speed.value);
@@ -265,7 +264,6 @@ if(!t||!v)return dist_result.innerText="Erreur";
 dist_result.innerText=((t/60)*v).toFixed(2)+" km";
 }
 
-// FC
 function analyseFC(){
 let max=Number(fcmax.value);
 let moy=Number(fcmoy.value);
@@ -274,29 +272,29 @@ let p=(moy/max)*100;
 fcResult.innerText=p.toFixed(1)+"%";
 }
 
-// PLAN
+// ===================== PERFORMANCE =====================
+
 function plan5k(){
 let t=Number(time5k.value);
 planResult.innerText=t>25?"Débutant":t>21?"Inter":"Avancé";
 }
 
-// EST
 function estimate(){
 let d=Number(est_dist.value);
 let t=Number(est_time.value);
 estResult.innerHTML=[5,10,21,42].map(x=>
-x+" km "+(t*Math.pow(x/d,1.06)).toFixed(1)
+x+" km : "+(t*Math.pow(x/d,1.06)).toFixed(1)
 ).join("<br>");
 }
 
-// ALLURES
 function calcAllures(){
 let t=Number(allure5k.value);
 let a=t/5;
 allureResult.innerHTML="EF "+(a+1.1).toFixed(2);
 }
 
-// FIREBASE
+// ===================== FIREBASE =====================
+
 async function addRunner(){
 await db.collection("runners").add({
 name:name.value,
@@ -315,16 +313,22 @@ rankList.innerHTML=html;
 }
 loadRanking();
 
-// AUTH
+// ===================== AUTH =====================
+
 function signup(){
 auth.createUserWithEmailAndPassword(email.value,password.value);
 }
+
 function login(){
 auth.signInWithEmailAndPassword(email.value,password.value);
 }
-function logout(){auth.signOut();}
 
-// PROFILE
+function logout(){
+auth.signOut();
+}
+
+// ===================== PROFILE =====================
+
 function saveProfile(){
 let u=auth.currentUser;
 if(!u)return;
