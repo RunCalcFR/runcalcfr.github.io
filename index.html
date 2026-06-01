@@ -84,7 +84,6 @@ font-weight:bold;
 }
 </style>
 
-<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
@@ -106,7 +105,6 @@ const db = firebase.firestore();
 </script>
 
 </head>
-
 <body>
   <header>
 <h1>🏃 RunCalc Pro Plus</h1>
@@ -142,31 +140,31 @@ const db = firebase.firestore();
 
 <div class="card">
 <h3>VO2 Max</h3>
-<input id="vo2_distance">
-<input id="vo2_time">
+<input id="vo2_distance" placeholder="Distance km">
+<input id="vo2_time" placeholder="Temps min">
 <button onclick="calcVO2()">Calculer</button>
 <div id="vo2_result" class="result"></div>
 </div>
 
 <div class="card">
 <h3>Vitesse</h3>
-<input id="pace">
+<input id="pace" placeholder="4:30">
 <button onclick="calcSpeed()">Calculer</button>
 <div id="speed_result" class="result"></div>
 </div>
 
 <div class="card">
 <h3>Distance</h3>
-<input id="dist_time">
-<input id="dist_speed">
+<input id="dist_time" placeholder="Temps min">
+<input id="dist_speed" placeholder="km/h">
 <button onclick="calcDistance()">Calculer</button>
 <div id="dist_result" class="result"></div>
 </div>
 
 <div class="card">
-<h3>Fréquence cardiaque</h3>
-<input id="fcmax">
-<input id="fcmoy">
+<h3>FC</h3>
+<input id="fcmax" placeholder="FC max">
+<input id="fcmoy" placeholder="FC moyenne">
 <button onclick="analyseFC()">Analyser</button>
 <div id="fcResult" class="result"></div>
 </div>
@@ -178,28 +176,27 @@ const db = firebase.firestore();
 
 <div class="card">
 <h3>Plan 5 km</h3>
-<input id="time5k">
+<input id="time5k" placeholder="Temps 5 km">
 <button onclick="plan5k()">Analyser</button>
 <div id="planResult" class="result"></div>
 </div>
 
 <div class="card">
 <h3>Estimation</h3>
-<input id="est_dist">
-<input id="est_time">
+<input id="est_dist" placeholder="Distance">
+<input id="est_time" placeholder="Temps">
 <button onclick="estimate()">Estimer</button>
 <div id="estResult" class="result"></div>
 </div>
 
 <div class="card">
 <h3>Allures</h3>
-<input id="allure5k">
+<input id="allure5k" placeholder="Temps 5 km">
 <button onclick="calcAllures()">Calculer</button>
 <div id="allureResult" class="result"></div>
 </div>
 
 </div>
-
 <h2 id="classement">🏆 Classement</h2>
 
 <div class="card">
@@ -213,19 +210,25 @@ const db = firebase.firestore();
 <h2 id="profil">👤 Profil</h2>
 
 <div class="card">
-<input id="profilNom">
-<input id="profilAge">
-<input id="profilPoids">
-<input id="profilFcMax">
+<input id="profilNom" placeholder="Nom">
+<input id="profilAge" placeholder="Âge">
+<input id="profilPoids" placeholder="Poids">
+<input id="profilFcMax" placeholder="FC max">
 <button onclick="saveProfile()">Sauvegarder</button>
 </div>
 <script>
 
 // VO2
 function calcVO2(){
-let d=+vo2_distance.value;
-let t=+vo2_time.value;
-let vo2=(3.5*(d/t*60)).toFixed(1);
+let d = Number(vo2_distance.value);
+let t = Number(vo2_time.value);
+
+if(!d || !t){
+vo2_result.innerText="Valeurs invalides";
+return;
+}
+
+let vo2 = (3.5*(d/t*60)).toFixed(1);
 
 vo2_result.innerText="VO2 Max : "+vo2;
 homeVo2.innerText=vo2;
@@ -233,18 +236,42 @@ homeVo2.innerText=vo2;
 
 // SPEED
 function calcSpeed(){
-let [m,s]=pace.value.split(":").map(Number);
+let v = pace.value;
+
+if(!v.includes(":")){
+speed_result.innerText="Format 4:30";
+return;
+}
+
+let [m,s]=v.split(":").map(Number);
+
 speed_result.innerText=(60/(m+s/60)).toFixed(2)+" km/h";
 }
 
 // DISTANCE
 function calcDistance(){
-dist_result.innerText=((+dist_time.value/60)*+dist_speed.value).toFixed(2)+" km";
+let t = Number(dist_time.value);
+let v = Number(dist_speed.value);
+
+if(!t || !v){
+dist_result.innerText="Erreur";
+return;
+}
+
+dist_result.innerText=((t/60)*v).toFixed(2)+" km";
 }
 
 // FC
 function analyseFC(){
-let pct=(+fcmoy.value/+fcmax.value)*100;
+let max = Number(fcmax.value);
+let moy = Number(fcmoy.value);
+
+if(!max || !moy){
+fcResult.innerText="Erreur";
+return;
+}
+
+let pct = (moy/max)*100;
 
 fcResult.innerText =
 pct.toFixed(1)+"% - "+
@@ -256,8 +283,14 @@ pct<95?"VO2 Max":"Max");
 
 // PLAN
 function plan5k(){
-let t=+time5k.value;
-planResult.innerText=
+let t = Number(time5k.value);
+
+if(!t){
+planResult.innerText="Erreur";
+return;
+}
+
+planResult.innerText =
 t>25?"Débutant":
 t>21?"Intermédiaire":
 "Avancé";
@@ -265,18 +298,29 @@ t>21?"Intermédiaire":
 
 // ESTIMATION
 function estimate(){
-let d=+est_dist.value;
-let t=+est_time.value;
+let d = Number(est_dist.value);
+let t = Number(est_time.value);
+
+if(!d || !t){
+estResult.innerText="Erreur";
+return;
+}
 
 estResult.innerHTML=
-[5,10,21,42].map(x=>
+[5,10,21,42].map(x =>
 x+" km : "+(t*Math.pow(x/d,1.06)).toFixed(1)+" min"
 ).join("<br>");
 }
 
 // ALLURES
 function calcAllures(){
-let t=+allure5k.value;
+let t = Number(allure5k.value);
+
+if(!t){
+allureResult.innerText="Erreur";
+return;
+}
+
 let a=t/5;
 
 allureResult.innerHTML=
@@ -285,24 +329,25 @@ allureResult.innerHTML=
 " | Seuil "+(a+0.1).toFixed(2);
 }
 
-
 // AUTH
 function signup(){
 auth.createUserWithEmailAndPassword(email.value,password.value)
-.then(()=>alert("Compte créé"));
+.catch(e=>alert(e.message));
 }
 
 function login(){
 auth.signInWithEmailAndPassword(email.value,password.value)
-.then(()=>alert("Connecté"));
+.catch(e=>alert(e.message));
 }
 
 function logout(){auth.signOut();}
 
-
 // PROFIL
 function saveProfile(){
-db.collection("profiles").doc(auth.currentUser.uid).set({
+let user=auth.currentUser;
+if(!user){alert("Connecte-toi");return;}
+
+db.collection("profiles").doc(user.uid).set({
 nom:profilNom.value,
 age:profilAge.value,
 poids:profilPoids.value,
@@ -310,20 +355,25 @@ fc:profilFcMax.value
 });
 }
 
-
 // CLASSEMENT
-function addRunner(){
-db.collection("runners").add({
+async function addRunner(){
+
+if(!name.value || !rankTime.value) return;
+
+await db.collection("runners").add({
 name:name.value,
-time:+rankTime.value
+time:Number(rankTime.value)
 });
+
 loadRanking();
 }
 
 async function loadRanking(){
+
 let snap=await db.collection("runners").orderBy("time").get();
 
-let i=1,html="";
+let html="";
+let i=1;
 
 snap.forEach(d=>{
 html+=i+++". "+d.data().name+" - "+d.data().time+" min<br>";
@@ -335,6 +385,7 @@ rankList.innerHTML=html;
 loadRanking();
 
 </script>
+
 </div>
 </body>
 </html>
