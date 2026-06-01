@@ -1,126 +1,3 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RunCalc Pro Plus</title>
-
-<style>
-body{
-margin:0;
-font-family:Arial;
-background:#0b1220;
-color:white;
-}
-
-header{
-background:linear-gradient(90deg,#22c55e,#16a34a);
-padding:25px;
-text-align:center;
-}
-
-nav{
-position:sticky;
-top:0;
-background:#111a2e;
-display:flex;
-gap:10px;
-justify-content:center;
-flex-wrap:wrap;
-padding:10px;
-}
-
-nav a{
-color:white;
-background:#22c55e;
-padding:8px 12px;
-border-radius:8px;
-text-decoration:none;
-}
-
-.container{
-max-width:1200px;
-margin:auto;
-padding:20px;
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:15px;
-}
-
-.card{
-background:#111a2e;
-padding:15px;
-border-radius:12px;
-}
-
-input,select{
-width:100%;
-padding:10px;
-margin-top:8px;
-border-radius:8px;
-border:none;
-background:#0b1220;
-color:white;
-}
-
-button{
-width:100%;
-padding:10px;
-margin-top:10px;
-background:#22c55e;
-border:none;
-border-radius:8px;
-font-weight:bold;
-cursor:pointer;
-}
-
-.result{
-margin-top:10px;
-color:#60ffa8;
-font-weight:bold;
-}
-</style>
-
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyBFpxJIxLgmbxKfdEaanhN4kuhWAf9pkTE",
-  authDomain: "runcalc-38716.firebaseapp.com",
-  projectId: "runcalc-38716",
-  storageBucket: "runcalc-38716.appspot.com",
-  messagingSenderId: "1065168370740",
-  appId: "1:1065168370740:web:1c67250311a2bb665f5e61"
-};
-
-firebase.initializeApp(firebaseConfig);
-
-const auth = firebase.auth();
-const db = firebase.firestore();
-</script>
-
-</head>
-<body>
-  <header>
-<h1>🏃 RunCalc Pro Plus</h1>
-<p>Coach running intelligent</p>
-</header>
-
-<nav>
-<a href="#accueil">Accueil</a>
-<a href="#calculs">Calculs</a>
-<a href="#perf">Performance</a>
-<a href="#classement">Classement</a>
-<a href="#profil">Profil</a>
-</nav>
-
-<div class="container">
-
 <h2 id="accueil">🏠 Dashboard</h2>
 
 <div class="grid">
@@ -134,41 +11,44 @@ const db = firebase.firestore();
 <div>5 km rapide</div>
 </div>
 </div>
-<h2 id="calculs">📊 Calculs</h2>
-
-<div class="grid">
-
 <div class="card">
 <h3>VO2 Max</h3>
-<input id="vo2_distance" placeholder="Distance km">
-<input id="vo2_time" placeholder="Temps min">
-<button onclick="calcVO2()">Calculer</button>
+
+<input id="vo2_distance" placeholder="Distance parcourue (km) ex: 5">
+<input id="vo2_time" placeholder="Temps total (minutes) ex: 20">
+
+<button onclick="calcVO2()">Calculer VO2 Max</button>
 <div id="vo2_result" class="result"></div>
 </div>
-
 <div class="card">
 <h3>Vitesse</h3>
-<input id="pace" placeholder="4:30">
-<button onclick="calcSpeed()">Calculer</button>
+
+<input id="pace" placeholder="Allure min/km ex: 4:30">
+
+<button onclick="calcSpeed()">Calculer vitesse</button>
 <div id="speed_result" class="result"></div>
 </div>
 
+
 <div class="card">
 <h3>Distance</h3>
-<input id="dist_time" placeholder="Temps min">
-<input id="dist_speed" placeholder="km/h">
-<button onclick="calcDistance()">Calculer</button>
+
+<input id="dist_time" placeholder="Temps (minutes) ex: 30">
+<input id="dist_speed" placeholder="Vitesse (km/h) ex: 12">
+
+<button onclick="calcDistance()">Calculer distance</button>
 <div id="dist_result" class="result"></div>
 </div>
 
-<div class="card">
-<h3>FC</h3>
-<input id="fcmax" placeholder="FC max">
-<input id="fcmoy" placeholder="FC moyenne">
-<button onclick="analyseFC()">Analyser</button>
-<div id="fcResult" class="result"></div>
-</div>
 
+<div class="card">
+<h3>Fréquence cardiaque</h3>
+
+<input id="fcmax" placeholder="FC max ex: 200">
+<input id="fcmoy" placeholder="FC moyenne ex: 160">
+
+<button onclick="analyseFC()">Analyser zone</button>
+<div id="fcResult" class="result"></div>
 </div>
 <h2 id="perf">🚀 Performance</h2>
 
@@ -176,23 +56,31 @@ const db = firebase.firestore();
 
 <div class="card">
 <h3>Plan 5 km</h3>
-<input id="time5k" placeholder="Temps 5 km">
-<button onclick="plan5k()">Analyser</button>
+
+<input id="time5k" placeholder="Temps 5 km (minutes) ex: 22">
+
+<button onclick="plan5k()">Analyser niveau</button>
 <div id="planResult" class="result"></div>
 </div>
 
+
 <div class="card">
-<h3>Estimation</h3>
-<input id="est_dist" placeholder="Distance">
-<input id="est_time" placeholder="Temps">
-<button onclick="estimate()">Estimer</button>
+<h3>Estimation performances</h3>
+
+<input id="est_dist" placeholder="Distance actuelle (km) ex: 5">
+<input id="est_time" placeholder="Temps réalisé (min) ex: 20">
+
+<button onclick="estimate()">Estimer performances</button>
 <div id="estResult" class="result"></div>
 </div>
 
+
 <div class="card">
-<h3>Allures</h3>
-<input id="allure5k" placeholder="Temps 5 km">
-<button onclick="calcAllures()">Calculer</button>
+<h3>Calcul des allures</h3>
+
+<input id="allure5k" placeholder="Temps 5 km (min) ex: 20">
+
+<button onclick="calcAllures()">Calculer allures</button>
 <div id="allureResult" class="result"></div>
 </div>
 
@@ -200,192 +88,29 @@ const db = firebase.firestore();
 <h2 id="classement">🏆 Classement</h2>
 
 <div class="card">
-<input id="name" placeholder="Nom">
-<input id="rankTime" placeholder="Temps">
-<button onclick="addRunner()">Ajouter</button>
+
+<input id="name" placeholder="Nom du coureur">
+<input id="rankTime" placeholder="Temps (minutes) ex: 19.30">
+
+<button onclick="addRunner()">Ajouter au classement</button>
 
 <div id="rankList"></div>
 </div>
 
+
 <h2 id="profil">👤 Profil</h2>
 
 <div class="card">
-<input id="profilNom" placeholder="Nom">
-<input id="profilAge" placeholder="Âge">
-<input id="profilPoids" placeholder="Poids">
-<input id="profilFcMax" placeholder="FC max">
-<button onclick="saveProfile()">Sauvegarder</button>
-</div>
-<script>
 
-// VO2
-function calcVO2(){
-let d = Number(vo2_distance.value);
-let t = Number(vo2_time.value);
+<input id="profilNom" placeholder="Nom complet">
+<input id="profilAge" placeholder="Âge (ex: 14)">
+<input id="profilPoids" placeholder="Poids (kg) ex: 60">
+<input id="profilFcMax" placeholder="FC max ex: 200">
 
-if(!d || !t){
-vo2_result.innerText="Valeurs invalides";
-return;
-}
-
-let vo2 = (3.5*(d/t*60)).toFixed(1);
-
-vo2_result.innerText="VO2 Max : "+vo2;
-homeVo2.innerText=vo2;
-}
-
-// SPEED
-function calcSpeed(){
-let v = pace.value;
-
-if(!v.includes(":")){
-speed_result.innerText="Format 4:30";
-return;
-}
-
-let [m,s]=v.split(":").map(Number);
-
-speed_result.innerText=(60/(m+s/60)).toFixed(2)+" km/h";
-}
-
-// DISTANCE
-function calcDistance(){
-let t = Number(dist_time.value);
-let v = Number(dist_speed.value);
-
-if(!t || !v){
-dist_result.innerText="Erreur";
-return;
-}
-
-dist_result.innerText=((t/60)*v).toFixed(2)+" km";
-}
-
-// FC
-function analyseFC(){
-let max = Number(fcmax.value);
-let moy = Number(fcmoy.value);
-
-if(!max || !moy){
-fcResult.innerText="Erreur";
-return;
-}
-
-let pct = (moy/max)*100;
-
-fcResult.innerText =
-pct.toFixed(1)+"% - "+
-(pct<70?"Récupération":
-pct<80?"Endurance":
-pct<88?"Seuil":
-pct<95?"VO2 Max":"Max");
-}
-
-// PLAN
-function plan5k(){
-let t = Number(time5k.value);
-
-if(!t){
-planResult.innerText="Erreur";
-return;
-}
-
-planResult.innerText =
-t>25?"Débutant":
-t>21?"Intermédiaire":
-"Avancé";
-}
-
-// ESTIMATION
-function estimate(){
-let d = Number(est_dist.value);
-let t = Number(est_time.value);
-
-if(!d || !t){
-estResult.innerText="Erreur";
-return;
-}
-
-estResult.innerHTML=
-[5,10,21,42].map(x =>
-x+" km : "+(t*Math.pow(x/d,1.06)).toFixed(1)+" min"
-).join("<br>");
-}
-
-// ALLURES
-function calcAllures(){
-let t = Number(allure5k.value);
-
-if(!t){
-allureResult.innerText="Erreur";
-return;
-}
-
-let a=t/5;
-
-allureResult.innerHTML=
-"EF "+(a+1.1).toFixed(2)+
-" | Tempo "+(a+0.4).toFixed(2)+
-" | Seuil "+(a+0.1).toFixed(2);
-}
-
-// AUTH
-function signup(){
-auth.createUserWithEmailAndPassword(email.value,password.value)
-.catch(e=>alert(e.message));
-}
-
-function login(){
-auth.signInWithEmailAndPassword(email.value,password.value)
-.catch(e=>alert(e.message));
-}
-
-function logout(){auth.signOut();}
-
-// PROFIL
-function saveProfile(){
-let user=auth.currentUser;
-if(!user){alert("Connecte-toi");return;}
-
-db.collection("profiles").doc(user.uid).set({
-nom:profilNom.value,
-age:profilAge.value,
-poids:profilPoids.value,
-fc:profilFcMax.value
-});
-}
-
-// CLASSEMENT
-async function addRunner(){
-
-if(!name.value || !rankTime.value) return;
-
-await db.collection("runners").add({
-name:name.value,
-time:Number(rankTime.value)
-});
-
-loadRanking();
-}
-
-async function loadRanking(){
-
-let snap=await db.collection("runners").orderBy("time").get();
-
-let html="";
-let i=1;
-
-snap.forEach(d=>{
-html+=i+++". "+d.data().name+" - "+d.data().time+" min<br>";
-});
-
-rankList.innerHTML=html;
-}
-
-loadRanking();
-
-</script>
+<button onclick="saveProfile()">Sauvegarder profil</button>
 
 </div>
-</body>
-</html>
+function safeNumber(value){
+let n = Number(value);
+return isNaN(n) ? 0 : n;
+}
