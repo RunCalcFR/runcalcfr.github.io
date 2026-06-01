@@ -44,12 +44,6 @@ margin:auto;
 padding:20px;
 }
 
-.section-title{
-margin-top:30px;
-border-left:5px solid #22c55e;
-padding-left:10px;
-}
-
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
@@ -62,12 +56,12 @@ padding:15px;
 border-radius:12px;
 }
 
-input,select{
+input{
 width:100%;
 padding:10px;
 margin-top:8px;
-border-radius:8px;
 border:none;
+border-radius:8px;
 background:#0b1220;
 color:white;
 }
@@ -93,212 +87,248 @@ font-weight:bold;
 background:#111a2e;
 padding:15px;
 border-radius:12px;
-text-align:center;
 }
 </style>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+<script>
+
+// 🔥 CONFIG FIREBASE (TON PROJET)
+const firebaseConfig = {
+  apiKey: "AIzaSyBFpxJIxLgmbxKfdEaanhN4kuhWAf9pkTE",
+  authDomain: "runcalc-38716.firebaseapp.com",
+  projectId: "runcalc-38716",
+  storageBucket: "runcalc-38716.appspot.com",
+  messagingSenderId: "1065168370740",
+  appId: "1:1065168370740:web:1c67250311a2bb665f5e61"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+
+// =====================
+// VO2 MAX
+// =====================
+function calcVO2(){
+let d = Number(document.getElementById("vo2_distance").value);
+let t = Number(document.getElementById("vo2_time").value);
+
+let v = (d/t)*60;
+let vo2 = (3.5*v).toFixed(1);
+
+document.getElementById("vo2_result").innerText = "VO2 Max : " + vo2;
+}
+
+
+// =====================
+// SPEED
+// =====================
+function calcSpeed(){
+let p = document.getElementById("pace").value.split(":");
+let m = +p[0], s = +p[1];
+let speed = 60/(m + s/60);
+
+document.getElementById("speed_result").innerText =
+speed.toFixed(2) + " km/h";
+}
+
+
+// =====================
+// DISTANCE
+// =====================
+function calcDistance(){
+let t = Number(document.getElementById("dist_time").value);
+let v = Number(document.getElementById("dist_speed").value);
+
+document.getElementById("dist_result").innerText =
+((t/60)*v).toFixed(2) + " km";
+}
+
+
+// =====================
+// FC
+// =====================
+function analyseFC(){
+let max = Number(document.getElementById("fcmax").value);
+let moy = Number(document.getElementById("fcmoy").value);
+
+let pct = (moy/max)*100;
+
+let zone =
+pct < 70 ? "Récupération" :
+pct < 80 ? "Endurance" :
+pct < 88 ? "Seuil" :
+pct < 95 ? "VO2 Max" :
+"Max";
+
+document.getElementById("fcResult").innerText =
+pct.toFixed(1) + "% - " + zone;
+}
+
+
+// =====================
+// AUTH
+// =====================
+function signup(){
+auth.createUserWithEmailAndPassword(
+email.value, password.value
+).then(()=>alert("Compte créé"))
+.catch(e=>alert(e.message));
+}
+
+function login(){
+auth.signInWithEmailAndPassword(
+email.value, password.value
+).then(()=>alert("Connecté"))
+.catch(e=>alert(e.message));
+}
+
+function logout(){
+auth.signOut();
+}
+
+
+// =====================
+// PROFIL
+// =====================
+function saveProfile(){
+
+const user = auth.currentUser;
+if(!user) return alert("Connecte-toi");
+
+db.collection("profiles").doc(user.uid).set({
+nom: profilNom.value,
+age: profilAge.value,
+poids: profilPoids.value,
+fc: profilFcMax.value
+});
+
+alert("Profil sauvegardé");
+}
+
+
+// =====================
+// CLASSEMENT
+// =====================
+async function addRunner(){
+
+await db.collection("runners").add({
+name: name.value,
+time: Number(rankTime.value),
+date: Date.now()
+});
+
+loadRanking();
+}
+
+async function loadRanking(){
+
+const snap = await db.collection("runners")
+.orderBy("time")
+.get();
+
+let html = "";
+let i = 1;
+
+snap.forEach(doc=>{
+html += `${i++}. ${doc.data().name} - ${doc.data().time} min<br>`;
+});
+
+rankList.innerHTML = html;
+}
+
+loadRanking();
+
+</script>
+
 </head>
 
 <body>
 
 <header>
 <h1>🏃 RunCalc Pro Plus</h1>
-<p>Ton coach running intelligent</p>
 </header>
 
 <nav>
-<a href="#accueil">Accueil</a>
-<a href="#calculs">Calculs</a>
-<a href="#perf">Performance</a>
-<a href="#classement">Classement</a>
+<a href="#calc">Calculs</a>
+<a href="#rank">Classement</a>
 <a href="#profil">Profil</a>
 </nav>
 
 <div class="container">
 
-<!-- ACCUEIL -->
-<h2 class="section-title" id="accueil">📊 Dashboard</h2>
-
-<div class="grid">
-<div class="stat">
-<h3>VO2 Max</h3>
-<div id="homeVo2">--</div>
+<!-- LOGIN -->
+<div class="card">
+<h2>Connexion</h2>
+<input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Mot de passe">
+<button onclick="signup()">Inscription</button>
+<button onclick="login()">Connexion</button>
+<button onclick="logout()">Déconnexion</button>
 </div>
 
-<div class="stat">
-<h3>Objectif</h3>
-<div id="objectif">5 km rapide</div>
-</div>
-</div>
-
-<!-- CALCULS -->
-<h2 class="section-title" id="calculs">🧮 Calculs</h2>
-
-<div class="grid">
-
+<!-- VO2 -->
 <div class="card">
 <h2>VO2 Max</h2>
-<input id="vo2_distance" placeholder="Distance (km)">
-<input id="vo2_time" placeholder="Temps (min)">
+<input id="vo2_distance">
+<input id="vo2_time">
 <button onclick="calcVO2()">Calculer</button>
-<div id="vo2_result" class="result"></div>
+<div id="vo2_result"></div>
 </div>
 
+<!-- SPEED -->
 <div class="card">
 <h2>Vitesse</h2>
-<input id="pace" placeholder="ex: 4:30">
+<input id="pace">
 <button onclick="calcSpeed()">Calculer</button>
-<div id="speed_result" class="result"></div>
+<div id="speed_result"></div>
 </div>
 
+<!-- DISTANCE -->
 <div class="card">
 <h2>Distance</h2>
-<input id="dist_time" placeholder="Temps (min)">
-<input id="dist_speed" placeholder="Vitesse (km/h)">
+<input id="dist_time">
+<input id="dist_speed">
 <button onclick="calcDistance()">Calculer</button>
-<div id="dist_result" class="result"></div>
+<div id="dist_result"></div>
 </div>
 
+<!-- FC -->
 <div class="card">
 <h2>Fréquence cardiaque</h2>
-<input id="fcmax" placeholder="FC max">
-<input id="fcmoy" placeholder="FC moyenne">
+<input id="fcmax">
+<input id="fcmoy">
 <button onclick="analyseFC()">Analyser</button>
-<div id="fcResult" class="result"></div>
-</div>
-
-</div>
-
-<!-- PERFORMANCE -->
-<h2 class="section-title" id="perf">🚀 Performance</h2>
-
-<div class="grid">
-
-<div class="card">
-<h2>Plan 5 km</h2>
-<input id="time5k" placeholder="Temps 5 km (min)">
-<button onclick="plan5k()">Analyser</button>
-<div id="planResult" class="result"></div>
-</div>
-
-<div class="card">
-<h2>Estimation courses</h2>
-<input id="est_dist" placeholder="Distance actuelle (km)">
-<input id="est_time" placeholder="Temps (min)">
-<button onclick="estimate()">Estimer</button>
-<div id="estResult" class="result"></div>
-</div>
-
-<div class="card">
-<h2>Allures</h2>
-<input id="allure5k" placeholder="Temps 5 km (min)">
-<button onclick="calcAllures()">Calculer</button>
-<div id="allureResult" class="result"></div>
-</div>
-
+<div id="fcResult"></div>
 </div>
 
 <!-- CLASSEMENT -->
-<h2 class="section-title" id="classement">🏆 Classement</h2>
-
-<div class="card">
-<h2>Top coureurs</h2>
-<div id="ranking">
-<div>🥇 Alex - 18:30</div>
-<div>🥈 Max - 19:10</div>
-<div>🥉 Tom - 20:05</div>
-</div>
+<div class="card" id="rank">
+<h2>Classement</h2>
+<input id="name" placeholder="Nom">
+<input id="rankTime" placeholder="Temps">
+<button onclick="addRunner()">Ajouter</button>
+<div id="rankList"></div>
 </div>
 
 <!-- PROFIL -->
-<h2 class="section-title" id="profil">👤 Profil</h2>
-
-<div class="card">
-<input id="profilNom" placeholder="Nom">
-<input id="profilAge" placeholder="Âge">
-<input id="profilPoids" placeholder="Poids">
-<input id="profilFcMax" placeholder="FC Max">
+<div class="card" id="profil">
+<h2>Profil</h2>
+<input id="profilNom">
+<input id="profilAge">
+<input id="profilPoids">
+<input id="profilFcMax">
 <button onclick="saveProfile()">Sauvegarder</button>
-<div id="profilResult" class="result"></div>
 </div>
 
 </div>
-
-<script>
-
-// VO2
-function calcVO2(){
-let d=+vo2_distance.value;
-let t=+vo2_time.value;
-let v=(d/t)*60;
-let vo2=(3.5*v).toFixed(1);
-
-vo2_result.innerText="VO2 Max : "+vo2;
-homeVo2.innerText=vo2;
-}
-
-// SPEED
-function calcSpeed(){
-let p=pace.value.split(":");
-let m=+p[0], s=+p[1];
-let speed=60/(m+s/60);
-speed_result.innerText=speed.toFixed(2)+" km/h";
-}
-
-// DISTANCE
-function calcDistance(){
-let t=+dist_time.value;
-let v=+dist_speed.value;
-dist_result.innerText=((t/60)*v).toFixed(2)+" km";
-}
-
-// FC
-function analyseFC(){
-let max=+fcmax.value;
-let moy=+fcmoy.value;
-let pct=(moy/max)*100;
-
-let z=pct<70?"Récup":pct<80?"Endurance":pct<88?"Seuil":pct<95?"VO2":"Max";
-
-fcResult.innerText=pct.toFixed(1)+"% - "+z;
-}
-
-// PLAN 5K
-function plan5k(){
-let t=+time5k.value;
-planResult.innerText =
-t>25?"Débutant: footing + 6x400m":
-t>21?"Intermédiaire: 8x400m + seuil":
-"Avancé: VMA + fractionné";
-}
-
-// ESTIMATION
-function estimate(){
-let d=+est_dist.value;
-let t=+est_time.value;
-
-estResult.innerHTML =
-[5,10,21,42].map(x=>
-x+"km : "+(t*Math.pow(x/d,1.06)).toFixed(1)+" min"
-).join("<br>");
-}
-
-// ALLURES
-function calcAllures(){
-let t=+allure5k.value;
-let a=t/5;
-
-allureResult.innerHTML=
-"EF "+(a+1.1).toFixed(2)+
-" | Tempo "+(a+0.4).toFixed(2)+
-" | Seuil "+(a+0.1).toFixed(2);
-}
-
-// PROFIL (simple local)
-function saveProfile(){
-profilResult.innerText="Profil sauvegardé ✔";
-}
-
-</script>
 
 </body>
 </html>
