@@ -774,3 +774,117 @@ vo2_home.innerText=vo2;
 saveProgress(Number(vo2), Number((t/d).toFixed(2)));
 updateStravaScore();
   
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#22c55e">
+<h2 class="section-title">📍 GPS Run (beta)</h2>
+
+<div class="card">
+
+<button onclick="startGPS()">▶️ Démarrer course</button>
+<button onclick="stopGPS()">⛔ Stop</button>
+
+<div id="gpsData" class="result"></div>
+
+</div>
+let watchId;
+let path = [];
+let startTime;
+
+function startGPS(){
+
+if(!navigator.geolocation){
+gpsData.innerText="GPS non supporté";
+return;
+}
+
+startTime = Date.now();
+path = [];
+
+watchId = navigator.geolocation.watchPosition(pos=>{
+
+path.push({
+lat:pos.coords.latitude,
+lng:pos.coords.longitude,
+time:Date.now()
+});
+
+gpsData.innerText=
+"Points: "+path.length;
+
+});
+}
+
+function stopGPS(){
+
+navigator.geolocation.clearWatch(watchId);
+
+let duration = (Date.now()-startTime)/60000;
+
+gpsData.innerHTML=
+"🏃 Run terminé<br>"+
+"Durée: "+duration.toFixed(1)+" min<br>"+
+"Points GPS: "+path.length;
+
+/* sauvegarde cloud possible ici */
+}
+ let badges = JSON.parse(localStorage.getItem("badges") || "[]");
+
+function checkBadges(){
+
+if(historyData.length>=1 && !badges.includes("first_run")){
+badges.push("first_run");
+}
+
+if(historyData.length>=10 && !badges.includes("10_runs")){
+badges.push("10_runs");
+}
+
+localStorage.setItem("badges", JSON.stringify(badges));
+
+return badges;
+}
+  function ultraAI(){
+
+if(historyData.length<2){
+return "🟡 Pas assez de données pour analyse";
+}
+
+let last = historyData[historyData.length-1];
+let prev = historyData[historyData.length-2];
+
+let trend = last.pace - prev.pace;
+
+let msg="";
+
+if(trend<0){
+msg="🔥 progression en cours → augmenter intensité";
+}
+else if(trend<0.3){
+msg="⚡ stable → maintien plan actuel";
+}
+else{
+msg="🟠 fatigue détectée → récupération recommandée";
+}
+
+return msg;
+}
+  function updateDashboard(){
+
+let score = historyData.length*5;
+
+let ai = ultraAI();
+
+document.getElementById("level_home").innerText=
+"Score forme: "+score+" → "+ai;
+
+checkBadges();
+}
+  await db.collection("runs").add({
+uid:auth.currentUser.uid,
+distance:d,
+time:t,
+pace:t/d,
+vo2:vo2,
+date:new Date()
+});
+  
