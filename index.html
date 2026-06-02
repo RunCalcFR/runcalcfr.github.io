@@ -4,53 +4,67 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="description" content="RunCalc Pro Plus est un coach running intelligent permettant de calculer la VO2 Max, les allures, la vitesse, la fréquence cardiaque et les performances sur 5 km, 10 km, semi-marathon et marathon.">
+<title>RunCalc Pro Plus | Coach Running Intelligent</title>
 
-<meta name="keywords" content="running, course à pied, calcul allure, VO2 Max, vitesse course, semi-marathon, marathon, entraînement running, RunCalc Pro Plus">
-
-<meta name="author" content="RunCalc Pro Plus">
-
-<title>RunCalc Pro Plus</title>
+<meta name="description" content="RunCalc Pro Plus est un coach running intelligent : allure, VO2 max, fréquence cardiaque, plans 5 km et suivi performance type Strava.">
+<meta name="keywords" content="running, course à pied, 5 km, 10 km, marathon, VO2 max, pace, allure, entraînement running">
 
 <style>
+
 body{
 margin:0;
-font-family:Arial;
+font-family:Arial, sans-serif;
 background:#0b1220;
 color:white;
 }
 
+/* HEADER STRAVA STYLE */
 header{
-background:linear-gradient(90deg,#22c55e,#16a34a);
+background:linear-gradient(90deg,#22c55e,#06b6d4);
 padding:25px;
 text-align:center;
 }
 
+/* NAV */
 nav{
 position:sticky;
 top:0;
-background:#111a2e;
+background:#0f172a;
 display:flex;
-gap:10px;
 justify-content:center;
-flex-wrap:wrap;
+gap:10px;
 padding:10px;
+flex-wrap:wrap;
+z-index:100;
 }
 
 nav a{
 color:white;
-background:#22c55e;
+text-decoration:none;
+background:#1f2937;
 padding:8px 12px;
 border-radius:8px;
-text-decoration:none;
 }
 
+nav a:hover{
+background:#22c55e;
+color:black;
+}
+
+/* LAYOUT */
 .container{
 max-width:1200px;
 margin:auto;
 padding:20px;
 }
 
+.section-title{
+margin-top:30px;
+border-left:4px solid #22c55e;
+padding-left:10px;
+}
+
+/* CARDS STRAVA */
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
@@ -61,8 +75,16 @@ gap:15px;
 background:#111a2e;
 padding:15px;
 border-radius:12px;
+transition:0.2s;
+border-left:3px solid #22c55e;
 }
 
+.card:hover{
+transform:scale(1.01);
+background:#121c33;
+}
+
+/* INPUTS */
 input{
 width:100%;
 padding:10px;
@@ -73,6 +95,7 @@ background:#0b1220;
 color:white;
 }
 
+/* BUTTONS */
 button{
 width:100%;
 padding:10px;
@@ -84,244 +107,447 @@ font-weight:bold;
 cursor:pointer;
 }
 
+button:active{
+transform:scale(0.97);
+}
+
+/* RESULT */
 .result{
 margin-top:10px;
-color:#60ffa8;
+color:#4ef0a6;
 font-weight:bold;
+line-height:1.6;
 }
+
 </style>
-
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-
-<script>
-const firebaseConfig = {
-  apiKey: "YOUR_KEY",
-  authDomain: "YOUR_DOMAIN",
-  projectId: "YOUR_PROJECT",
-  storageBucket: "YOUR_BUCKET",
-  messagingSenderId: "YOUR_ID",
-  appId: "YOUR_APP_ID"
-};
-
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-</script>
-
 </head>
 
 <body>
 
 <header>
 <h1>🏃 RunCalc Pro Plus</h1>
-<p>Coach running intelligent</p>
+<p>Coach running intelligent type Strava</p>
 </header>
 
 <nav>
-<a href="#accueil">Accueil</a>
+<a href="#dashboard">Dashboard</a>
 <a href="#calculs">Calculs</a>
-<a href="#perf">Performance</a>
-<a href="#classement">Classement</a>
-<a href="#profil">Profil</a>
+<a href="#performance">Performance</a>
+<a href="#coach">Coach 5K</a>
 </nav>
 
 <div class="container">
 
 <!-- DASHBOARD -->
-<h2 id="accueil">🏠 Dashboard</h2>
+<h2 id="dashboard" class="section-title">📊 Dashboard</h2>
 
 <div class="grid">
+
 <div class="card">
 <h3>VO2 Max</h3>
-<div id="homeVo2">--</div>
+<div id="vo2_home">--</div>
 </div>
 
 <div class="card">
-<h3>Objectif</h3>
-<div>5 km rapide</div>
+<h3>Zone FC</h3>
+<div id="fc_home">--</div>
 </div>
+
+<div class="card">
+<h3>Niveau</h3>
+<div id="level_home">--</div>
+</div>
+
 </div>
 
 <!-- CALCULS -->
-<h2 id="calculs">📊 Calculs</h2>
+<h2 id="calculs" class="section-title">🧮 Calculs</h2>
 
 <div class="grid">
 
 <div class="card">
-<h3>VO2 Max</h3>
-<input id="vo2_distance" placeholder="km ex: 5">
-<input id="vo2_time" placeholder="min ex: 20">
-<button onclick="calcVO2()">Calculer</button>
-<div id="vo2_result" class="result"></div>
+<h3>Allure (min/km)</h3>
+<input id="distance" placeholder="km">
+<input id="time" placeholder="min">
+<button onclick="calcPace()">Calculer</button>
+<div id="paceResult" class="result"></div>
 </div>
 
 <div class="card">
 <h3>Vitesse</h3>
-<input id="pace" placeholder="4:30">
+<input id="paceInput" placeholder="ex 4:30">
 <button onclick="calcSpeed()">Calculer</button>
-<div id="speed_result" class="result"></div>
+<div id="speedResult" class="result"></div>
 </div>
 
-<div class="card">
-<h3>Distance</h3>
-<input id="dist_time" placeholder="min">
-<input id="dist_speed" placeholder="km/h">
-<button onclick="calcDistance()">Calculer</button>
-<div id="dist_result" class="result"></div>
 </div>
 
+<!-- PERFORMANCE -->
+<h2 id="performance" class="section-title">🚀 Performance</h2>
+
+<div class="grid">
+
 <div class="card">
-<h3>FC</h3>
+<h3>Analyse FC</h3>
 <input id="fcmax" placeholder="FC max">
 <input id="fcmoy" placeholder="FC moyenne">
 <button onclick="analyseFC()">Analyser</button>
 <div id="fcResult" class="result"></div>
 </div>
 
-</div>
-
-<!-- PERFORMANCE -->
-<h2 id="perf">🚀 Performance</h2>
-
-<div class="grid">
-
 <div class="card">
-<h3>Plan 5 km</h3>
-<input id="time5k" placeholder="5 km temps">
-<button onclick="plan5k()">OK</button>
-<div id="planResult"></div>
-</div>
-
-<div class="card">
-<h3>Estimation</h3>
-<input id="est_dist" placeholder="Distance (ex: 10 km)">
-<input id="est_time" placeholder="Temps (ex: 45 min)">
+<h3>Estimation course</h3>
+<input id="d" placeholder="Distance">
+<input id="t2" placeholder="Temps">
 <button onclick="estimate()">OK</button>
-<div id="estResult"></div>
+<div id="estResult" class="result"></div>
 </div>
+
+</div>
+
+<!-- COACH -->
+<h2 id="coach" class="section-title">🏁 Coach 5 km intelligent</h2>
 
 <div class="card">
-<h3>Allures</h3>
-<input id="allure5k" placeholder="Temps 5 km (ex: 20 min)">
-<button onclick="calcAllures()">OK</button>
-<div id="allureResult"></div>
-</div>
 
-</div>
+<input id="time5k" placeholder="Temps actuel 5 km">
+<input id="objectif5k" placeholder="Objectif 5 km">
 
-<!-- CLASSEMENT -->
-<h2 id="classement">🏆 Classement</h2>
+<button onclick="generateCoach()">Générer plan 4 semaines</button>
 
-<div class="card">
-<input id="name" placeholder="Nom">
-<input id="rankTime" placeholder="Temps">
-<button onclick="addRunner()">Ajouter</button>
-<div id="rankList"></div>
-</div>
+<div id="coachResult" class="result"></div>
 
-<!-- PROFIL -->
-<h2 id="profil">👤 Profil</h2>
-
-<div class="card">
-<input id="profilNom" placeholder="Nom">
-<input id="profilAge" placeholder="Âge">
-<input id="profilPoids" placeholder="Poids">
-<input id="profilFcMax" placeholder="FC max">
-<button onclick="saveProfile()">Sauvegarder</button>
-</div>
-
-<!-- LOGIN -->
-<div class="card">
-<h3>Connexion</h3>
-<input id="email" placeholder="Email">
-<input id="password" type="password" placeholder="Mot de passe">
-<button onclick="signup()">Signup</button>
-<button onclick="login()">Login</button>
-<button onclick="logout()">Logout</button>
 </div>
 
 </div>
 
 <script>
 
-// ===================== CALCULS =====================
+/* ================= DASHBOARD ================= */
 
-function calcVO2(){
-let d=Number(vo2_distance.value);
-let t=Number(vo2_time.value);
-if(!d||!t)return vo2_result.innerText="Erreur";
-let vo2=(3.5*(d/t*60)).toFixed(1);
-vo2_result.innerText="VO2: "+vo2;
-homeVo2.innerText=vo2;
+let levelGlobal = "";
+
+function updateLevel(t){
+if(t<=19) levelGlobal="Avancé 🔥";
+else if(t<=24) levelGlobal="Intermédiaire ⚡";
+else levelGlobal="Débutant 🟢";
+
+level_home.innerText=levelGlobal;
+}
+
+/* ================= CALCULS ================= */
+
+function calcPace(){
+let d=Number(distance.value);
+let t=Number(time.value);
+if(!d||!t)return paceResult.innerText="Erreur";
+
+let p=t/d;
+let m=Math.floor(p);
+let s=Math.round((p-m)*60);
+
+paceResult.innerText=m+":"+s+" min/km";
+
+vo2_home.innerText=(3.5*(d/t*60)).toFixed(1);
 }
 
 function calcSpeed(){
-let v=pace.value;
-if(!v.includes(":"))return speed_result.innerText="4:30";
-let [m,s]=v.split(":").map(Number);
-speed_result.innerText=(60/(m+s/60)).toFixed(2)+" km/h";
-}
+let v=paceInput.value;
+if(!v.includes(":"))return speedResult.innerText="Erreur";
 
-function calcDistance(){
-let t=Number(dist_time.value);
-let v=Number(dist_speed.value);
-if(!t||!v)return dist_result.innerText="Erreur";
-dist_result.innerText=((t/60)*v).toFixed(2)+" km";
+let [m,s]=v.split(":").map(Number);
+speedResult.innerText=(60/(m+s/60)).toFixed(2)+" km/h";
 }
 
 function analyseFC(){
 let max=Number(fcmax.value);
 let moy=Number(fcmoy.value);
 if(!max||!moy)return fcResult.innerText="Erreur";
+
 let p=(moy/max)*100;
-fcResult.innerText=p.toFixed(1)+"%";
+
+let zone="";
+
+if(p<70) zone="EF 🟢";
+else if(p<80) zone="Endurance 🟡";
+else if(p<88) zone="Seuil 🟠";
+else zone="VO2 max 🔴";
+
+fc_home.innerText=zone;
+fcResult.innerText=p.toFixed(1)+"% → "+zone;
 }
 
-// ===================== PERFORMANCE =====================
-
-function plan5k(){
-let t=Number(time5k.value);
-planResult.innerText=t>25?"Débutant":t>21?"Inter":"Avancé";
-}
+/* ================= ESTIMATION ================= */
 
 function estimate(){
-let d=Number(est_dist.value);
-let t=Number(est_time.value);
+let d=Number(d.value);
+let t=Number(t2.value);
+
 estResult.innerHTML=[5,10,21,42].map(x=>
-x+" km : "+(t*Math.pow(x/d,1.06)).toFixed(1)
+x+" km : "+(t*Math.pow(x/d,1.06)).toFixed(1)+" min"
 ).join("<br>");
 }
 
-function calcAllures(){
-let t=Number(allure5k.value);
-let a=t/5;
-allureResult.innerHTML="EF "+(a+1.1).toFixed(2);
+/* ================= COACH 5K ================= */
+
+function generateCoach(){
+
+let current=Number(time5k.value);
+let goal=Number(objectif5k.value);
+
+if(!current||!goal){
+coachResult.innerText="Erreur";
+return;
 }
 
-// ===================== FIREBASE =====================
+updateLevel(current);
 
-async function addRunner(){
-await db.collection("runners").add({
-name:name.value,
-time:Number(rankTime.value)
+let plan="";
+
+plan+= "<b>Niveau :</b> "+levelGlobal+"<br>";
+plan+= "<b>Objectif :</b> "+goal+" min 5 km<br><br>";
+
+plan+= "<b>Semaine 1</b><br>EF 30-40 min + 6x400m<br><br>";
+plan+= "<b>Semaine 2</b><br>EF 40 min + 5x800m<br><br>";
+plan+= "<b>Semaine 3</b><br>4x1000m + fractionné court<br><br>";
+plan+= "<b>Semaine 4</b><br>affûtage + course 5 km 🏁<br><br>";
+
+let diff=current-goal;
+
+if(diff>5) plan+="⚠️ focus endurance";
+else if(diff>2) plan+="⚡ progression équilibrée";
+else plan+="🔥 objectif rapide";
+
+coachResult.innerHTML=plan;
+}
+
+</script>
+
+</body>
+</html>
+<h2 class="section-title">📅 Historique & Stats</h2>
+
+<div class="grid">
+
+<div class="card">
+<h3>Ajouter séance</h3>
+
+<input id="runDistance" placeholder="Distance km">
+<input id="runTime" placeholder="Temps min">
+
+<button onclick="addSession()">Ajouter séance</button>
+
+<div id="sessionMsg" class="result"></div>
+</div>
+
+<div class="card">
+<h3>Historique</h3>
+<div id="history"></div>
+</div>
+
+<div class="card">
+<h3>Score de forme</h3>
+<div id="formScore">--</div>
+</div>
+
+</div>
+<h2 class="section-title">📈 Progression 5 km</h2>
+
+<div class="card">
+<canvas id="graph" width="400" height="200"></canvas>
+</div>
+let sessions = JSON.parse(localStorage.getItem("runs") || "[]");
+
+function addSession(){
+
+let d = Number(runDistance.value);
+let t = Number(runTime.value);
+
+if(!d || !t){
+sessionMsg.innerText="Erreur";
+return;
+}
+
+sessions.push({
+date:new Date().toLocaleDateString(),
+distance:d,
+time:t,
+pace:(t/d)
 });
-loadRanking();
+
+localStorage.setItem("runs", JSON.stringify(sessions));
+
+sessionMsg.innerText="Séance ajoutée ✔";
+
+renderHistory();
+updateScore();
+drawGraph();
 }
 
-async function loadRanking(){
-let snap=await db.collection("runners").orderBy("time").get();
-let html="",i=1;
-snap.forEach(d=>{
-html+=i+++". "+d.data().name+" - "+d.data().time+"<br>";
+function renderHistory(){
+
+let html="";
+
+sessions.slice(-6).reverse().forEach(s=>{
+html+=`
+<div>
+📅 ${s.date}<br>
+🏃 ${s.distance} km - ${s.time} min<br>
+⏱ ${s.pace.toFixed(2)} min/km
+</div><hr>
+`;
 });
-rankList.innerHTML=html;
+
+history.innerHTML=html;
 }
-loadRanking();
 
-// ===================== AUTH =====================
+function updateScore(){
 
+if(sessions.length===0){
+formScore.innerText="Aucune donnée";
+return;
+}
+
+let avg = sessions.reduce((a,b)=>a+b.pace,0)/sessions.length;
+
+let score = 100 - (avg*10);
+
+let level="";
+
+if(score>80) level="🔥 Très bonne forme";
+else if(score>60) level="⚡ Bonne forme";
+else level="🟡 Base à construire";
+
+formScore.innerText=score.toFixed(1)+" → "+level;
+}
+
+renderHistory();
+updateScore();
+function drawGraph(){
+
+let canvas = document.getElementById("graph");
+let ctx = canvas.getContext("2d");
+
+ctx.clearRect(0,0,400,200);
+
+if(sessions.length===0)return;
+
+let data = sessions.slice(-10);
+
+let max = Math.max(...data.map(s=>s.pace));
+
+ctx.beginPath();
+
+data.forEach((s,i)=>{
+
+let x = i*40;
+let y = 180 - (s.pace/max)*150;
+
+ctx.lineTo(x,y);
+
+});
+
+ctx.strokeStyle="#22c55e";
+ctx.stroke();
+}
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+apiKey: "YOUR_KEY",
+authDomain: "YOUR_DOMAIN",
+projectId: "YOUR_PROJECT",
+storageBucket: "YOUR_BUCKET",
+messagingSenderId: "YOUR_ID",
+appId: "YOUR_APP_ID"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+</script>
+<h2 class="section-title">☁️ Historique Cloud (Strava)</h2>
+
+<div class="grid">
+
+<div class="card">
+<h3>Ajouter séance</h3>
+
+<input id="c_distance" placeholder="Distance km">
+<input id="c_time" placeholder="Temps min">
+
+<button onclick="addCloudRun()">Sauvegarder cloud</button>
+
+<div id="cloudMsg" class="result"></div>
+</div>
+
+<div class="card">
+<h3>Mes séances</h3>
+<div id="cloudHistory"></div>
+</div>
+
+</div>
+async function addCloudRun(){
+
+let user = auth.currentUser;
+if(!user){
+cloudMsg.innerText="Connecte-toi";
+return;
+}
+
+let d = Number(c_distance.value);
+let t = Number(c_time.value);
+
+if(!d || !t){
+cloudMsg.innerText="Erreur";
+return;
+}
+
+await db.collection("runs").add({
+uid:user.uid,
+distance:d,
+time:t,
+pace:t/d,
+date:new Date()
+});
+
+cloudMsg.innerText="Sauvegardé ☁️";
+
+loadCloudRuns();
+}
+async function loadCloudRuns(){
+
+let user = auth.currentUser;
+if(!user)return;
+
+let snap = await db.collection("runs")
+.where("uid","==",user.uid)
+.orderBy("date","desc")
+.get();
+
+let html="";
+
+snap.forEach(doc=>{
+let d=doc.data();
+
+html+=`
+<div>
+🏃 ${d.distance} km - ${d.time} min<br>
+⏱ ${d.pace.toFixed(2)} min/km
+</div><hr>
+`;
+});
+
+cloudHistory.innerHTML=html;
+}
+auth.onAuthStateChanged(user=>{
+if(user){
+loadCloudRuns();
+}
+});
 function signup(){
 auth.createUserWithEmailAndPassword(email.value,password.value);
 }
@@ -333,21 +559,218 @@ auth.signInWithEmailAndPassword(email.value,password.value);
 function logout(){
 auth.signOut();
 }
+<h2 class="section-title">🤖 IA Coach Intelligent</h2>
 
-// ===================== PROFILE =====================
+<div class="card">
 
-function saveProfile(){
-let u=auth.currentUser;
-if(!u)return;
-db.collection("profiles").doc(u.uid).set({
-nom:profilNom.value,
-age:profilAge.value,
-poids:profilPoids.value,
-fc:profilFcMax.value
-});
+<input id="ai_5k" placeholder="Temps 5 km actuel">
+<input id="ai_goal" placeholder="Objectif 5 km">
+
+<input id="ai_lastRun" placeholder="Dernière séance (min/km ex 4.30)">
+
+<button onclick="runAICoach()">Générer séance intelligente</button>
+
+<div id="aiResult" class="result"></div>
+
+</div>
+function runAICoach(){
+
+let current = Number(ai_5k.value);
+let goal = Number(ai_goal.value);
+let last = ai_lastRun.value;
+
+if(!current || !goal){
+aiResult.innerText="Erreur";
+return;
 }
 
-</script>
+let diff = current - goal;
 
-</body>
-</html>
+/* conversion last run */
+let fatigue = 0;
+
+if(last.includes(":")){
+let [m,s] = last.split(":").map(Number);
+fatigue = m + s/60;
+}
+else{
+fatigue = Number(last);
+}
+
+let session = "";
+
+let intensity = "";
+
+if(fatigue < 4.5){
+intensity = "🔴 haute intensité";
+}
+else if(fatigue < 5.5){
+intensity = "🟠 seuil";
+}
+else{
+intensity = "🟢 récupération";
+}
+
+/* IA LOGIC */
+if(diff > 5){
+session = `
+🧠 IA Coach : priorité endurance
+
+🏃 Footing EF 45 min
+🏃 6x400m léger
+📉 récupération active
+`;
+}
+
+else if(diff > 2){
+session = `
+🧠 IA Coach : progression équilibrée
+
+🏃 40 min EF
+🏃 5x800m seuil
+🏃 10 min tempo
+`;
+}
+
+else{
+session = `
+🧠 IA Coach : performance
+
+🏃 3x1000m rapide
+🏃 8x200m sprint
+🏁 simulation 5 km
+`;
+}
+
+/* adaptation fatigue */
+if(fatigue < 4.5){
+session += "\n⚠️ fatigue faible → intensité augmentée";
+}
+else if(fatigue > 6){
+session += "\n⚠️ fatigue élevée → récupération conseillée";
+}
+
+aiResult.innerText =
+"Zone détectée : "+intensity+"\n\n"+session;
+}
+  <h2 class="section-title">📈 Progression Performance</h2>
+
+<div class="grid">
+
+<div class="card">
+<h3>VO2 Max évolution</h3>
+<canvas id="vo2Chart" width="400" height="200"></canvas>
+</div>
+
+<div class="card">
+<h3>Allure moyenne</h3>
+<canvas id="paceChart" width="400" height="200"></canvas>
+</div>
+
+</div>
+let historyData = JSON.parse(localStorage.getItem("history_v7") || "[]");
+
+function saveProgress(vo2, pace){
+
+historyData.push({
+date:new Date().toLocaleDateString(),
+vo2:vo2,
+pace:pace
+});
+
+localStorage.setItem("history_v7", JSON.stringify(historyData));
+
+drawCharts();
+}
+  function drawCharts(){
+
+drawVO2();
+drawPace();
+}
+
+/* VO2 GRAPH */
+function drawVO2(){
+
+let c=document.getElementById("vo2Chart");
+if(!c)return;
+
+let ctx=c.getContext("2d");
+ctx.clearRect(0,0,400,200);
+
+if(historyData.length===0)return;
+
+let max=Math.max(...historyData.map(x=>x.vo2));
+
+ctx.beginPath();
+
+historyData.slice(-10).forEach((d,i)=>{
+let x=i*40;
+let y=180-(d.vo2/max)*150;
+ctx.lineTo(x,y);
+});
+
+ctx.strokeStyle="#22c55e";
+ctx.stroke();
+}
+
+/* PACE GRAPH */
+function drawPace(){
+
+let c=document.getElementById("paceChart");
+if(!c)return;
+
+let ctx=c.getContext("2d");
+ctx.clearRect(0,0,400,200);
+
+if(historyData.length===0)return;
+
+let max=Math.max(...historyData.map(x=>x.pace));
+
+ctx.beginPath();
+
+historyData.slice(-10).forEach((d,i)=>{
+let x=i*40;
+let y=180-(d.pace/max)*150;
+ctx.lineTo(x,y);
+});
+
+ctx.strokeStyle="#06b6d4";
+ctx.stroke();
+}
+  function predict5k(){
+
+let lastRuns = historyData.slice(-3);
+
+if(lastRuns.length===0) return "Pas assez de données";
+
+let avgPace = lastRuns.reduce((a,b)=>a+b.pace,0)/lastRuns.length;
+
+/* formule simple progression */
+let prediction = (avgPace * 5 * 0.98).toFixed(1);
+
+return prediction;
+}
+  function updateStravaScore(){
+
+if(historyData.length===0)return;
+
+let last = historyData.slice(-1)[0];
+
+let score = 100 - (last.pace * 10) + (last.vo2 * 2);
+
+let level="";
+
+if(score>85) level="🔥 Elite";
+else if(score>70) level="⚡ Bon niveau";
+else level="🟡 Progression";
+
+document.getElementById("level_home").innerText=
+score.toFixed(1)+" → "+level;
+}
+  let vo2 = (3.5*(d/t*60)).toFixed(1);
+vo2_home.innerText=vo2;
+
+/* SAVE DATA */
+saveProgress(Number(vo2), Number((t/d).toFixed(2)));
+updateStravaScore();
+  
