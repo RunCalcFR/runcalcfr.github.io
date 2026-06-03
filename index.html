@@ -75,7 +75,16 @@ canvas{width:100%;background:#0b1220;border-radius:10px;}
 <h2 class="section-title">📊 Dashboard complet</h2>
 
 <div class="grid">
+<div class="card">
+<b>🧪 VO2 max test 5 km</b>
 
+<input id="vo2dist" placeholder="Distance (ex: 5)">
+<input id="vo2time" placeholder="Temps (min ex: 25)">
+
+<button onclick="calcVO2Test()">Calcul VO2 5K</button>
+
+<div id="vo2testOut">--</div>
+</div>
 <div class="card">VO2 Max<div id="vo2">--</div></div>
 <div class="card">Score forme<div id="score">--</div></div>
 <div class="card">FC zone<div id="zone">--</div></div>
@@ -192,6 +201,29 @@ let history = JSON.parse(localStorage.getItem("history")||"[]");
 
 /* ================= CALCUL ALLURE ================= */
 function calcPace(){
+  let vo2test = (3.5 * (d/(t/60))) * 1.1;
+document.getElementById("vo2").innerText = vo2test.toFixed(1);
+  function calcVO2Test(){
+let d = Number(vo2dist.value);
+let t = Number(vo2time.value);
+
+if(!d || !t || d <= 0 || t <= 0) return;
+
+/* vitesse km/h */
+let kmh = (d / t) * 60;
+
+/* VO2 estimé basé performance course */
+let vo2 = 3.5 * kmh;
+
+/* correction effort 5 km */
+vo2 = vo2 * 1.1;
+
+document.getElementById("vo2testOut").innerText =
+"VO2 max estimé: " + vo2.toFixed(1);
+
+/* on met aussi à jour le dashboard VO2 */
+document.getElementById("vo2").innerText = vo2.toFixed(1);
+}
 let d=Number(dist.value);
 let t=Number(time.value);
 if(!d||!t)return;
