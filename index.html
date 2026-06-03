@@ -919,4 +919,37 @@ drawCharts();
 
 /* ================= FIRST LOAD ================= */
 safeInit();
-  
+function forceUIRefresh(){
+
+/* LISTE RUNS */
+if(runs.length === 0){
+runHistory.innerHTML = "Aucune séance pour le moment";
+}
+
+/* SCORE FORME */
+if(!formScore.innerText || formScore.innerText === "--"){
+formScore.innerText = "0 / 100";
+}
+
+/* GRAPHIQUES MESSAGE */
+let vo2Canvas = document.getElementById("vo2Chart");
+let paceCanvas = document.getElementById("paceChart");
+
+if(vo2Canvas && historyData.length === 0){
+let ctx = vo2Canvas.getContext("2d");
+ctx.clearRect(0,0,400,200);
+ctx.fillStyle = "white";
+ctx.fillText("Aucune donnée VO2", 100, 100);
+}
+
+if(paceCanvas && historyData.length === 0){
+let ctx = paceCanvas.getContext("2d");
+ctx.clearRect(0,0,400,200);
+ctx.fillStyle = "white";
+ctx.fillText("Aucune donnée allure", 100, 100);
+}
+
+}
+
+/* AUTO FIX UI */
+setInterval(forceUIRefresh, 4000);  
