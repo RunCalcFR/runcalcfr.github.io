@@ -70,11 +70,12 @@ canvas{width:100%;background:#0b1220;border-radius:10px;}
 
 <div class="container">
 
-<!-- ================= DASHBOARD ================= -->
+<!-- DASHBOARD -->
 <section id="dash" class="section">
 <h2 class="section-title">📊 Dashboard complet</h2>
 
 <div class="grid">
+
 <div class="card">
 <b>🧪 VO2 max test 5 km</b>
 
@@ -85,6 +86,7 @@ canvas{width:100%;background:#0b1220;border-radius:10px;}
 
 <div id="vo2testOut">--</div>
 </div>
+
 <div class="card">VO2 Max<div id="vo2">--</div></div>
 <div class="card">Score forme<div id="score">--</div></div>
 <div class="card">FC zone<div id="zone">--</div></div>
@@ -102,14 +104,14 @@ canvas{width:100%;background:#0b1220;border-radius:10px;}
 </div>
 </section>
 
-<!-- ================= CALCULS ================= -->
+<!-- CALCULS -->
 <section id="calc" class="section">
 <h2 class="section-title">🧮 Calculs</h2>
 
 <div class="grid">
 
 <div class="card">
-Allure (ex: 5 km / 25 min)
+Allure
 <input id="dist" placeholder="Ex: 5">
 <input id="time" placeholder="Ex: 25">
 <button onclick="calcPace()">Calculer</button>
@@ -117,14 +119,14 @@ Allure (ex: 5 km / 25 min)
 </div>
 
 <div class="card">
-Vitesse (ex: 4:30)
+Vitesse
 <input id="paceInput" placeholder="Ex: 4:30">
 <button onclick="calcSpeed()">Calculer</button>
 <div id="speedOut"></div>
 </div>
 
 <div class="card">
-FC (ex: 190 / 150)
+FC
 <input id="fcmax" placeholder="FC max">
 <input id="fcavg" placeholder="FC moyenne">
 <button onclick="calcFC()">Analyser</button>
@@ -134,7 +136,7 @@ FC (ex: 190 / 150)
 </div>
 </section>
 
-<!-- ================= RUNS ================= -->
+<!-- RUNS -->
 <section id="runs" class="section">
 <h2 class="section-title">🏃 Runs</h2>
 
@@ -146,7 +148,7 @@ FC (ex: 190 / 150)
 </div>
 </section>
 
-<!-- ================= PROGRAMME ================= -->
+<!-- PROGRAMME -->
 <section id="prog" class="section">
 <h2 class="section-title">📅 Programme 4 semaines COMPLET</h2>
 
@@ -187,7 +189,7 @@ Dimanche: test 10 km
 </div>
 </section>
 
-<!-- ================= STATS ================= -->
+<!-- STATS -->
 <section id="stats" class="section">
 <h2 class="section-title">📈 Graph VO2 + progression</h2>
 <canvas id="chart" height="200"></canvas>
@@ -199,31 +201,24 @@ Dimanche: test 10 km
 let runs = JSON.parse(localStorage.getItem("runs")||"[]");
 let history = JSON.parse(localStorage.getItem("history")||"[]");
 
-/* ================= CALCUL ALLURE ================= */
-function calcPace(){
-  let vo2test = (3.5 * (d/(t/60))) * 1.1;
-document.getElementById("vo2").innerText = vo2test.toFixed(1);
-  function calcVO2Test(){
+/* ================= VO2 TEST 5K (FIX PROPRE) ================= */
+function calcVO2Test(){
 let d = Number(vo2dist.value);
 let t = Number(vo2time.value);
 
 if(!d || !t || d <= 0 || t <= 0) return;
 
-/* vitesse km/h */
 let kmh = (d / t) * 60;
-
-/* VO2 estimé basé performance course */
-let vo2 = 3.5 * kmh;
-
-/* correction effort 5 km */
-vo2 = vo2 * 1.1;
+let vo2 = 3.5 * kmh * 1.1;
 
 document.getElementById("vo2testOut").innerText =
 "VO2 max estimé: " + vo2.toFixed(1);
 
-/* on met aussi à jour le dashboard VO2 */
 document.getElementById("vo2").innerText = vo2.toFixed(1);
 }
+
+/* ================= CALCUL ALLURE (FIXÉ) ================= */
+function calcPace(){
 let d=Number(dist.value);
 let t=Number(time.value);
 if(!d||!t)return;
@@ -232,29 +227,27 @@ let pace=t/d;
 
 let m=Math.floor(pace);
 let s=Math.round((pace-m)*60);
+if(s===60){m++;s=0;}
 
 paceOut.innerText=`${m}:${s<10?"0":""}${s} min/km`;
 
-/* VO2 */
 let speed=d/(t/60);
-let vo2=3.5*speed;
+let vo2=3.5*speed*1.1;
 
 document.getElementById("vo2").innerText=vo2.toFixed(1);
-
-/* SCORE */
 document.getElementById("score").innerText=
 Math.max(0,100-pace*10).toFixed(1);
 
 save(vo2,pace);
 }
 
-/* ================= SPEED ================= */
+/* SPEED */
 function calcSpeed(){
 let v=paceInput.value.split(":");
 speedOut.innerText=(60/(+v[0]+(+v[1]/60))).toFixed(2)+" km/h";
 }
 
-/* ================= FC ================= */
+/* FC */
 function calcFC(){
 let max=+fcmax.value;
 let avg=+fcavg.value;
@@ -268,7 +261,7 @@ p<70?"EF":p<80?"Endurance":p<88?"Seuil":"VO2 max";
 fcOut.innerText=p.toFixed(1)+"%";
 }
 
-/* ================= RUNS ================= */
+/* RUNS */
 function addRun(){
 let r={d:+rDist.value,t:+rTime.value,date:new Date().toLocaleDateString()};
 runs.push(r);
@@ -280,14 +273,14 @@ document.getElementById("last").innerText=
 render();
 }
 
-/* ================= SAVE ================= */
+/* SAVE */
 function save(vo2,pace){
 history.push({vo2,pace});
 localStorage.setItem("history",JSON.stringify(history));
 draw();
 }
 
-/* ================= GRAPH ================= */
+/* GRAPH */
 function draw(){
 let c=chart.getContext("2d");
 c.clearRect(0,0,400,200);
@@ -300,7 +293,7 @@ c.strokeStyle="#22c55e";
 c.stroke();
 }
 
-/* ================= PREDICTION ================= */
+/* PREDICTION */
 function predict(){
 if(history.length===0)return;
 
@@ -319,7 +312,7 @@ pred21k.innerText="21K: "+f(pace*21.1);
 pred42k.innerText="42K: "+f(pace*42.2*1.08);
 }
 
-/* ================= INIT ================= */
+/* INIT */
 function render(){
 runList.innerHTML=runs.slice(-10).map(r=>
 `📅 ${r.date} - ${r.d}km / ${r.t}min`
