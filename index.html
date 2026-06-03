@@ -1,127 +1,159 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>RunCalc Pro Plus</title>
+<title>RunCalc Pro Plus | Coach Running Intelligent</title>
 
+<meta name="description" content="RunCalc Pro Plus : coach running intelligent avec VO2 max, allure, vitesse, fréquence cardiaque, plans 5 km, classement et suivi performance.">
+<meta name="keywords" content="running, course à pied, 5 km, 10 km, marathon, VO2 max, allure, vitesse, entraînement running, coach sportif">
+<meta name="author" content="RunCalc Pro Plus">
+<meta name="robots" content="index, follow">
+
+<meta property="og:title" content="RunCalc Pro Plus">
+<meta property="og:description" content="Application de coaching running intelligente type Strava">
+<meta property="og:type" content="website">
+
+<meta name="theme-color" content="#22c55e">
+
+<link rel="icon" href="logo.png">
+
+<!-- ================= DESIGN ================= -->
 <style>
 
-body{
+*{
 margin:0;
-font-family:Arial;
-background:#0b1220;
-color:white;
+padding:0;
+box-sizing:border-box;
 }
 
+body{
+font-family:Arial, sans-serif;
+background:#0b1220;
+color:white;
+line-height:1.5;
+}
+
+/* HEADER */
 header{
 background:linear-gradient(90deg,#22c55e,#06b6d4);
-padding:20px;
+padding:25px;
 text-align:center;
 }
 
+/* NAV */
 nav{
 position:sticky;
 top:0;
 background:#0f172a;
 display:flex;
-gap:10px;
 justify-content:center;
-padding:10px;
+gap:10px;
+padding:12px;
 flex-wrap:wrap;
+z-index:1000;
 }
 
 nav a{
 color:white;
 text-decoration:none;
 background:#1f2937;
-padding:8px 12px;
-border-radius:8px;
+padding:10px 14px;
+border-radius:10px;
 }
 
+/* CONTAINER */
 .container{
-max-width:1100px;
+max-width:1200px;
 margin:auto;
 padding:20px;
 }
 
+/* TITLES */
 .section-title{
-margin-top:30px;
-border-left:4px solid #22c55e;
-padding-left:10px;
+margin-top:35px;
+margin-bottom:15px;
+border-left:5px solid #22c55e;
+padding-left:12px;
 }
 
+/* GRID */
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
 gap:15px;
-margin-top:10px;
 }
 
+/* CARD */
 .card{
 background:#111a2e;
-padding:15px;
-border-radius:12px;
-border-left:3px solid #22c55e;
+padding:18px;
+border-radius:14px;
+border-left:4px solid #22c55e;
 }
 
+/* INPUT */
 input{
 width:100%;
-padding:10px;
+padding:12px;
 margin-top:8px;
-border-radius:8px;
 border:none;
+border-radius:10px;
 background:#0b1220;
 color:white;
 }
 
+/* BUTTON */
 button{
 width:100%;
-padding:10px;
+padding:12px;
 margin-top:10px;
-background:#22c55e;
 border:none;
-border-radius:8px;
+border-radius:10px;
+background:#22c55e;
+color:white;
 font-weight:bold;
 cursor:pointer;
 }
 
+/* RESULT */
 .result{
 margin-top:10px;
 color:#4ef0a6;
 white-space:pre-line;
 }
 
-canvas{
-width:100%;
-max-width:400px;
-background:#0b1220;
-border-radius:10px;
-margin-top:10px;
+/* MOBILE */
+@media(max-width:700px){
+header h1{font-size:1.5rem;}
+nav a{font-size:14px;padding:8px 10px;}
 }
 
 </style>
+
 </head>
 
 <body>
 
 <header>
 <h1>🏃 RunCalc Pro Plus</h1>
-<p>Coach running intelligent complet</p>
+<p>Coach running intelligent type Strava</p>
 </header>
 
 <nav>
-<a href="#dash">Dashboard</a>
-<a href="#calc">Calculs</a>
+<a href="#dashboard">Dashboard</a>
+<a href="#calculs">Calculs</a>
 <a href="#coach">Coach</a>
 <a href="#history">Historique</a>
 </nav>
 
 <div class="container">
 
-<!-- DASHBOARD -->
-<h2 id="dash" class="section-title">📊 Dashboard</h2>
+<!-- ================= DASHBOARD ================= -->
+<h2 id="dashboard" class="section-title">📊 Dashboard</h2>
 
 <div class="grid">
 
@@ -142,8 +174,9 @@ margin-top:10px;
 
 </div>
 
+<!-- ================= PLACEHOLDER POUR PARTIES SUIVANTES ================= -->
 <!-- CALCULS -->
-<h2 id="calc" class="section-title">🧮 Calculs</h2>
+<h2 id="calculs" class="section-title">🧮 Calculs</h2>
 
 <div class="grid">
 
@@ -172,7 +205,7 @@ margin-top:10px;
 
 </div>
 
-<!-- COACH -->
+<!-- ================= COACH ================= -->
 <h2 id="coach" class="section-title">🏁 Coach 5 km</h2>
 
 <div class="card">
@@ -182,7 +215,7 @@ margin-top:10px;
 <div id="coachResult" class="result"></div>
 </div>
 
-<!-- HISTORIQUE -->
+<!-- ================= HISTORIQUE ================= -->
 <h2 id="history" class="section-title">📅 Historique & Analyse</h2>
 
 <div class="grid">
@@ -197,7 +230,7 @@ margin-top:10px;
 
 <div class="card">
 <h3>Liste runs</h3>
-<div id="runHistory"></div>
+<div id="runHistory">--</div>
 </div>
 
 <div class="card">
@@ -207,7 +240,7 @@ margin-top:10px;
 
 </div>
 
-<!-- GRAPHIQUES -->
+<!-- ================= GRAPHIQUES ================= -->
 <h2 class="section-title">📈 Graphiques</h2>
 
 <div class="grid">
@@ -226,198 +259,286 @@ margin-top:10px;
 
 </div>
 
+<!-- ================= FIREBASE ================= -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+<script>
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBFpxJIxLgmbxKfdEaanhN4kuhWAf9pkTE",
+  authDomain: "runcalc-38716.firebaseapp.com",
+  projectId: "runcalc-38716",
+  storageBucket: "runcalc-38716.firebasestorage.app",
+  messagingSenderId: "1065168370740",
+  appId: "1:1065168370740:web:1c67250311a2bb665f5e61"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+</script>
+
+<!-- ================= JS PART 2 + 3 + 4 viendront ici ================= -->
+
 <script>
 
 /* ================= STATE ================= */
 let runs = JSON.parse(localStorage.getItem("runs") || "[]");
 let historyData = JSON.parse(localStorage.getItem("historyData") || "[]");
-let levelGlobal = "";
 
-/* ================= CALCUL ALLURE ================= */
+/* ================= PLACEHOLDER FUNCTIONS ================= */
+/* (Les parties suivantes ajouteront toute la logique) */
+
+function calcPace(){}
+function calcSpeed(){}
+function analyseFC(){}
+function generateCoach(){}
+function addRun(){}
+function renderRuns(){}
+function updateForm(){}
+function saveProgress(){}
+function drawCharts(){}
+
+</script>
+
+</body>
+</html>
 function calcPace(){
 
 let d = Number(distance.value);
 let t = Number(time.value);
 
-if(!d || !t) return;
+if(!d || !t){
+paceResult.innerText = "Erreur";
+return;
+}
 
 let pace = t / d;
 
 let min = Math.floor(pace);
 let sec = Math.round((pace - min) * 60);
 
-paceResult.innerText = min + ":" + (sec<10?"0":"") + sec + " min/km";
+paceResult.innerText =
+min + ":" + (sec<10?"0":"") + sec + " min/km";
 
-let vo2 = (3.5 * (d / t * 60)).toFixed(1);
-vo2_home.innerText = vo2;
+/* VO2 estimation simple */
+let vo2 = (3.5 * (d / t * 60));
 
+vo2_home.innerText = vo2.toFixed(1);
+
+/* save graph */
 saveProgress(vo2, pace);
 }
 
-/* ================= VITESSE ================= */
+/* ================= SPEED ================= */
 function calcSpeed(){
 
 let v = paceInput.value;
-if(!v.includes(":")) return;
+
+if(!v.includes(":")){
+speedResult.innerText = "Format 4:30";
+return;
+}
 
 let [m,s] = v.split(":").map(Number);
 
-speedResult.innerText = (60/(m+s/60)).toFixed(2) + " km/h";
+let speed = (60 / (m + s/60));
+
+speedResult.innerText = speed.toFixed(2) + " km/h";
 }
 
-/* ================= FC ================= */
+/* ================= FC ANALYSIS ================= */
 function analyseFC(){
 
 let max = Number(fcmax.value);
 let moy = Number(fcmoy.value);
 
-if(!max || !moy) return;
-
-let p = (moy/max)*100;
-
-let zone =
-p<70?"EF":
-p<80?"Endurance":
-p<88?"Seuil":"VO2 max";
-
-fc_home.innerText = zone;
-fcResult.innerText = p.toFixed(1)+"% "+zone;
+if(!max || !moy){
+fcResult.innerText = "Erreur";
+return;
 }
 
-/* ================= COACH ================= */
+let percent = (moy / max) * 100;
+
+let zone = "";
+
+if(percent < 70) zone = "Récupération (EF)";
+else if(percent < 80) zone = "Endurance fondamentale";
+else if(percent < 88) zone = "Seuil";
+else zone = "VO2 max";
+
+fc_home.innerText = zone;
+
+fcResult.innerText =
+percent.toFixed(1) + "% - " + zone;
+}
+
+/* ================= COACH 5KM ================= */
 function generateCoach(){
 
 let t = Number(time5k.value);
 let g = Number(goal5k.value);
 
-if(!t||!g) return;
-
-let diff = t-g;
-
-levelGlobal =
-t<=19?"Avancé":
-t<=24?"Intermédiaire":"Débutant";
-
-level_home.innerText = levelGlobal;
-
-coachResult.innerHTML =
-"Level: "+levelGlobal+"<br><br>"+
-"EF + fractionné progressif<br>"+
-(diff>5?"Focus endurance":"Intensité adaptée");
+if(!t || !g){
+coachResult.innerText = "Erreur";
+return;
 }
 
-/* ================= RUNS ================= */
+let diff = t - g;
+
+let level =
+t <= 19 ? "Avancé" :
+t <= 24 ? "Intermédiaire" :
+"Débutant";
+
+level_home.innerText = level;
+
+coachResult.innerHTML =
+"🏁 Niveau : " + level + "<br>" +
+"📊 Écart objectif : " + diff + " min<br>" +
+"🏃 Plan : EF + fractionné + seuil progressif";
+}
+
+/* ================= ADD RUN ================= */
 function addRun(){
 
 let d = Number(runDistance.value);
 let t = Number(runTime.value);
 
-if(!d||!t) return;
+if(!d || !t){
+runMsg.innerText = "Erreur";
+return;
+}
 
-let pace = t/d;
+let pace = t / d;
 
-runs.push({
-date:new Date().toLocaleDateString(),
-distance:d,
-time:t,
-pace:pace
-});
+let run = {
+date: new Date().toISOString(),
+distance: d,
+time: t,
+pace: pace
+};
 
-localStorage.setItem("runs",JSON.stringify(runs));
+runs.push(run);
+
+localStorage.setItem("runs", JSON.stringify(runs));
+
+runMsg.innerText = "Run ajouté ✔";
 
 renderRuns();
 updateForm();
+saveProgress(0, pace);
+
+/* CLOUD */
+saveRunToCloud(run);
+updateProfileAfterRun();
+
+/* NEW FEATURES */
+addToLeaderboard(run);
+checkBadges();
+checkWeeklyGoal();
+getStats();
 }
 
-/* ================= DISPLAY RUNS ================= */
+/* ================= RENDER RUNS ================= */
 function renderRuns(){
 
-let html="";
+let html = "";
 
-runs.slice(-10).reverse().forEach(r=>{
+runs.slice(-10).reverse().forEach(r => {
 
-html+=`
-📅 ${r.date}<br>
-🏃 ${r.distance}km - ${r.time}min<br>
-⏱ ${r.pace.toFixed(2)}<br><hr>
-`;
+let min = Math.floor(r.pace);
+let sec = Math.round((r.pace - min) * 60);
+
+html +=
+"📅 " + r.date + "<br>" +
+"🏃 " + r.distance + " km - " + r.time + " min<br>" +
+"⏱ " + min + ":" + (sec<10?"0":"") + sec + " /km<br><hr>";
 
 });
 
-runHistory.innerHTML=html;
+runHistory.innerHTML = html;
 }
 
 /* ================= FORM SCORE ================= */
 function updateForm(){
 
-if(runs.length==0) return;
-
-let avg = runs.reduce((a,b)=>a+b.pace,0)/runs.length;
-
-let score = 100 - avg*10;
-
-formScore.innerText =
-score.toFixed(1) + (score>80?" 🔥":" ⚡");
+if(runs.length === 0){
+formScore.innerText = "--";
+return;
 }
 
-/* ================= SAVE ANALYTICS ================= */
+let avg = runs.reduce((a,b)=>a + b.pace,0) / runs.length;
+
+let score = 100 - (avg * 10);
+
+let status = score > 80 ? "🔥 Très bon" : "⚡ À améliorer";
+
+formScore.innerText =
+score.toFixed(1) + " / 100 " + status;
+}
+
+/* ================= SAVE DATA ================= */
 function saveProgress(vo2, pace){
 
-historyData.push({vo2,pace});
+historyData.push({vo2: vo2, pace: pace});
 
-localStorage.setItem("historyData",JSON.stringify(historyData));
+localStorage.setItem("historyData", JSON.stringify(historyData));
 
 drawCharts();
 }
 
-/* ================= GRAPHS ================= */
+/* ================= CHARTS ================= */
 function drawCharts(){
-
 drawVO2();
 drawPace();
 }
 
 function drawVO2(){
 
-let c=document.getElementById("vo2Chart");
-if(!c) return;
+let canvas = document.getElementById("vo2Chart");
+if(!canvas) return;
 
-let ctx=c.getContext("2d");
+let ctx = canvas.getContext("2d");
 ctx.clearRect(0,0,400,200);
 
-let max=Math.max(...historyData.map(x=>x.vo2),1);
+let data = historyData.slice(-10);
+
+let max = Math.max(...data.map(d => d.vo2), 1);
 
 ctx.beginPath();
 
-historyData.slice(-10).forEach((d,i)=>{
-
-ctx.lineTo(i*40,180-(d.vo2/max)*150);
-
+data.forEach((d,i) => {
+ctx.lineTo(i * 40, 180 - (d.vo2 / max) * 150);
 });
 
-ctx.strokeStyle="#22c55e";
+ctx.strokeStyle = "#22c55e";
 ctx.stroke();
 }
 
 function drawPace(){
 
-let c=document.getElementById("paceChart");
-if(!c) return;
+let canvas = document.getElementById("paceChart");
+if(!canvas) return;
 
-let ctx=c.getContext("2d");
+let ctx = canvas.getContext("2d");
 ctx.clearRect(0,0,400,200);
 
-let max=Math.max(...historyData.map(x=>x.pace),1);
+let data = historyData.slice(-10);
+
+let max = Math.max(...data.map(d => d.pace), 1);
 
 ctx.beginPath();
 
-historyData.slice(-10).forEach((d,i)=>{
-
-ctx.lineTo(i*40,180-(d.pace/max)*150);
-
+data.forEach((d,i) => {
+ctx.lineTo(i * 40, 180 - (d.pace / max) * 150);
 });
 
-ctx.strokeStyle="#06b6d4";
+ctx.strokeStyle = "#06b6d4";
 ctx.stroke();
 }
 
@@ -425,8 +546,377 @@ ctx.stroke();
 renderRuns();
 updateForm();
 drawCharts();
+  function signup(){
+let email = prompt("Email ?");
+let pass = prompt("Mot de passe ?");
+auth.createUserWithEmailAndPassword(email, pass)
+.then(u => {
+alert("Compte créé ✔");
+createUserProfile(u.user.uid);
+});
+}
 
-</script>
+function login(){
+let email = prompt("Email ?");
+let pass = prompt("Mot de passe ?");
+auth.signInWithEmailAndPassword(email, pass)
+.then(() => alert("Connecté ✔"));
+}
 
-</body>
-</html>
+function logout(){
+auth.signOut();
+alert("Déconnecté");
+}
+  function createUserProfile(uid){
+
+db.collection("users").doc(uid).set({
+created: new Date().toISOString(),
+best5k: null,
+totalRuns: 0,
+level: "Débutant"
+});
+}
+
+function updateProfileAfterRun(){
+
+let user = auth.currentUser;
+if(!user) return;
+
+db.collection("users").doc(user.uid).get().then(doc => {
+
+if(!doc.exists) return;
+
+let data = doc.data();
+
+db.collection("users").doc(user.uid).update({
+totalRuns: runs.length
+});
+
+});
+}
+  function saveRunToCloud(run){
+
+let user = auth.currentUser;
+if(!user) return;
+
+db.collection("users")
+.doc(user.uid)
+.collection("runs")
+.add(run);
+}
+  function loadRunsFromCloud(){
+
+let user = auth.currentUser;
+if(!user) return;
+
+db.collection("users")
+.doc(user.uid)
+.collection("runs")
+.orderBy("date")
+.get()
+.then(snapshot => {
+
+runs = [];
+
+snapshot.forEach(doc => {
+runs.push(doc.data());
+});
+
+localStorage.setItem("runs", JSON.stringify(runs));
+
+renderRuns();
+updateForm();
+});
+}
+auth.onAuthStateChanged(user => {
+
+if(user){
+console.log("Utilisateur connecté :", user.email);
+loadRunsFromCloud();
+}else{
+console.log("Utilisateur non connecté");
+}
+});
+  function addToLeaderboard(run){
+
+let user = auth.currentUser;
+if(!user) return;
+
+db.collection("leaderboard").add({
+uid: user.uid,
+date: new Date().toISOString(),
+distance: run.distance,
+time: run.time,
+pace: run.pace
+});
+}
+  function loadLeaderboard(){
+
+db.collection("leaderboard")
+.orderBy("pace")
+.limit(10)
+.get()
+.then(snapshot => {
+
+let html = "🏆 TOP RUNS<br><br>";
+
+snapshot.forEach(doc => {
+
+let r = doc.data();
+
+html +=
+"🏃 " + r.distance + " km - " +
+r.time + " min<br>" +
+"⏱ " + r.pace.toFixed(2) + " min/km<br><hr>";
+
+});
+
+runHistory.innerHTML = html;
+});
+}
+ function checkBadges(){
+
+let badges = [];
+
+let total = runs.length;
+
+let best = Math.min(...runs.map(r => r.pace));
+
+if(total >= 1) badges.push("🥉 Premier run");
+if(total >= 10) badges.push("🥈 10 runs");
+if(total >= 30) badges.push("🥇 Runner régulier");
+
+if(best < 4) badges.push("🔥 Niveau élite");
+
+showBadges(badges);
+}
+
+function showBadges(badges){
+
+let html = "";
+
+badges.forEach(b => {
+html += b + "<br>";
+});
+
+formScore.innerHTML += "<br><br>🏅 Badges:<br>" + html;
+}
+  function checkBadges(){
+
+let badges = [];
+
+let total = runs.length;
+
+let best = Math.min(...runs.map(r => r.pace));
+
+if(total >= 1) badges.push("🥉 Premier run");
+if(total >= 10) badges.push("🥈 10 runs");
+if(total >= 30) badges.push("🥇 Runner régulier");
+
+if(best < 4) badges.push("🔥 Niveau élite");
+
+showBadges(badges);
+}
+
+function showBadges(badges){
+
+let html = "";
+
+badges.forEach(b => {
+html += b + "<br>";
+});
+
+formScore.innerHTML += "<br><br>🏅 Badges:<br>" + html;
+}
+  function getStats(){
+
+if(runs.length === 0) return;
+
+let totalKm = runs.reduce((a,b)=>a+b.distance,0);
+let avgPace = runs.reduce((a,b)=>a+b.pace,0)/runs.length;
+let bestRun = Math.min(...runs.map(r=>r.pace));
+
+let stats =
+"📊 Stats globales\n" +
+"Km total : " + totalKm.toFixed(1) + " km\n" +
+"Allure moyenne : " + avgPace.toFixed(2) + " min/km\n" +
+"Meilleure allure : " + bestRun.toFixed(2) + " min/km";
+
+formScore.innerText = stats;
+}
+button:hover{
+transform:scale(1.02);
+opacity:0.95;
+}
+
+.card{
+transition:0.2s ease;
+}
+
+.card:hover{
+transform:translateY(-4px);
+box-shadow:0 10px 25px rgba(0,0,0,0.3);
+}
+
+/* SCROLL CLEAN */
+::-webkit-scrollbar{
+width:6px;
+}
+
+::-webkit-scrollbar-thumb{
+background:#22c55e;
+border-radius:10px;
+}
+
+/* MOBILE OPTIMISATION */
+@media(max-width:600px){
+
+.grid{
+grid-template-columns:1fr;
+}
+
+.card{
+padding:14px;
+}
+}
+
+/* HEADER STYLE STRAVA */
+header{
+background:linear-gradient(90deg,#22c55e,#10b981);
+box-shadow:0 4px 15px rgba(0,0,0,0.3);
+}
+
+/* NAV ACTIVE LOOK */
+nav a{
+transition:0.2s;
+}
+
+nav a:hover{
+background:#10b981;
+}
+  function updateDashboard(){
+
+if(runs.length === 0) return;
+
+let last = runs[runs.length - 1];
+
+let vo2 = (3.5 * (last.distance / last.time * 60));
+
+vo2_home.innerText = vo2.toFixed(1);
+
+/* FC estimation simple */
+let fcZone = "";
+
+if(vo2 < 35) fcZone = "Endurance";
+else if(vo2 < 45) fcZone = "Seuil";
+else fcZone = "VO2 Max";
+
+fc_home.innerText = fcZone;
+
+/* Niveau global */
+let avg = runs.reduce((a,b)=>a+b.pace,0)/runs.length;
+
+let level =
+avg < 4 ? "🔥 Élite" :
+avg < 5 ? "⚡ Confirmé" :
+"🏃 Débutant";
+
+level_home.innerText = level;
+}
+  setInterval(() => {
+
+updateDashboard();
+  drawCharts();
+
+}, 5000);
+  body{
+-webkit-tap-highlight-color: transparent;
+}
+
+button{
+font-size:15px;
+}
+
+input{
+font-size:15px;
+}
+
+/* cards spacing mobile */
+@media(max-width:500px){
+.card{
+  
+margin-bottom:10px;
+}
+}
+  
+renderRuns();
+updateForm();
+drawCharts();
+updateDashboard();
+checkBadges();
+getStats();
+  function safeInit(){
+
+try{
+renderRuns();
+updateForm();
+drawCharts();
+
+if(typeof updateDashboard === "function") updateDashboard();
+if(typeof checkBadges === "function") checkBadges();
+if(typeof getStats === "function") getStats();
+
+}catch(e){
+console.log("Init error:", e);
+}
+
+}
+
+/* ================= FIREBASE SAFE LOAD ================= */
+auth.onAuthStateChanged(user => {
+
+if(user){
+console.log("User connecté:", user.email);
+
+if(typeof loadRunsFromCloud === "function"){
+loadRunsFromCloud();
+}
+
+setTimeout(() => {
+safeInit();
+}, 500);
+
+}else{
+
+console.log("User non connecté");
+
+setTimeout(() => {
+safeInit();
+}, 500);
+
+}
+
+});
+
+/* ================= GLOBAL ERROR PROTECTION ================= */
+window.onerror = function(msg, url, line){
+console.log("Erreur JS:", msg, "ligne:", line);
+return false;
+};
+
+/* ================= AUTO SYNC DASHBOARD ================= */
+setInterval(() => {
+
+if(typeof updateDashboard === "function"){
+updateDashboard();
+}
+
+if(typeof drawCharts === "function"){
+drawCharts();
+}
+
+}, 6000);
+
+/* ================= FIRST LOAD ================= */
+safeInit();
+  
