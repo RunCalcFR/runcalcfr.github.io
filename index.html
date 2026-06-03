@@ -3,11 +3,111 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>RunCalc Pro Plus</title>
+<title>RunHub Pro</title>
 
 <style>
 body{
+  <body>
+
+<header>
+<h1>🏃 RunHub Pro</h1>
+</header>
+
+<nav>
+<a href="#dashboard">Dashboard</a>
+<a href="#calc">Calculs</a>
+<a href="#runs">Runs</a>
+<a href="#training">Training</a>
+<a href="#stats">Stats</a>
+</nav>
+
+<div class="container">
+
+<section id="dashboard" class="section">
+<h2 class="section-title">📊 Dashboard</h2>
+<section id="calc" class="section">
+<h2 class="section-title">🧮 Calculs</h2>
+
+<div class="grid">
+
+<div class="card">
+<h3>Allure</h3>
+<input id="dist" placeholder="Distance km (ex 5)">
+<input id="time" placeholder="Temps min (ex 25)">
+<button onclick="calcPace()">Calculer</button>
+<div id="paceOut"></div>
+</div>
+
+<div class="card">
+<h3>Vitesse</h3>
+<input id="pace" placeholder="ex 4:30">
+<button onclick="calcSpeed()">Calculer</button>
+<div id="speedOut"></div>
+</div>
+
+<div class="card">
+<h3>Fréquence cardiaque</h3>
+<input id="fcmax" placeholder="FC max">
+<input id="fcavg" placeholder="FC moyenne">
+<button onclick="calcFC()">Analyser</button>
+<div id="fcOut"></div>
+</div>
+
+</div>
+</section>
+
+<section id="training" class="section">
+<h2 class="section-title">📅 Programmes d’entraînement</h2>
+
+<div class="grid">
+
+<div class="card">
+<b>Débutant</b><br>
+- 3 séances/semaine<br>
+- footing 30 min<br>
+- footing léger + récup
+</div>
+
+<div class="card">
+<b>Intermédiaire</b><br>
+- 4 séances/semaine<br>
+- fractionné<br>
+- sortie longue<br>
+- footing
+</div>
+
+<div class="card">
+<b>Avancé</b><br>
+- 5-6 séances/semaine<br>
+- VO2 max<br>
+- seuil<br>
+- endurance fondamentale
+</div>
+
+</div>
+</section>
+<div class="grid">
+<div class="card">
+VO2 Max
+<div id="vo2">--</div>
+</div>
+
+<div class="card">
+Score forme
+<div id="score">--</div>
+</div>
+
+<div class="card">
+FC zone
+<div id="zone">--</div>
+</div>
+
+<div class="card">
+Dernière perf
+<div id="last">--</div>
+</div>
+</div>
+</section>
 margin:0;
 font-family:Arial;
 background:#0b1220;
@@ -40,22 +140,25 @@ border-radius:8px;
 }
 
 .container{
-max-width:1100px;
+max-width:1200px;
 margin:auto;
 padding:20px;
 }
 
+.section{
+margin-top:40px;
+}
+
 .section-title{
-margin-top:25px;
 border-left:4px solid #22c55e;
 padding-left:10px;
+margin-bottom:10px;
 }
 
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
 gap:15px;
-margin-top:10px;
 }
 
 .card{
@@ -64,302 +167,126 @@ padding:15px;
 border-radius:12px;
 }
 
-input{
+input, button{
 width:100%;
 padding:10px;
 margin-top:8px;
 border:none;
 border-radius:8px;
+}
+
+input{
 background:#0b1220;
 color:white;
 }
 
 button{
-width:100%;
-padding:10px;
-margin-top:10px;
 background:#22c55e;
-border:none;
-border-radius:8px;
 font-weight:bold;
 cursor:pointer;
 }
-
-.result{
-margin-top:10px;
-color:#4ef0a6;
-white-space:pre-line;
-}
-
-canvas{
-width:100%;
-max-width:400px;
-background:#0b1220;
-border-radius:10px;
-}
 </style>
-
-<!-- FIREBASE -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-
-<script>
-const firebaseConfig = {
-apiKey: "YOUR_KEY",
-authDomain: "YOUR_DOMAIN",
-projectId: "YOUR_PROJECT",
-storageBucket: "YOUR_BUCKET",
-messagingSenderId: "YOUR_ID",
-appId: "YOUR_APP_ID"
-};
-
-firebase.initializeApp(firebaseConfig);
-
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-/* ================= STATE ================= */
-let runs = JSON.parse(localStorage.getItem("runs") || "[]");
-let historyData = JSON.parse(localStorage.getItem("historyData") || "[]");
-
-/* ================= CALCULS ================= */
-function calcPace(){
-let d = Number(distance.value);
-let t = Number(time.value);
-if(!d || !t) return;
-
-let pace = t / d;
-
-let min = Math.floor(pace);
-let sec = Math.round((pace - min) * 60);
-
-paceResult.innerText = min + ":" + (sec<10?"0":"") + sec + " min/km";
-
-let vo2 = 3.5 * (d / t * 60);
-vo2_home.innerText = vo2.toFixed(1);
-
-saveProgress(vo2, pace);
-}
-
-function calcSpeed(){
-let v = paceInput.value;
-if(!v.includes(":")) return;
-
-let [m,s] = v.split(":").map(Number);
-speedResult.innerText = (60/(m+s/60)).toFixed(2) + " km/h";
-}
-
-function analyseFC(){
-let max = Number(fcmax.value);
-let moy = Number(fcmoy.value);
-if(!max || !moy) return;
-
-let p = (moy/max)*100;
-
-let zone =
-p < 70 ? "EF" :
-p < 80 ? "Endurance" :
-p < 88 ? "Seuil" : "VO2 max";
-
-fc_home.innerText = zone;
-fcResult.innerText = p.toFixed(1) + "% - " + zone;
-}
-
-/* ================= RUNS ================= */
-function addRun(){
-let d = Number(runDistance.value);
-let t = Number(runTime.value);
-if(!d || !t) return;
-
-let pace = t/d;
-
-let run = {
-date: new Date().toISOString(),
-distance: d,
-time: t,
-pace: pace
-};
-
-runs.push(run);
-localStorage.setItem("runs", JSON.stringify(runs));
-
-renderRuns();
-updateForm();
-saveRunToCloud(run);
-}
-
-function renderRuns(){
-let html = "";
-
-runs.slice(-10).reverse().forEach(r => {
-let min = Math.floor(r.pace);
-let sec = Math.round((r.pace - min) * 60);
-
-html +=
-"📅 " + r.date + "<br>" +
-"🏃 " + r.distance + " km - " + r.time + " min<br>" +
-"⏱ " + min + ":" + (sec<10?"0":"") + sec + " /km<br><hr>";
-});
-
-runHistory.innerHTML = html;
-}
-
-function updateForm(){
-if(runs.length === 0) return;
-
-let avg = runs.reduce((a,b)=>a+b.pace,0)/runs.length;
-formScore.innerText = (100 - avg*10).toFixed(1) + " / 100";
-}
-
-/* ================= GRAPH ================= */
-function saveProgress(vo2, pace){
-historyData.push({vo2, pace});
-localStorage.setItem("historyData", JSON.stringify(historyData));
-drawCharts();
-}
-
-function drawCharts(){
-drawVO2();
-drawPace();
-}
-
-function drawVO2(){
-let c = vo2Chart.getContext("2d");
-c.clearRect(0,0,400,200);
-
-let data = historyData.slice(-10);
-let max = Math.max(...data.map(d=>d.vo2),1);
-
-c.beginPath();
-data.forEach((d,i)=>{
-c.lineTo(i*40,180-(d.vo2/max)*150);
-});
-c.strokeStyle="#22c55e";
-c.stroke();
-}
-
-function drawPace(){
-let c = paceChart.getContext("2d");
-c.clearRect(0,0,400,200);
-
-let data = historyData.slice(-10);
-let max = Math.max(...data.map(d=>d.pace),1);
-
-c.beginPath();
-data.forEach((d,i)=>{
-c.lineTo(i*40,180-(d.pace/max)*150);
-});
-c.strokeStyle="#06b6d4";
-c.stroke();
-}
-
-/* ================= FIREBASE ================= */
-function saveRunToCloud(run){
-let user = auth.currentUser;
-if(!user) return;
-
-db.collection("users")
-.doc(user.uid)
-.collection("runs")
-.add(run);
-}
-
-auth.onAuthStateChanged(user=>{
-if(user){
-db.collection("users")
-.doc(user.uid)
-.collection("runs")
-.get()
-.then(snap=>{
-runs = [];
-snap.forEach(d=>runs.push(d.data()));
-renderRuns();
-updateForm();
-});
-}
-});
-
-/* INIT */
-renderRuns();
-updateForm();
-drawCharts();
-</script>
-
-</head>
-
-<body>
-
-<header>
-<h1>🏃 RunCalc Pro Plus</h1>
-</header>
-
-<div class="container">
-
-<h2 class="section-title">📊 Dashboard</h2>
-<div class="grid">
-<div class="card">
-VO2 Max<br>
-<div id="vo2_home">--</div>
-</div>
-
-<div class="card">
-Score forme<br>
-<div id="formScore">--</div>
-</div>
-
-<div class="card">
-FC zone<br>
-<div id="fc_home">--</div>
-</div>
-</div>
-
-<h2 class="section-title">🧮 Calculs</h2>
-
-<div class="grid">
-
-<div class="card">
-Distance / Temps
-<input id="distance">
-<input id="time">
-<button onclick="calcPace()">Allure</button>
-<div id="paceResult"></div>
-</div>
-
-<div class="card">
-Vitesse
-<input id="paceInput">
-<button onclick="calcSpeed()">Speed</button>
-<div id="speedResult"></div>
-</div>
-
-<div class="card">
-FC
-<input id="fcmax">
-<input id="fcmoy">
-<button onclick="analyseFC()">Analyse</button>
-<div id="fcResult"></div>
-</div>
-
-</div>
-
+<section id="runs" class="section">
 <h2 class="section-title">🏃 Runs</h2>
 
 <div class="card">
-<input id="runDistance">
-<input id="runTime">
+<input id="rDist" placeholder="Distance km">
+<input id="rTime" placeholder="Temps min">
 <button onclick="addRun()">Ajouter run</button>
-<div id="runHistory"></div>
+<div id="runList"></div>
+</div>
+</section>
+
+<section id="stats" class="section">
+<h2 class="section-title">📈 Stats</h2>
+
+<canvas id="graph" width="400" height="200"></canvas>
+</section>
+
 </div>
 
-<h2 class="section-title">📈 Graphiques</h2>
+<script>
+let runs = JSON.parse(localStorage.getItem("runs")||"[]");
 
-<div class="grid">
-<canvas id="vo2Chart" width="400" height="200"></canvas>
-<canvas id="paceChart" width="400" height="200"></canvas>
-</div>
+/* CALCUL ALLURE */
+function calcPace(){
+let d=+dist.value;
+let t=+time.value;
+if(!d||!t)return;
 
-</div>
+let p=t/d;
+paceOut.innerText=p.toFixed(2)+" min/km";
 
+vo2.innerText=(3.5*(d/t*60)).toFixed(1);
+save();
+}
+
+/* VITESSE */
+function calcSpeed(){
+let v=pace.value.split(":");
+let m=+v[0], s=+v[1];
+speedOut.innerText=(60/(m+s/60)).toFixed(2)+" km/h";
+}
+
+/* FC */
+function calcFC(){
+let max=+fcmax.value;
+let avg=+fcavg.value;
+let p=(avg/max)*100;
+
+zone.innerText=
+p<70?"EF":p<80?"Endurance":p<88?"Seuil":"VO2 max";
+
+fcOut.innerText=p.toFixed(1)+"%";
+}
+
+/* RUNS */
+function addRun(){
+let r={
+d:+rDist.value,
+t:+rTime.value,
+date:new Date().toLocaleDateString()
+};
+
+runs.push(r);
+localStorage.setItem("runs",JSON.stringify(runs));
+render();
+}
+
+/* RENDER */
+function render(){
+runList.innerHTML=runs.slice(-10).map(r=>
+`📅 ${r.date} - ${r.d}km / ${r.t}min`
+).join("<br>");
+
+if(runs.length){
+let last=runs[runs.length-1];
+last.innerText=`${last.d}km - ${last.t}min`;
+}
+}
+
+/* GRAPH SIMPLE */
+function graph(){
+let c=graph.getContext("2d");
+c.clearRect(0,0,400,200);
+
+c.beginPath();
+runs.slice(-10).forEach((r,i)=>{
+c.lineTo(i*40,200-r.t*2);
+});
+c.stroke();
+}
+
+function save(){
+localStorage.setItem("runs",JSON.stringify(runs));
+graph();
+}
+
+render();
+graph();
+</script>
+
+</body>
+</html>
 </body>
 </html>
