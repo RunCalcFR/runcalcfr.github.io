@@ -3,111 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RunHub Pro</title>
+<title>RunCalc Pro Plus</title>
 
 <style>
 body{
-  <body>
-
-<header>
-<h1>🏃 RunHub Pro</h1>
-</header>
-
-<nav>
-<a href="#dashboard">Dashboard</a>
-<a href="#calc">Calculs</a>
-<a href="#runs">Runs</a>
-<a href="#training">Training</a>
-<a href="#stats">Stats</a>
-</nav>
-
-<div class="container">
-
-<section id="dashboard" class="section">
-<h2 class="section-title">📊 Dashboard</h2>
-<section id="calc" class="section">
-<h2 class="section-title">🧮 Calculs</h2>
-
-<div class="grid">
-
-<div class="card">
-<h3>Allure</h3>
-<input id="dist" placeholder="Distance km (ex 5)">
-<input id="time" placeholder="Temps min (ex 25)">
-<button onclick="calcPace()">Calculer</button>
-<div id="paceOut"></div>
-</div>
-
-<div class="card">
-<h3>Vitesse</h3>
-<input id="pace" placeholder="ex 4:30">
-<button onclick="calcSpeed()">Calculer</button>
-<div id="speedOut"></div>
-</div>
-
-<div class="card">
-<h3>Fréquence cardiaque</h3>
-<input id="fcmax" placeholder="FC max">
-<input id="fcavg" placeholder="FC moyenne">
-<button onclick="calcFC()">Analyser</button>
-<div id="fcOut"></div>
-</div>
-
-</div>
-</section>
-
-<section id="training" class="section">
-<h2 class="section-title">📅 Programmes d’entraînement</h2>
-
-<div class="grid">
-
-<div class="card">
-<b>Débutant</b><br>
-- 3 séances/semaine<br>
-- footing 30 min<br>
-- footing léger + récup
-</div>
-
-<div class="card">
-<b>Intermédiaire</b><br>
-- 4 séances/semaine<br>
-- fractionné<br>
-- sortie longue<br>
-- footing
-</div>
-
-<div class="card">
-<b>Avancé</b><br>
-- 5-6 séances/semaine<br>
-- VO2 max<br>
-- seuil<br>
-- endurance fondamentale
-</div>
-
-</div>
-</section>
-<div class="grid">
-<div class="card">
-VO2 Max
-<div id="vo2">--</div>
-</div>
-
-<div class="card">
-Score forme
-<div id="score">--</div>
-</div>
-
-<div class="card">
-FC zone
-<div id="zone">--</div>
-</div>
-
-<div class="card">
-Dernière perf
-<div id="last">--</div>
-</div>
-</div>
-</section>
 margin:0;
 font-family:Arial;
 background:#0b1220;
@@ -118,6 +17,7 @@ header{
 background:linear-gradient(90deg,#22c55e,#10b981);
 padding:20px;
 text-align:center;
+font-size:22px;
 }
 
 nav{
@@ -146,13 +46,13 @@ padding:20px;
 }
 
 .section{
-margin-top:40px;
+margin-top:50px;
 }
 
 .section-title{
 border-left:4px solid #22c55e;
 padding-left:10px;
-margin-bottom:10px;
+margin-bottom:15px;
 }
 
 .grid{
@@ -167,12 +67,12 @@ padding:15px;
 border-radius:12px;
 }
 
-input, button{
+input,button{
 width:100%;
 padding:10px;
 margin-top:8px;
-border:none;
 border-radius:8px;
+border:none;
 }
 
 input{
@@ -185,30 +85,151 @@ background:#22c55e;
 font-weight:bold;
 cursor:pointer;
 }
+
+small{color:#aaa;}
+canvas{
+width:100%;
+background:#0b1220;
+border-radius:10px;
+}
 </style>
-<section id="runs" class="section">
-<h2 class="section-title">🏃 Runs</h2>
+</head>
+
+<body>
+
+<header>🏃 RunCalc Pro Plus</header>
+
+<nav>
+<a href="#dash">Dashboard</a>
+<a href="#calc">Calculs</a>
+<a href="#runs">Runs</a>
+<a href="#prog">Programme</a>
+<a href="#stats">Stats</a>
+</nav>
+
+<div class="container">
+
+<!-- DASHBOARD -->
+<section id="dash" class="section">
+<h2 class="section-title">📊 Dashboard complet</h2>
+
+<div class="grid">
+
+<div class="card">VO2 Max<div id="vo2">--</div></div>
+<div class="card">Score forme<div id="score">--</div></div>
+<div class="card">FC zone<div id="zone">--</div></div>
+<div class="card">Dernière perf<div id="last">--</div></div>
+
+</div>
+</section>
+
+<!-- CALCULS -->
+<section id="calc" class="section">
+<h2 class="section-title">🧮 Calculs complets</h2>
+
+<div class="grid">
 
 <div class="card">
-<input id="rDist" placeholder="Distance km">
-<input id="rTime" placeholder="Temps min">
+Allure
+<input id="dist" placeholder="Ex: 5 km">
+<input id="time" placeholder="Ex: 25 min">
+<button onclick="calcPace()">Calculer</button>
+<div id="paceOut"></div>
+</div>
+
+<div class="card">
+Vitesse
+<input id="paceInput" placeholder="Ex: 4:30">
+<button onclick="calcSpeed()">Calculer</button>
+<div id="speedOut"></div>
+</div>
+
+<div class="card">
+Fréquence cardiaque
+<input id="fcmax" placeholder="FC max">
+<input id="fcavg" placeholder="FC moyenne">
+<button onclick="calcFC()">Analyser</button>
+<div id="fcOut"></div>
+</div>
+
+</div>
+</section>
+
+<!-- RUNS -->
+<section id="runs" class="section">
+<h2 class="section-title">🏃 Historique Runs</h2>
+
+<div class="card">
+<input id="rDist" placeholder="distance km">
+<input id="rTime" placeholder="temps min">
 <button onclick="addRun()">Ajouter run</button>
 <div id="runList"></div>
 </div>
 </section>
+<section id="prog" class="section">
+<h2 class="section-title">📅 Programme 4 semaines</h2>
 
+<div class="grid">
+
+<div class="card">
+Semaine 1<br>
+Lun footing 25 min<br>
+Mer fractionné 30/30<br>
+Ven footing 30 min<br>
+Dim long 45 min
+</div>
+
+<div class="card">
+Semaine 2<br>
+Lun footing 30 min<br>
+Mer 400m x6<br>
+Ven footing 35 min<br>
+Dim long 50 min
+</div>
+
+<div class="card">
+Semaine 3<br>
+Lun footing 35 min<br>
+Mer seuil<br>
+Ven fractionné long<br>
+Dim long 55 min
+</div>
+
+<div class="card">
+Semaine 4<br>
+Lun récup<br>
+Mer test 5K<br>
+Ven footing<br>
+Dim test 10K
+</div>
+
+</div>
+</section>
+
+<section>
+<h2 class="section-title">🏁 Estimations course</h2>
+
+<div class="grid">
+
+<div class="card">5 km<br>Débutant 28–35<br>Inter 20–27<br>Avancé 14–19</div>
+<div class="card">10 km<br>Débutant 55–75<br>Inter 40–55<br>Avancé 30–39</div>
+<div class="card">21 km<br>Débutant 2h40–2h00<br>Inter 2h–1h25<br>Avancé 1h25–1h05</div>
+<div class="card">42 km<br>Débutant 6h–4h30<br>Inter 4h30–3h10<br>Avancé 3h10–2h20</div>
+
+</div>
+</section>
 <section id="stats" class="section">
-<h2 class="section-title">📈 Stats</h2>
-
-<canvas id="graph" width="400" height="200"></canvas>
+<h2 class="section-title">📈 Graphiques VO2 + performance</h2>
+<canvas id="chart" width="400" height="200"></canvas>
 </section>
 
 </div>
 
 <script>
 let runs = JSON.parse(localStorage.getItem("runs")||"[]");
+let history = JSON.parse(localStorage.getItem("history")||"[]");
 
-/* CALCUL ALLURE */
+/* CALCULS */
 function calcPace(){
 let d=+dist.value;
 let t=+time.value;
@@ -218,75 +239,62 @@ let p=t/d;
 paceOut.innerText=p.toFixed(2)+" min/km";
 
 vo2.innerText=(3.5*(d/t*60)).toFixed(1);
+
 save();
 }
 
-/* VITESSE */
 function calcSpeed(){
-let v=pace.value.split(":");
-let m=+v[0], s=+v[1];
-speedOut.innerText=(60/(m+s/60)).toFixed(2)+" km/h";
+let v=paceInput.value.split(":");
+speedOut.innerText=(60/(+v[0]+v[1]/60)).toFixed(2)+" km/h";
 }
 
-/* FC */
 function calcFC(){
 let max=+fcmax.value;
 let avg=+fcavg.value;
 let p=(avg/max)*100;
 
-zone.innerText=
-p<70?"EF":p<80?"Endurance":p<88?"Seuil":"VO2 max";
-
+zone.innerText=p<70?"EF":p<80?"Endurance":p<88?"Seuil":"VO2 max";
 fcOut.innerText=p.toFixed(1)+"%";
 }
 
 /* RUNS */
 function addRun(){
-let r={
-d:+rDist.value,
-t:+rTime.value,
-date:new Date().toLocaleDateString()
-};
-
+let r={d:+rDist.value,t:+rTime.value,date:new Date().toLocaleDateString()};
 runs.push(r);
 localStorage.setItem("runs",JSON.stringify(runs));
+
+last.innerText=`${r.d}km - ${r.t}min`;
 render();
 }
 
-/* RENDER */
+/* GRAPH VO2 + EVOLUTION */
+function save(){
+history.push({v:vo2.innerText});
+localStorage.setItem("history",JSON.stringify(history));
+draw();
+}
+
+function draw(){
+let c=chart.getContext("2d");
+c.clearRect(0,0,400,200);
+
+c.beginPath();
+history.slice(-10).forEach((h,i)=>{
+c.lineTo(i*40,200-h.v*2);
+});
+c.strokeStyle="#22c55e";
+c.stroke();
+}
+
 function render(){
 runList.innerHTML=runs.slice(-10).map(r=>
 `📅 ${r.date} - ${r.d}km / ${r.t}min`
 ).join("<br>");
-
-if(runs.length){
-let last=runs[runs.length-1];
-last.innerText=`${last.d}km - ${last.t}min`;
-}
-}
-
-/* GRAPH SIMPLE */
-function graph(){
-let c=graph.getContext("2d");
-c.clearRect(0,0,400,200);
-
-c.beginPath();
-runs.slice(-10).forEach((r,i)=>{
-c.lineTo(i*40,200-r.t*2);
-});
-c.stroke();
-}
-
-function save(){
-localStorage.setItem("runs",JSON.stringify(runs));
-graph();
 }
 
 render();
-graph();
+draw();
 </script>
 
-</body>
-</html>
 </body>
 </html>
