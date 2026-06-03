@@ -112,7 +112,16 @@ border-radius:10px;
 <!-- DASHBOARD -->
 <section id="dash" class="section">
 <h2 class="section-title">📊 Dashboard complet</h2>
+<div class="card">
+<b>📈 Prédiction performance</b>
 
+<div id="pred5k">5K: --</div>
+<div id="pred10k">10K: --</div>
+<div id="pred21k">21K: --</div>
+<div id="pred42k">42K: --</div>
+
+<button onclick="predict()">Calculer prédiction</button>
+</div>
 <div class="grid">
 
 <div class="card">VO2 Max<div id="vo2">--</div></div>
@@ -226,26 +235,68 @@ Dim test 10K
 </div>
 
 <script>
+  function predict(){
+if(history.length === 0) return;
+
+/* on prend la dernière performance VO2 + pace */
+let last = history[history.length - 1];
+
+let pace = last.pace || 5; // sécurité
+
+/* base performance (niveau simple type running tables) */
+let base5k = pace * 5;
+let base10k = pace * 10;
+let base21k = pace * 21.1;
+let base42k = pace * 42.2;
+
+/* fatigue factor (marathon plus lent) */
+let enduranceFactor = 1.08;
+
+pred5k.innerText = "5K: " + format(base5k);
+pred10k.innerText = "10K: " + format(base10k);
+pred21k.innerText = "21K: " + format(base21k * 1.03);
+pred42k.innerText = "42K: " + format(base42k * enduranceFactor);
+}
+
+function format(min){
+let m = Math.floor(min);
+let s = Math.round((min - m) * 60);
+return `${m}:${s<10?"0":""}${s}`;
+}
 let runs = JSON.parse(localStorage.getItem("runs")||"[]");
 let history = JSON.parse(localStorage.getItem("history")||"[]");
 
 /* CALCULS */
 function calcPace(){
-let d=+dist.value;
-let t=+time.value;
-if(!d||!t)return;
+let d = Number(dist.value);   // km
+let t = Number(time.value);   // minutes
 
-let p=t/d;
-paceOut.innerText=p.toFixed(2)+" min/km";
+if(!d || !t || d<=0 || t<=0) return;
 
-vo2.innerText=(3.5*(d/t*60)).toFixed(1);
+/* pace en min/km correct */
+let pace = t / d;
 
-save();
-}
+let min = Math.floor(pace);
+let sec = Math.round((pace - min) * 60);
 
-function calcSpeed(){
-let v=paceInput.value.split(":");
-speedOut.innerText=(60/(+v[0]+v[1]/60)).toFixed(2)+" km/h";
+paceOut.innerText = `${min}:${sec<10?"0":""}${sec} min/km`;
+
+/* VO2 estimation plus cohérente */
+let speed = (d / (t/60)); // km/h
+let vo2 = 3.5 * speed;
+
+vo2 = Math.max(0, vo2);
+
+vo2.innerText = vo2.toFixed(1);
+
+function save(vo2, pace){
+history.push({
+vo2: Number(vo2),
+pace: Number(pace)
+});
+
+localStorage.setItem("history", JSON.stringify(history));
+draw();
 }
 
 function calcFC(){
