@@ -1,1 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact - RunCalc Pro Plus</title>
 
+<style>
+body{
+font-family: Arial;
+margin:0;
+background:#0f172a;
+color:white;
+}
+
+nav{
+display:flex;
+justify-content:center;
+gap:20px;
+padding:15px;
+background:#0b1220;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+opacity:0.8;
+}
+
+nav a:hover{
+opacity:1;
+}
+
+.container{
+max-width:700px;
+margin:auto;
+padding:40px 20px;
+}
+
+.card{
+background:#1e293b;
+padding:20px;
+border-radius:12px;
+}
+
+input, textarea{
+width:100%;
+padding:10px;
+margin-top:10px;
+margin-bottom:15px;
+border-radius:8px;
+border:none;
+}
+
+button{
+padding:12px 20px;
+background:#22c55e;
+border:none;
+color:white;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+}
+</style>
+
+</head>
+
+<body>
+
+<nav>
+<a href="index.html">Accueil</a>
+<a href="runcalc.html">Outils</a>
+<a href="contact.html">Contact</a>
+<a href="confidentialite.html">Confidentialité</a>
+</nav>
+
+<div class="container">
+
+<h1>Contact</h1>
+
+<div class="card">
+
+<p>Envoyez un message :</p>
+
+<form action="https://formsubmit.co/esteban.doublet74@gmail.com" method="POST">
+
+<input type="text" name="name" placeholder="Ton nom" required>
+
+<input type="email" name="email" placeholder="Ton email" required>
+
+<textarea name="message" rows="6" placeholder="Ton message" required></textarea>
+
+<button type="submit">Envoyer</button>
+
+</form>
+
+</div>
+
+</div>
+
+</body>
+</html>
