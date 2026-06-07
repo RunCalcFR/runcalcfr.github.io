@@ -244,11 +244,20 @@ let history = JSON.parse(localStorage.getItem("history")||"[]");
 /* ================= VO2 TEST 5K (FIX PROPRE) ================= */
 function calcVO2Test(){
 let d = Number(vo2dist.value);
-let t = Number(vo2time.value);
+let t = vo2time.value;
 
-if(!d || !t || d <= 0 || t <= 0) return;
+if(!d || !t) return;
 
-let kmh = (d / t) * 60;
+// conversion "17:56" → minutes décimales
+let parts = t.split(":");
+let minutes = Number(parts[0]);
+let seconds = Number(parts[1] || 0);
+
+let timeMin = minutes + seconds/60;
+
+if(!timeMin || timeMin <= 0) return;
+
+let kmh = (d / timeMin) * 60;
 let vo2 = 3.5 * kmh * 1.1;
 
 document.getElementById("vo2testOut").innerText =
@@ -256,7 +265,6 @@ document.getElementById("vo2testOut").innerText =
 
 document.getElementById("vo2").innerText = vo2.toFixed(1);
 }
-
 /* ================= CALCUL ALLURE (FIXÉ) ================= */
 function calcPace(){
 let d=Number(dist.value);
@@ -304,16 +312,22 @@ fcOut.innerText=p.toFixed(1)+"%";
 /* RUNS */
 function addRun(){
 let d = Number(rDist.value);
-let t = Number(rTime.value);
+let t = rTime.value;
 
-if(!d || !t || d <= 0 || t <= 0){
-alert("Entre une distance et un temps valides");
-return;
-}
+if(!d || !t) return;
+
+// conversion mm:ss → minutes
+let parts = t.split(":");
+let minutes = Number(parts[0]);
+let seconds = Number(parts[1] || 0);
+
+let timeMin = minutes + seconds/60;
+
+if(!timeMin || timeMin <= 0) return;
 
 let r={
 d:d,
-t:t,
+t:timeMin,
 date:new Date().toLocaleDateString()
 };
 
@@ -321,7 +335,7 @@ runs.push(r);
 localStorage.setItem("runs",JSON.stringify(runs));
 
 document.getElementById("last").innerText =
-`${r.d} km - ${r.t} min`;
+`${d} km - ${t}`;
 
 render();
 }
