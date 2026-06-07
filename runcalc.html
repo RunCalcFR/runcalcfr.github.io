@@ -374,9 +374,21 @@ let c=document.getElementById("chart").getContext("2d");
 c.clearRect(0,0,400,200);
 
 c.beginPath();
-history.slice(-10).forEach((h,i)=>{
-c.lineTo(i*40,200-(h.vo2||0)*2);
+
+let data = history.slice(-10);
+
+data.forEach((h,i)=>{
+let vo2 = Number(h.vo2);
+
+if(isNaN(vo2)) vo2 = 0;
+
+if(i === 0){
+c.moveTo(i*40,200 - vo2*2);
+}else{
+c.lineTo(i*40,200 - vo2*2);
+}
 });
+
 c.strokeStyle="#22c55e";
 c.stroke();
 }
