@@ -1073,3 +1073,248 @@ function getBadge(vo2) {
   return "Athlète";
 }
 </script>
+  
+<script>
+function convertKm() {
+  let km = parseFloat(document.getElementById("kmInput").value);
+
+  if (!km || km <= 0) return;
+
+  let miles = km * 0.621371;
+
+  document.getElementById("mileOut").innerText =
+    miles.toFixed(2) + " miles";
+}
+</script>
+<script>
+function goalTime() {
+  let d = parseFloat(document.getElementById("goalDist").value);
+  let pace = document.getElementById("goalPace").value;
+
+  if (!d || !pace) return;
+
+  let p = pace.split(":");
+  let paceMin = parseFloat(p[0]) + parseFloat(p[1] || 0) / 60;
+
+  let totalMin = d * paceMin;
+
+  let h = Math.floor(totalMin / 60);
+  let m = Math.round(totalMin % 60);
+
+  document.getElementById("goalOut").innerText =
+    (h > 0 ? h + "h " : "") + m + " min";
+}
+</script>
+<div class="card">
+<h3>📈 Prédiction personnalisée</h3>
+
+<input id="predInput" placeholder="Temps 5 km (ex: 25:00)">
+<button onclick="manualPredict()">Générer</button>
+
+<br><br>
+
+<div id="pred5k">5 km : --</div>
+<div id="pred10k">10 km : --</div>
+<div id="pred21k">21 km : --</div>
+<div id="pred42k">42 km : --</div>
+</div>
+<script>
+function manualPredict() {
+  let t = document.getElementById("predInput").value;
+
+  if (!t) return;
+
+  let p = t.split(":");
+  let base = parseFloat(p[0]) + (parseFloat(p[1] || 0) / 60);
+
+  function f(min) {
+    let m = Math.floor(min);
+    let s = Math.round((min - m) * 60);
+    return `${m}:${s < 10 ? "0" : ""}${s}`;
+  }
+
+  document.getElementById("pred5k").innerText = "5 km : " + f(base);
+  document.getElementById("pred10k").innerText = "10 km : " + f(base * 2.05);
+  document.getElementById("pred21k").innerText = "21 km : " + f(base * 4.4);
+  document.getElementById("pred42k").innerText = "42 km : " + f(base * 9.2);
+}
+</script>
+<!-- 🔴 PUB BAS + GRAPH -->
+<div class="ads">
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="ca-pub-9530999475279577"
+data-ad-slot="5073457762"
+data-ad-format="auto"
+data-full-width-responsive="true"></ins>
+
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<section class="section">
+<h2 class="section-title">📈 Progression VO2 Max</h2>
+<canvas id="chart" height="200"></canvas>
+</section>
+<script>
+function safeNum(v) {
+  let n = parseFloat(v);
+  return isNaN(n) ? null : n;
+}
+
+function parseTime(t) {
+  if (!t) return null;
+
+  if (t.includes(":")) {
+    let p = t.split(":");
+    return (parseFloat(p[0]) || 0) + (parseFloat(p[1]) || 0) / 60;
+  }
+
+  return safeNum(t);
+}
+</script>
+<script>
+function calcPace() {
+  let d = safeNum(document.getElementById("dist").value);
+  let t = parseTime(document.getElementById("time").value);
+
+  if (!d || !t) return;
+
+  let pace = t / d;
+
+  let m = Math.floor(pace);
+  let s = Math.round((pace - m) * 60);
+
+  document.getElementById("paceOut").innerText =
+    `Allure : ${m}:${s < 10 ? "0" : ""}${s} /km`;
+
+  let speed = d / (t / 60);
+
+  document.getElementById("speedOut").innerText =
+    `Vitesse : ${speed.toFixed(2)} km/h`;
+
+  let vo2 = 3.5 * speed * 1.1;
+
+  document.getElementById("vo2").innerText = vo2.toFixed(1);
+
+  document.getElementById("score").innerText =
+    Math.max(0, 100 - pace * 10).toFixed(1);
+
+  save(vo2, pace);
+}
+</script>
+<script>
+function calcFC() {
+  let max = safeNum(document.getElementById("fcmax").value);
+  let avg = safeNum(document.getElementById("fcavg").value);
+
+  if (!max || !avg) return;
+
+  let p = (avg / max) * 100;
+
+  let zone =
+    p < 70 ? "Récupération" :
+    p < 80 ? "Endurance" :
+    p < 88 ? "Seuil" :
+    "VO2 max";
+
+  document.getElementById("zone").innerText = zone;
+  document.getElementById("fcOut").innerText = p.toFixed(1) + "%";
+}
+</script>
+<script>
+function addRun() {
+  let d = safeNum(document.getElementById("rDist").value);
+  let t = parseTime(document.getElementById("rTime").value);
+
+  if (!d || !t) return;
+
+  runs.push({
+    d,
+    t,
+    date: new Date().toLocaleDateString()
+  });
+
+  localStorage.setItem("runs", JSON.stringify(runs));
+
+  document.getElementById("last").innerText =
+    `${d} km - ${t.toFixed(2)} min`;
+
+  render();
+}
+</script>
+<script>
+function draw() {
+  let canvas = document.getElementById("chart");
+  if (!canvas) return;
+
+  let c = canvas.getContext("2d");
+
+  c.clearRect(0, 0, canvas.width, canvas.height);
+
+  let data = history.slice(-20);
+  if (data.length === 0) return;
+
+  let max = Math.max(...data.map(h => h.vo2 || 0), 1);
+
+  c.beginPath();
+
+  data.forEach((h, i) => {
+    let v = (h.vo2 || 0) / max;
+
+    let x = (i / (data.length - 1)) * canvas.width;
+    let y = canvas.height - v * canvas.height;
+
+    if (i === 0) c.moveTo(x, y);
+    else c.lineTo(x, y);
+  });
+
+  c.strokeStyle = "#fc4c02";
+  c.lineWidth = 3;
+  c.stroke();
+}
+</script>
+<script>
+function save(vo2, pace) {
+  history.push({ vo2, pace });
+
+  if (history.length > 200) history.shift();
+
+  localStorage.setItem("history", JSON.stringify(history));
+
+  draw();
+}
+
+function draw() {
+  const c = document.getElementById("chart").getContext("2d");
+  c.clearRect(0, 0, 400, 200);
+
+  c.beginPath();
+
+  history.slice(-10).forEach((h, i) => {
+    let v = Number(h.vo2) || 0;
+
+    if (i === 0) c.moveTo(i * 40, 200 - v * 2);
+    else c.lineTo(i * 40, 200 - v * 2);
+  });
+
+  c.strokeStyle = "#fc4c02";
+  c.stroke();
+}
+</script>
+
+<style>
+.card {
+  transition: 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(252, 76, 2, 0.15);
+}
+
+.section-title {
+  letter-spacing: 0.5px;
+}
+</style>
