@@ -305,13 +305,25 @@ document.getElementById("score").innerText =
 Math.max(0, 100 - pace * 10).toFixed(1);
 
 // SAFE SAVE
-save(vo2, pace);
+function calcPace(){
+let d = parseFloat(document.getElementById("dist").value);
+let t = document.getElementById("time").value;
+
+if(!d || !t) return;
+
+let timeMin;
+
+if(t.includes(":")){
+let p = t.split(":");
+timeMin = parseFloat(p[0]) + (parseFloat(p[1])||0)/60;
+}else{
+timeMin = parseFloat(t);
 }
+
 if(!timeMin || timeMin <= 0) return;
 
-// ALLURE (min/km)
+// ALLURE
 let pace = timeMin / d;
-
 let m = Math.floor(pace);
 let s = Math.round((pace - m) * 60);
 
@@ -323,7 +335,7 @@ s = 0;
 document.getElementById("paceOut").innerText =
 `${m}:${s < 10 ? "0" : ""}${s} min/km`;
 
-// VITESSE km/h
+// VITESSE
 let speed = d / (timeMin / 60);
 document.getElementById("speedOut").innerText =
 speed.toFixed(2) + " km/h";
@@ -335,35 +347,6 @@ document.getElementById("vo2").innerText = vo2.toFixed(1);
 document.getElementById("score").innerText =
 Math.max(0, 100 - pace * 10).toFixed(1);
 
-// sauvegarde
-save(vo2, pace);
-}
-
-if(!timeMin || timeMin <= 0) return;
-
-// allure min/km
-let pace = timeMin / d;
-
-let m = Math.floor(pace);
-let s = Math.round((pace - m) * 60);
-if(s === 60){ m++; s = 0; }
-
-document.getElementById("paceOut").innerText =
-`${m}:${s < 10 ? "0" : ""}${s} min/km`;
-
-// vitesse km/h
-let speed = d / (timeMin / 60);
-document.getElementById("speedOut").innerText =
-speed.toFixed(2) + " km/h";
-
-// VO2 estimation
-let vo2 = 3.5 * speed * 1.1;
-document.getElementById("vo2").innerText = vo2.toFixed(1);
-
-document.getElementById("score").innerText =
-Math.max(0, 100 - pace * 10).toFixed(1);
-
-// sauvegarde
 save(vo2, pace);
 }
 
