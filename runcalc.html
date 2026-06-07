@@ -214,6 +214,18 @@ VO2 Max
 <div class="stat" id="vo2">--</div>
 </div>
 
+  <div class="card">
+  <h3>📅 Générateur de programme</h3>
+
+  <input id="goalDistance" placeholder="Distance objectif (5 / 10 / 21 / 42)">
+  <input id="goalTime" placeholder="Temps cible (ex: 45:00 ou 1:40:00)">
+  <input id="level" placeholder="Niveau (débutant / moyen / fort)">
+
+  <button onclick="generatePlan()">Créer mon plan</button>
+
+  <div id="planOut"></div>
+</div>
+  
 <div class="card">
 Niveau
 <div id="level">--</div>
@@ -317,6 +329,82 @@ document.getElementById("vo2testOut").innerText =
 document.getElementById("vo2").innerText = vo2.toFixed(1);
 }
 
+  function generatePlan() {
+  let dist = +document.getElementById("goalDistance").value;
+  let time = document.getElementById("goalTime").value;
+  let level = document.getElementById("level").value.toLowerCase();
+
+  if (!dist || !time || !level) return;
+
+  let plan = "";
+
+  if (level === "débutant") {
+    plan =
+`📅 Plan débutant
+
+Semaine 1:
+- 3 footings 20-30 min
+- 1 sortie longue facile
+
+Semaine 2:
+- 3 footings 25-35 min
+- 1 fractionné léger (6x1 min)
+
+Semaine 3:
+- 2 footings + 1 seuil léger
+- sortie longue
+
+Semaine 4:
+- réduction volume + test`;
+  }
+
+  else if (level === "moyen") {
+    plan =
+`📅 Plan intermédiaire
+
+Semaine 1:
+- 2 footing + 1 fractionné (8x400m)
+- sortie longue 45-60 min
+
+Semaine 2:
+- seuil 20 min + footing
+- fractionné long (5x800m)
+
+Semaine 3:
+- intensité + sortie longue
+
+Semaine 4:
+- affûtage + test`;
+  }
+
+  else if (level === "fort") {
+    plan =
+`📅 Plan avancé
+
+Semaine 1:
+- fractionné 10x400m
+- seuil 25 min
+- sortie longue 1h15
+
+Semaine 2:
+- fractionné long 6x1000m
+- footing récupération
+- travail allure course
+
+Semaine 3:
+- intensité spécifique objectif
+
+Semaine 4:
+- affûtage + simulation course`;
+  }
+
+  else {
+    plan = "Niveau invalide (débutant / moyen / fort)";
+  }
+
+  document.getElementById("planOut").innerText = plan;
+}
+  
 /* ================= ALLURE ================= */
 function calcPace() {
 let d = parseFloat(document.getElementById("dist").value);
