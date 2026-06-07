@@ -267,26 +267,47 @@ document.getElementById("vo2").innerText = vo2.toFixed(1);
 }
 /* ================= CALCUL ALLURE (FIXÉ) ================= */
 function calcPace(){
-let d=Number(dist.value);
-let t=Number(time.value);
-if(!d||!t)return;
+let d = Number(document.getElementById("dist").value);
+let t = document.getElementById("time").value;
 
-let pace=t/d;
+if(!d || d <= 0 || !t) return;
 
-let m=Math.floor(pace);
-let s=Math.round((pace-m)*60);
-if(s===60){m++;s=0;}
+// temps accepté : 25 ou 25:30
+let timeMin;
 
-paceOut.innerText=`${m}:${s<10?"0":""}${s} min/km`;
+if(t.includes(":")){
+let parts = t.split(":");
+timeMin = Number(parts[0]) + Number(parts[1] || 0)/60;
+}else{
+timeMin = Number(t);
+}
 
-let speed=d/(t/60);
-let vo2=3.5*speed*1.1;
+if(!timeMin || timeMin <= 0) return;
 
-document.getElementById("vo2").innerText=vo2.toFixed(1);
-document.getElementById("score").innerText=
-Math.max(0,100-pace*10).toFixed(1);
+// allure min/km
+let pace = timeMin / d;
 
-save(vo2,pace);
+let m = Math.floor(pace);
+let s = Math.round((pace - m) * 60);
+if(s === 60){ m++; s = 0; }
+
+document.getElementById("paceOut").innerText =
+`${m}:${s < 10 ? "0" : ""}${s} min/km`;
+
+// vitesse km/h
+let speed = d / (timeMin / 60);
+document.getElementById("speedOut").innerText =
+speed.toFixed(2) + " km/h";
+
+// VO2 estimation
+let vo2 = 3.5 * speed * 1.1;
+document.getElementById("vo2").innerText = vo2.toFixed(1);
+
+document.getElementById("score").innerText =
+Math.max(0, 100 - pace * 10).toFixed(1);
+
+// sauvegarde
+save(vo2, pace);
 }
 
 /* SPEED */
