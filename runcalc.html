@@ -267,21 +267,46 @@ document.getElementById("vo2").innerText = vo2.toFixed(1);
 }
 /* ================= CALCUL ALLURE (FIXÉ) ================= */
 function calcPace(){
-let d = Number(document.getElementById("dist").value);
+let d = parseFloat(document.getElementById("dist").value);
 let t = document.getElementById("time").value;
 
 if(!d || d <= 0 || !t) return;
 
-// conversion temps
-let timeMin = 0;
+let timeMin;
 
 if(t.includes(":")){
 let parts = t.split(":");
-timeMin = Number(parts[0]) + Number(parts[1] || 0) / 60;
+timeMin = parseFloat(parts[0]) + (parseFloat(parts[1]) || 0)/60;
 }else{
-timeMin = Number(t);
+timeMin = parseFloat(t);
 }
 
+if(!timeMin || timeMin <= 0) return;
+
+// ALLURE
+let pace = timeMin / d;
+let m = Math.floor(pace);
+let s = Math.round((pace - m) * 60);
+if(s === 60){ m++; s = 0; }
+
+document.getElementById("paceOut").innerText =
+`${m}:${s < 10 ? "0" : ""}${s} min/km`;
+
+// VITESSE
+let speed = d / (timeMin / 60);
+document.getElementById("speedOut").innerText =
+speed.toFixed(2) + " km/h";
+
+// VO2
+let vo2 = 3.5 * speed * 1.1;
+document.getElementById("vo2").innerText = vo2.toFixed(1);
+
+document.getElementById("score").innerText =
+Math.max(0, 100 - pace * 10).toFixed(1);
+
+// SAFE SAVE
+save(vo2, pace);
+}
 if(!timeMin || timeMin <= 0) return;
 
 // ALLURE (min/km)
@@ -364,35 +389,35 @@ fcOut.innerText=p.toFixed(1)+"%";
 
 /* RUNS */
 function addRun(){
-let d = Number(rDist.value);
+let d = parseFloat(rDist.value);
 let t = rTime.value;
 
 if(!d || !t) return;
 
-// conversion mm:ss → minutes
-let parts = t.split(":");
-let minutes = Number(parts[0]);
-let seconds = Number(parts[1] || 0);
+let timeMin;
 
-let timeMin = minutes + seconds/60;
+if(t.includes(":")){
+let p = t.split(":");
+timeMin = parseFloat(p[0]) + (parseFloat(p[1])||0)/60;
+}else{
+timeMin = parseFloat(t);
+}
 
-if(!timeMin || timeMin <= 0) return;
+if(!timeMin) return;
 
-let r={
+runs.push({
 d:d,
 t:timeMin,
 date:new Date().toLocaleDateString()
-};
+});
 
-runs.push(r);
-localStorage.setItem("runs",JSON.stringify(runs));
+localStorage.setItem("runs", JSON.stringify(runs));
 
 document.getElementById("last").innerText =
 `${d} km - ${t}`;
 
 render();
 }
-
 /* SAVE */
 function save(vo2,pace){
 history.push({vo2,pace});
@@ -405,26 +430,21 @@ function draw(){
 let c=document.getElementById("chart").getContext("2d");
 c.clearRect(0,0,400,200);
 
-c.beginPath();
-
 let data = history.slice(-10);
 
+c.beginPath();
+
 data.forEach((h,i)=>{
-let vo2 = Number(h.vo2);
+let v = Number(h.vo2);
+if(isNaN(v)) v = 0;
 
-if(isNaN(vo2)) vo2 = 0;
-
-if(i === 0){
-c.moveTo(i*40,200 - vo2*2);
-}else{
-c.lineTo(i*40,200 - vo2*2);
-}
+if(i === 0) c.moveTo(i*40,200 - v*2);
+else c.lineTo(i*40,200 - v*2);
 });
 
 c.strokeStyle="#22c55e";
 c.stroke();
 }
-
 /* PREDICTION */
 function predict(){
 if(history.length===0)return;
