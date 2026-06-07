@@ -303,11 +303,24 @@ fcOut.innerText=p.toFixed(1)+"%";
 
 /* RUNS */
 function addRun(){
-let r={d:+rDist.value,t:+rTime.value,date:new Date().toLocaleDateString()};
+let d = Number(rDist.value);
+let t = Number(rTime.value);
+
+if(!d || !t || d <= 0 || t <= 0){
+alert("Entre une distance et un temps valides");
+return;
+}
+
+let r={
+d:d,
+t:t,
+date:new Date().toLocaleDateString()
+};
+
 runs.push(r);
 localStorage.setItem("runs",JSON.stringify(runs));
 
-document.getElementById("last").innerText=
+document.getElementById("last").innerText =
 `${r.d} km - ${r.t} min`;
 
 render();
@@ -355,9 +368,10 @@ pred42k.innerText="42K: "+f(pace*42.2*1.08);
 /* INIT */
 function render(){
 document.getElementById("runList").innerHTML =
-runs.slice(-10).map(r =>
-`📅 ${r.date} - ${r.d}km / ${r.t}min`
-).join("<br>");
+runs.slice(-10).map(r => {
+if(!r.d || !r.t) return "";
+return `📅 ${r.date} - ${r.d} km / ${r.t} min`;
+}).join("<br>");
 
 draw();
 }
