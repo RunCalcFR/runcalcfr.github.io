@@ -272,14 +272,46 @@ let t = document.getElementById("time").value;
 
 if(!d || d <= 0 || !t) return;
 
-// temps accepté : 25 ou 25:30
-let timeMin;
+// conversion temps
+let timeMin = 0;
 
 if(t.includes(":")){
 let parts = t.split(":");
-timeMin = Number(parts[0]) + Number(parts[1] || 0)/60;
+timeMin = Number(parts[0]) + Number(parts[1] || 0) / 60;
 }else{
 timeMin = Number(t);
+}
+
+if(!timeMin || timeMin <= 0) return;
+
+// ALLURE (min/km)
+let pace = timeMin / d;
+
+let m = Math.floor(pace);
+let s = Math.round((pace - m) * 60);
+
+if(s === 60){
+m++;
+s = 0;
+}
+
+document.getElementById("paceOut").innerText =
+`${m}:${s < 10 ? "0" : ""}${s} min/km`;
+
+// VITESSE km/h
+let speed = d / (timeMin / 60);
+document.getElementById("speedOut").innerText =
+speed.toFixed(2) + " km/h";
+
+// VO2
+let vo2 = 3.5 * speed * 1.1;
+document.getElementById("vo2").innerText = vo2.toFixed(1);
+
+document.getElementById("score").innerText =
+Math.max(0, 100 - pace * 10).toFixed(1);
+
+// sauvegarde
+save(vo2, pace);
 }
 
 if(!timeMin || timeMin <= 0) return;
