@@ -322,7 +322,7 @@ draw();
 
 /* GRAPH */
 function draw(){
-let c=chart.getContext("2d");
+let c=document.getElementById("chart").getContext("2d");
 c.clearRect(0,0,400,200);
 
 c.beginPath();
@@ -358,7 +358,10 @@ document.getElementById("runList").innerHTML =
 runs.slice(-10).map(r =>
 `📅 ${r.date} - ${r.d}km / ${r.t}min`
 ).join("<br>");
-render();
+
+draw();
+}
+  render();
 draw();
 </script>
   
