@@ -474,6 +474,39 @@ Math.max(0, 100 - pace * 10).toFixed(1);
 save(vo2, pace);
 }
 
+<script>
+function calcDistance() {
+
+  let pace = document.getElementById("distancePace").value;
+  let time = document.getElementById("distanceTime").value;
+
+  if (!pace || !time) return;
+
+  let p = pace.split(":");
+  let paceMin = parseFloat(p[0]) + (parseFloat(p[1] || 0) / 60);
+
+  let totalMin;
+
+  if (time.split(":").length === 3) {
+    let t = time.split(":");
+    totalMin =
+      parseFloat(t[0]) * 60 +
+      parseFloat(t[1]) +
+      (parseFloat(t[2]) || 0) / 60;
+  } else {
+    let t = time.split(":");
+    totalMin =
+      parseFloat(t[0]) +
+      (parseFloat(t[1]) || 0) / 60;
+  }
+
+  let distance = totalMin / paceMin;
+
+  document.getElementById("distanceOut").innerText =
+    "Distance : " + distance.toFixed(2) + " km";
+}
+</script>
+ 
 /* ================= SPEED ================= */
 function calcSpeed() {
 let v = document.getElementById("paceInput").value.split(":");
