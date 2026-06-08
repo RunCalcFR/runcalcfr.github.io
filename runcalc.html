@@ -207,6 +207,17 @@ data-full-width-responsive="true"></ins>
 📊 Dashboard Performance
 </h2>
 
+<div class="card">
+<h3>🏁 Plan basé sur ton record 5 km</h3>
+
+<input id="best5k" placeholder="Ton meilleur 5 km (ex 17:57)">
+<button onclick="generateSmartPlan()">Créer mon plan</button>
+
+<br><br>
+
+<div id="planOut">--</div>
+</div>
+ 
 <div class="grid">
 
 <div class="card">
@@ -1465,3 +1476,383 @@ function draw() {
   letter-spacing: 0.5px;
 }
 </style>
+<script>
+/* ===================== STOCKAGE ===================== */
+let runs = JSON.parse(localStorage.getItem("runs") || "[]");
+let history = JSON.parse(localStorage.getItem("history") || "[]");
+
+/* ===================== OUTILS TEMPS ===================== */
+function safeNum(v){
+  let n = parseFloat(v);
+  return isNaN(n) ? null : n;
+}
+
+function parseTime(t){
+  if(!t) return null;
+
+  if(t.includes(":")){
+    let p = t.split(":");
+    return (parseFloat(p[0]) || 0) + (parseFloat(p[1]) || 0)/60;
+  }
+  return safeNum(t);
+}
+
+/* ===================== VO2 ===================== */
+function calcVO2Test(){
+  let d = safeNum(document.getElementById("vo2dist").value);
+  let t = parseTime(document.getElementById("vo2time").value);
+
+  if(!d || !t) return;
+
+  let kmh = (d / t) * 60;
+  let vo2 = 3.5 * kmh * 1.1;
+
+  document.getElementById("vo2testOut").innerText =
+    "VO2 max : " + vo2.toFixed(1);
+
+  document.getElementById("vo2").innerText = vo2.toFixed(1);
+  document.getElementById("levelDisplay").innerText = getBadge(vo2);
+}
+
+function generateSmartPlan(){
+  let best5k = document.getElementById("best5k").value;
+
+  let paces = getTrainingPacesFrom5k(best5k);
+  if(!paces) return;
+
+  function f(x){
+    let m = Math.floor(x);
+    let s = Math.round((x - m)*60);
+    return `${m}:${s<10?"0":""}${s}/km`;
+  }
+
+  let plan =
+`🏃 PLAN BASÉ SUR TON 5 KM
+
+📊 Allures :
+- Endurance fondamentale : ${f(paces.easy)}
+- Endurance active : ${f(paces.steady)}
+- Seuil : ${f(paces.threshold)}
+- Fractionné : ${f(paces.interval)}
+
+📅 Semaine type :
+- 1 footing EF (45-60 min) → ${f(paces.easy)}
+- 1 séance seuil (15-25 min) → ${f(paces.threshold)}
+- 1 fractionné (ex: 6x3 min) → ${f(paces.interval)}
+- 1 sortie longue → EF
+
+💡 Objectif : progresser sans se cramer`;
+
+  document.getElementById("planOut").innerText = plan;
+}
+ 
+function getTrainingPacesFrom5k(timeStr){
+  let t = parseTime(timeStr);
+  if(!t) return null;
+
+  let pace = t / 5; // allure 5 km (min/km)
+
+  return {
+    easy: pace + 1.15,        // endurance fondamentale
+    steady: pace + 0.45,      // endurance active
+    threshold: pace + 0.10,   // seuil
+    interval: pace - 0.25     // VMA / fractionné
+  };
+}
+ 
+/* ===================== ALLURE ===================== */
+function calcPace(){
+  let d = safeNum(document.getElementById("dist").value);
+  let t = parseTime(document.getElementById("time").value);
+
+  if(!d || !t) return;
+
+  let pace = t / d;
+
+  let m = Math.floor(pace);
+  let s = Math.round((pace - m) * 60);
+
+  document.getElementById("paceOut").innerText =
+    `Allure : ${m}:${s<10?"0":""}${s} /km`;
+
+  let speed = d / (t/60);
+  document.getElementById("speedOut").innerText =
+    `Vitesse : ${speed.toFixed(2)} km/h`;
+
+  let vo2 = 3.5 * speed * 1.1;
+
+  document.getElementById("vo2").innerText = vo2.toFixed(1);
+  document.getElementById("score").innerText =
+    Math.max(0, 100 - pace * 10).toFixed(1);
+
+  document.getElementById("levelDisplay").innerText = getBadge(vo2);
+
+  save(vo2, pace);
+}
+
+/* ===================== VITESSE ===================== */
+function calcSpeed(){
+  let v = document.getElementById("paceInput").value.split(":");
+
+  if(v.length < 2) return;
+
+  let paceMin = parseFloat(v[0]) + parseFloat(v[1])/60;
+  let speed = 60 / paceMin;
+
+  document.getElementById("speedOnlyOut").innerText =
+    "Vitesse : " + speed.toFixed(2) + " km/h";
+}
+
+/* ===================== FC ===================== */
+function calcFC(){
+  let max = safeNum(document.getElementById("fcmax").value);
+  let avg = safeNum(document.getElementById("fcavg").value);
+
+  if(!max || !avg) return;
+
+  let p = (avg/max)*100;
+
+  let zone =
+    p < 70 ? "Endurance fondamentale" :
+    p < 80 ? "Endurance active" :
+    p < 88 ? "Seuil" : "VO2 max";
+
+  document.getElementById("zone").innerText = zone;
+  document.getElementById("fcOut").innerText = p.toFixed(1) + "% FC";
+}
+
+/* ===================== DISTANCE ===================== */
+function calcDistance(){
+  let pace = parseTime(document.getElementById("distancePace").value);
+  let time = parseTime(document.getElementById("distanceTime").value);
+
+  if(!pace || !time) return;
+
+  let dist = time / pace;
+
+  document.getElementById("distanceOut").innerText =
+    "Distance : " + dist.toFixed(2) + " km";
+}
+
+/* ===================== KM -> MILES ===================== */
+function convertKm(){
+  let km = safeNum(document.getElementById("kmInput").value);
+  if(!km) return;
+
+  let miles = km * 0.621371;
+
+  document.getElementById("mileOut").innerText =
+    miles.toFixed(2) + " miles";
+}
+
+/* ===================== OBJECTIF ===================== */
+function goalTime(){
+  let d = safeNum(document.getElementById("goalDist").value);
+  let pace = parseTime(document.getElementById("goalPace").value);
+
+  if(!d || !pace) return;
+
+  let total = d * pace;
+
+  let h = Math.floor(total / 60);
+  let m = Math.round(total % 60);
+
+  document.getElementById("goalOut").innerText =
+    (h>0 ? h+"h " : "") + m + " min";
+}
+
+/* ===================== RUNS ===================== */
+function addRun(){
+  let d = safeNum(document.getElementById("distancePace")?.value);
+  let t = parseTime(document.getElementById("distanceTime")?.value);
+
+  if(!d || !t) return;
+
+  runs.push({
+    d,
+    t,
+    date: new Date().toLocaleDateString()
+  });
+
+  localStorage.setItem("runs", JSON.stringify(runs));
+
+  document.getElementById("last").innerText =
+    `${d} km`;
+
+  render();
+}
+
+/* ===================== PROGRAMME ===================== */
+function generatePlan(){
+  let dist = safeNum(document.getElementById("goalDist").value);
+  let level = (document.getElementById("levelInput")?.value || "").toLowerCase();
+
+  if(!dist || !level) return;
+
+  let plan = "";
+
+  if(level === "débutant"){
+    plan =
+`Débutant :
+- 3 footings / semaine
+- 1 sortie longue
+- 1 fractionné léger`;
+  }
+
+  else if(level === "moyen"){
+    plan =
+`Intermédiaire :
+- 2 footing
+- 1 fractionné
+- 1 seuil
+- 1 sortie longue`;
+  }
+
+  else{
+    plan =
+`Avancé :
+- fractionné intensif
+- seuil
+- sortie longue
+- spécifique objectif`;
+  }
+
+  alert(plan);
+}
+
+/* ===================== PRÉDICTIONS ===================== */
+function predict(){
+  if(history.length === 0) return;
+
+  let last = history[history.length - 1];
+  let pace = last.pace || 5;
+
+  function fmt(min){
+    let m = Math.floor(min);
+    let s = Math.round((min - m)*60);
+    return `${m}:${s<10?"0":""}${s}`;
+  }
+
+  document.getElementById("pred5k").innerText =
+    "5 km : " + fmt(pace*5);
+
+  document.getElementById("pred10k").innerText =
+    "10 km : " + fmt(pace*10);
+
+  document.getElementById("pred21k").innerText =
+    "21 km : " + fmt(pace*21.1);
+
+  document.getElementById("pred42k").innerText =
+    "42 km : " + fmt(pace*42.2);
+}
+
+/* ===================== BADGE ===================== */
+function getBadge(vo2){
+  if(vo2 < 35) return "Débutant";
+  if(vo2 < 45) return "Intermédiaire";
+  if(vo2 < 55) return "Bon niveau";
+  return "Athlète";
+}
+</script>
+<script>
+/* ===================== SAVE ===================== */
+function save(vo2, pace){
+  history.push({ vo2, pace });
+
+  if(history.length > 200) history.shift();
+
+  localStorage.setItem("history", JSON.stringify(history));
+
+  draw();
+}
+
+/* ===================== GRAPH ===================== */
+function draw(){
+  let canvas = document.getElementById("chart");
+  if(!canvas) return;
+
+  let c = canvas.getContext("2d");
+
+  c.clearRect(0,0,canvas.width,canvas.height);
+
+  let data = history.slice(-20);
+  if(data.length === 0) return;
+
+  let max = Math.max(...data.map(h => h.vo2 || 0), 1);
+
+  c.beginPath();
+
+  data.forEach((h,i)=>{
+    let v = (h.vo2 || 0) / max;
+
+    let x = (i/(data.length-1)) * canvas.width;
+    let y = canvas.height - v * canvas.height;
+
+    if(i===0) c.moveTo(x,y);
+    else c.lineTo(x,y);
+  });
+
+  c.strokeStyle = "#fc4c02";
+  c.lineWidth = 3;
+  c.stroke();
+}
+
+/* ===================== RENDER RUNS ===================== */
+function render(){
+  let el = document.getElementById("runList");
+  if(!el) return;
+
+  el.innerHTML =
+    runs.slice(-10).reverse().map(r=>{
+      let pace = r.t / r.d;
+
+      let m = Math.floor(pace);
+      let s = Math.round((pace - m)*60);
+
+      return `
+        <div style="
+          background:#1b1b1b;
+          padding:10px;
+          margin-top:10px;
+          border-radius:10px;
+          border-left:4px solid #fc4c02;
+        ">
+          <b>${r.d} km</b><br>
+          ⏱ ${r.t.toFixed(2)} min<br>
+          ⚡ ${m}:${s<10?"0":""}${s}/km
+        </div>
+      `;
+    }).join("");
+}
+
+/* ===================== RESET ===================== */
+function resetAll(){
+  runs = [];
+  history = [];
+  localStorage.removeItem("runs");
+  localStorage.removeItem("history");
+
+  render();
+  draw();
+}
+
+/* ===================== INIT ===================== */
+function init(){
+  render();
+  draw();
+}
+
+/* lancement auto */
+init();
+</script>
+
+<!-- bouton reset (sans casser design) -->
+<div class="card" style="margin-top:20px;">
+<button onclick="resetAll()" style="background:red;">
+Reset données
+</button>
+</div>
+
+</body>
+</html>
+ 
