@@ -340,42 +340,7 @@ data-full-width-responsive="true"></ins>
 <div class="card">
 
 
-/* ================= SAVE ================= */
-function save(vo2, pace) {
-history.push({ vo2, pace });
-localStorage.setItem("history", JSON.stringify(history));
-draw();
-}
 
-/* ================= GRAPH ================= */
-function draw() {
-let c = document.getElementById("chart").getContext("2d");
-c.clearRect(0, 0, 400, 200);
-
-let data = history.slice(-10);
-
-c.beginPath();
-
-data.forEach((h, i) => {
-let v = Number(h.vo2 || 0);
-
-if (i === 0) c.moveTo(i * 40, 200 - v * 2);
-else c.lineTo(i * 40, 200 - v * 2);
-});
-
-c.strokeStyle = "#22c55e";
-c.stroke();
-}
-
-/* ================= RENDER ================= */
-function render() {
-document.getElementById("runList").innerHTML =
-runs.slice(-10)
-.map(r => `📅 ${r.date} - ${r.d} km / ${r.t.toFixed(1)} min`)
-.join("<br>");
-
-draw();
-}
 
 /* INIT */
 render();
