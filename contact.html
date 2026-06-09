@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,7 @@
 
 <style>
 body{
-font-family: Arial;
+font-family: Arial, sans-serif;
 margin:0;
 background:#0f172a;
 color:white;
@@ -19,12 +20,15 @@ justify-content:center;
 gap:20px;
 padding:15px;
 background:#0b1220;
+position:sticky;
+top:0;
 }
 
 nav a{
 color:white;
 text-decoration:none;
 opacity:0.8;
+font-size:14px;
 }
 
 nav a:hover{
@@ -32,34 +36,84 @@ opacity:1;
 }
 
 .container{
-max-width:700px;
+max-width:750px;
 margin:auto;
 padding:40px 20px;
 }
 
+h1{
+text-align:center;
+margin-bottom:10px;
+}
+
+.subtitle{
+text-align:center;
+color:#9ca3af;
+margin-bottom:30px;
+font-size:14px;
+}
+
 .card{
 background:#1e293b;
-padding:20px;
+padding:25px;
 border-radius:12px;
+box-shadow:0 3px 12px rgba(0,0,0,0.3);
+}
+
+label{
+font-size:13px;
+color:#cbd5e1;
 }
 
 input, textarea{
 width:100%;
-padding:10px;
-margin-top:10px;
+padding:12px;
+margin-top:6px;
 margin-bottom:15px;
-border-radius:8px;
+border-radius:10px;
 border:none;
+background:#2a2a2a;
+color:white;
+font-size:14px;
+outline:none;
+}
+
+input:focus, textarea:focus{
+border:1px solid #22c55e;
 }
 
 button{
-padding:12px 20px;
+width:100%;
+padding:12px;
 background:#22c55e;
 border:none;
 color:white;
-border-radius:8px;
+border-radius:10px;
 cursor:pointer;
 font-weight:bold;
+font-size:15px;
+transition:0.2s;
+}
+
+button:hover{
+background:#16a34a;
+transform:scale(1.02);
+}
+
+.info{
+margin-top:20px;
+font-size:13px;
+color:#9ca3af;
+line-height:1.6;
+}
+
+.email-box{
+margin-top:20px;
+padding:15px;
+background:#111827;
+border-left:4px solid #22c55e;
+border-radius:8px;
+font-size:14px;
 }
 </style>
 
@@ -70,29 +124,47 @@ font-weight:bold;
 <nav>
 <a href="index.html">Accueil</a>
 <a href="runcalc.html">Outils</a>
+<a href="temps.html">Temps</a>
 <a href="contact.html">Contact</a>
 <a href="confidentialite.html">Confidentialité</a>
 </nav>
 
 <div class="container">
 
-<h1>Contact</h1>
+<h1>📩 Contact</h1>
+<div class="subtitle">
+Une question, un bug ou une idée ? Réponse rapide.
+</div>
 
 <div class="card">
 
-<p>Envoyez un message :</p>
-
 <form action="https://formsubmit.co/esteban.doublet74@gmail.com" method="POST">
 
-<input type="text" name="name" placeholder="Ton nom" required>
+<!-- protection anti-spam simple -->
+<input type="hidden" name="_captcha" value="false">
 
-<input type="email" name="email" placeholder="Ton email" required>
+<label>Ton nom</label>
+<input type="text" name="name" placeholder="Ex : Lucas" required>
 
-<textarea name="message" rows="6" placeholder="Ton message" required></textarea>
+<label>Ton email</label>
+<input type="email" name="email" placeholder="exemple@gmail.com" required>
 
-<button type="submit">Envoyer</button>
+<label>Ton message</label>
+<textarea name="message" rows="6" placeholder="Explique ton problème ou ton idée..." required></textarea>
+
+<button type="submit">Envoyer le message</button>
 
 </form>
+
+<div class="email-box">
+📧 Email direct : <b>esteban.doublet74@gmail.com</b>
+</div>
+
+<div class="info">
+✔ Réponse sous 24 à 48h<br>
+✔ Support pour bugs / calculs / site<br>
+✔ Idées d’amélioration acceptées
+</div>
 
 </div>
 
