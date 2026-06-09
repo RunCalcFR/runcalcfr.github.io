@@ -1,1 +1,201 @@
+<!DOCTYPE html>
+<html lang="fr">
 
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Temps & Classement - RunCalc</title>
+
+<style>
+body{
+font-family: Arial;
+margin:0;
+background:#0f172a;
+color:white;
+}
+
+header{
+padding:50px 20px;
+text-align:center;
+background:linear-gradient(135deg,#2563eb,#1e40af);
+}
+
+h1{font-size:35px;margin-bottom:10px;}
+p{opacity:0.9}
+
+.container{
+max-width:900px;
+margin:auto;
+padding:20px;
+}
+
+.card{
+background:#1e293b;
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
+}
+
+th,td{
+border:1px solid #334155;
+padding:10px;
+text-align:center;
+}
+
+input,select,button{
+padding:10px;
+margin:5px;
+border-radius:8px;
+border:none;
+}
+
+button{
+background:#22c55e;
+color:white;
+cursor:pointer;
+font-weight:bold;
+}
+
+.result{
+margin-top:15px;
+font-size:18px;
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+<h1>Temps moyens & Classement</h1>
+<p>Compare tes performances et découvre ton niveau selon ton âge</p>
+</header>
+
+<div class="container">
+
+<!-- TABLEAU TEMPS MOYENS -->
+<div class="card">
+<h2>📊 Temps moyens (général)</h2>
+
+<table>
+<tr>
+<th>Distance</th>
+<th>Hommes</th>
+<th>Femmes</th>
+</tr>
+
+<tr>
+<td>5 km</td>
+<td>22 - 26 min</td>
+<td>26 - 32 min</td>
+</tr>
+
+<tr>
+<td>10 km</td>
+<td>45 - 55 min</td>
+<td>55 - 65 min</td>
+</tr>
+
+<tr>
+<td>Semi (21 km)</td>
+<td>1h40 - 2h00</td>
+<td>1h55 - 2h20</td>
+</tr>
+
+<tr>
+<td>Marathon</td>
+<td>3h30 - 4h30</td>
+<td>4h00 - 5h30</td>
+</tr>
+
+</table>
+</div>
+
+<!-- CALCUL CLASSEMENT -->
+<div class="card">
+<h2>🏃 Ton classement</h2>
+
+<input type="number" id="age" placeholder="Âge">
+<select id="distance">
+<option value="5">5 km</option>
+<option value="10">10 km</option>
+<option value="21">Semi-marathon</option>
+<option value="42">Marathon</option>
+</select>
+
+<input type="text" id="time" placeholder="Temps (ex: 25.30 = 25 min 30 sec)">
+
+<button onclick="calcul()">Calculer</button>
+
+<div class="result" id="result"></div>
+</div>
+
+</div>
+
+<script>
+function calcul(){
+
+let age = parseInt(document.getElementById("age").value);
+let dist = document.getElementById("distance").value;
+let time = parseFloat(document.getElementById("time").value);
+
+if(!age || !time){
+document.getElementById("result").innerHTML = "Remplis tous les champs.";
+return;
+}
+
+let score = 0;
+
+// logique simple par niveau
+if(dist == 5){
+if(time < 20) score = 90;
+else if(time < 25) score = 70;
+else if(time < 30) score = 50;
+else score = 30;
+}
+
+if(dist == 10){
+if(time < 42) score = 90;
+else if(time < 50) score = 70;
+else if(time < 60) score = 50;
+else score = 30;
+}
+
+if(dist == 21){
+if(time < 95) score = 90;
+else if(time < 120) score = 70;
+else if(time < 150) score = 50;
+else score = 30;
+}
+
+if(dist == 42){
+if(time < 210) score = 90;
+else if(time < 270) score = 70;
+else if(time < 330) score = 50;
+else score = 30;
+}
+
+// ajustement par âge (simple)
+if(age < 16) score += 5;
+if(age > 40) score -= 5;
+
+let niveau = "";
+
+if(score >= 85) niveau = "Top niveau (élite âge)";
+else if(score >= 70) niveau = "Très bon niveau (Top 25%)";
+else if(score >= 50) niveau = "Niveau moyen";
+else niveau = "Niveau débutant";
+
+document.getElementById("result").innerHTML =
+"Score : " + score + "/100<br>Niveau : " + niveau;
+}
+</script>
+
+</body>
+</html>
