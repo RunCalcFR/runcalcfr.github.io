@@ -297,6 +297,20 @@ canvas {
         <div class="result" id="distanceOut">Distance : --</div>
       </div>
 
+      <!-- ANALYSE SEANCE COMPLETE -->
+<div class="card">
+  <h3>📊 Analyse de séance complète</h3>
+
+  <input id="fc_session" placeholder="FC moyenne séance (ex : 155)">
+  <input id="fc_max" placeholder="FC max (ex : 195)">
+  <input id="pace_session" placeholder="Allure (ex : 4:30)">
+  <input id="time_session" placeholder="Temps total (ex : 45:00)">
+
+  <button onclick="analyseSeance()">Analyser la séance</button>
+
+  <div class="result" id="session_result">Résultat : --</div>
+</div>
+      
       <!-- FC -->
       <div class="card">
         <h3>❤️ Fréquence cardiaque</h3>
@@ -561,6 +575,77 @@ function calcFC() {
   document.getElementById("dashZone").innerText = zone;
 }
 
+function analyseSeance(){
+
+const fc = parseFloat(document.getElementById("fc_session").value);
+const fcmax = parseFloat(document.getElementById("fc_max").value);
+const pace = parseTime(document.getElementById("pace_session").value);
+const time = parseTime(document.getElementById("time_session").value);
+
+if(!fc || !fcmax || !pace || !time){
+document.getElementById("session_result").innerText = "Remplis tous les champs.";
+return;
+}
+
+let pct = (fc / fcmax) * 100;
+
+let zone = "";
+let gain = "";
+
+/* ZONES */
+if(pct < 70){
+zone = "Endurance fondamentale";
+gain = "Amélioration endurance de base + récupération + efficacité cardiaque";
+}
+
+else if(pct < 85){
+zone = "Seuil / tempo";
+gain = "Amélioration du seuil lactique + capacité à tenir un effort rapide longtemps";
+}
+
+else{
+zone = "Intensité élevée (VMA)";
+gain = "Amélioration vitesse + VO2 max + puissance";
+}
+
+/* analyse allure */
+let perf = "";
+
+if(pace > 6){
+perf = "Séance récupération / footing très lent";
+}
+else if(pace > 5){
+perf = "Endurance fondamentale";
+}
+else if(pace > 4){
+perf = "Travail soutenu / seuil";
+}
+else{
+perf = "Séance intense / VMA";
+}
+
+/* volume */
+let volume = "";
+
+if(time < 30){
+volume = "petite séance → récupération ou activation";
+}
+else if(time < 60){
+volume = "séance normale → bon développement";
+}
+else{
+volume = "grosse séance → forte adaptation endurance";
+}
+
+document.getElementById("session_result").innerHTML =
+"❤️ Zone FC : " + zone + "<br>" +
+"📊 % FC max : " + pct.toFixed(1) + "%<br>" +
+"🏃 Allure : " + perf + "<br>" +
+"⏱ Volume : " + volume + "<br><br>" +
+"🔥 Amélioration principale : " + gain;
+
+}
+  
 /* ============================================================
    VO2 MAX TEST
    ============================================================ */
