@@ -215,7 +215,8 @@ data-full-width-responsive="true"></ins>
 
 <br><br>
 
-<div id="planOut">--</div>
+<div id="generalPlanOut"></div>
+
 </div>
  
 <div class="grid">
@@ -872,7 +873,6 @@ function predict() {
 }
 
 /* ================= INIT ================= */
-<script>
 function render() {
   let html = runs.slice(-10).reverse().map(r => {
     let pace = r.t / r.d;
@@ -1583,6 +1583,121 @@ Reset données
 </button>
 </div>
 
+<div class="card" style="margin-top:20px;">
+  <h3>🏁 Programme special 5 km sur 4 semaines</h3>
+  <p style="color:#aaa; margin-top:8px;">
+    Entre ton record 5 km (ex : 22:30) pour generer un plan adapte avec 2 jours de repos par semaine.
+  </p>
+
+  <input id="best5kPlan" placeholder="Meilleur 5 km (ex : 22:30)">
+  <button onclick="generateSmartPlan()">Generer mon plan 5 km</button>
+
+  <div id="smartPlan5kOut" style="white-space:pre-line; margin-top:15px;"></div>
+</div>
+
+<script>
+/* ===================== FORMAT TEMPS ===================== */
+<script>
+function formatPace(min){
+  if(min == null || isNaN(min)) return "--";
+  let m = Math.floor(min);
+  let s = Math.round((min - m) * 60);
+  if(s === 60){ m++; s = 0; }
+  return `${m}:${s < 10 ? "0" : ""}${s}/km`;
+}
+
+function formatDuration(min){
+  if(min == null || isNaN(min)) return "--";
+  let h = Math.floor(min / 60);
+  let m = Math.round(min % 60);
+  if(m === 60){ h++; m = 0; }
+  return h > 0 ? `${h}h${m < 10 ? "0" : ""}${m}` : `${m} min`;
+}
+
+function get5kPacesFromPb(timeStr){
+  let totalMin = parseTime(timeStr);
+  if(!totalMin || totalMin <= 0) return null;
+
+  let racePace = totalMin / 5;
+
+  return {
+    race: racePace,
+    easy: racePace + 1.10,
+    steady: racePace + 0.40,
+    threshold: racePace + 0.12,
+    interval: Math.max(2.8, racePace - 0.20),
+    repetition: Math.max(2.6, racePace - 0.30)
+  };
+}
+
+function generateSmartPlan(){
+  let input = document.getElementById("best5k")?.value;
+  let out = document.getElementById("planOut");
+
+  if(!input || !out) return;
+
+  let paces = get5kPacesFromPb(input);
+  if(!paces){
+    out.innerText = "Entre un temps valide au format mm:ss (ex : 22:30).";
+    return;
+  }
+
+  let total5k = parseTime(input);
+
+  out.innerText = `
+🏃 PROGRAMME SPECIAL 5 KM - 4 SEMAINES
+
+Record 5 km : ${input}
+
+ALLURES
+- Endurance fondamentale : ${formatPace(paces.easy)}
+- Endurance active : ${formatPace(paces.steady)}
+- Seuil : ${formatPace(paces.threshold)}
+- Intervalles : ${formatPace(paces.interval)}
+
+SEMAINE 1
+Lundi - Repos
+Mardi - 8 x 400 m a ${formatPace(paces.interval)} recup 1 min 15
+Mercredi - Footing 45 min a ${formatPace(paces.easy)}
+Jeudi - 3 x 6 min a ${formatPace(paces.threshold)} recup 2 min
+Vendredi - Repos
+Samedi - Sortie longue 1h05 a ${formatPace(paces.easy)}
+Dimanche - Footing 40 min + 4 lignes droites
+
+SEMAINE 2
+Lundi - Repos
+Mardi - 5 x 800 m a ${formatPace(paces.interval)} recup 2 min
+Mercredi - Footing 45 a 50 min a ${formatPace(paces.easy)}
+Jeudi - 4 x 5 min a ${formatPace(paces.race)} recup 2 min
+Vendredi - Repos
+Samedi - Sortie longue 1h10 a ${formatPace(paces.easy)}
+Dimanche - Footing actif 45 min a ${formatPace(paces.steady)}
+
+SEMAINE 3
+Lundi - Repos
+Mardi - 10 x 300 m a ${formatPace(paces.repetition)} recup 1 min
+Mercredi - Footing 45 min a ${formatPace(paces.easy)}
+Jeudi - 2 x 10 min a ${formatPace(paces.threshold)} recup 3 min
+Vendredi - Repos
+Samedi - Sortie longue 1h00 a ${formatPace(paces.easy)}
+Dimanche - 3 x 1000 m a ${formatPace(paces.race)} recup 2 min 30
+
+SEMAINE 4
+Lundi - Repos
+Mardi - 6 x 200 m a ${formatPace(paces.repetition)} recup 1 min
+Mercredi - Footing 35 min a ${formatPace(paces.easy)}
+Jeudi - 15 min allure 5 km a ${formatPace(paces.race)}
+Vendredi - Repos
+Samedi - Footing 25 min + 4 accelerations
+Dimanche - Course 5 km
+
+OBJECTIF POSSIBLE
+- Estimation : ${formatDuration(total5k * 0.985)}
+`;
+}
+</script>
+
+ 
 </body>
 </html>
  
