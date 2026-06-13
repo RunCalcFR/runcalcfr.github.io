@@ -10,6 +10,10 @@
   </url>
 
   <url>
+    <loc>https://runcalcfr.github.io/conditions.html</loc>
+  </url>
+
+  <url>
     <loc>https://runcalcfr.github.io/confidentielle.html</loc>
   </url>
 
@@ -18,7 +22,15 @@
   </url>
 
   <url>
-    <loc>https://runcalcfr.github.io/runcalc.html</loc>
+    <loc>https://runcalcfr.github.io/guide-de-course.html</loc>
+  </url>
+
+  <url>
+    <loc>https://runcalcfr.github.io/temps.html</loc>
+  </url>
+
+  <url>
+    <loc>https://runcalcfr.github.io/exécutercalc.html</loc>
   </url>
 
 </urlset>
