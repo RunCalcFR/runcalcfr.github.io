@@ -7,8 +7,6 @@
 
 <title>RunCalc Pro Plus</title>
 
-<meta name="description" content="Outils running : allure, VO2 max, entraînement et performance">
-
 <style>
 /* CSS PARTIE 2 */
 </style>
@@ -17,17 +15,7 @@
 
 <body>
 
-<header class="hero">
-  <h1>RunCalc Pro Plus</h1>
-  <p>Ton outil de performance running</p>
-</header>
-
-<nav>
-  <a href="#tools">Outils</a>
-  <a href="#faq">FAQ</a>
-</nav>
-
-<!-- PUB 1 -->
+<!-- PUB HAUT -->
 <div class="ad">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9530999475279577"
 crossorigin="anonymous"></script>
@@ -41,22 +29,24 @@ data-ad-format="auto"></ins>
 <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 </div>
 
-<section id="tools">
+<!-- HERO STRAVA STYLE -->
+<header class="hero">
+  <div class="badge">RUN • PERFORMANCE</div>
+  <h1>RunCalc Pro Plus</h1>
+  <p>Ton coach running intelligent pour progresser plus vite</p>
 
-<h2>Outils</h2>
+  <a href="#tools" class="btn">Commencer</a>
+</header>
 
-<div class="grid">
-
-<div class="card">⚡ Allure running</div>
-<div class="card">📊 VO2 max</div>
-<div class="card">🏃 Plans entraînement</div>
-<div class="card">🔥 Prédictions chrono</div>
-
-</div>
-
+<!-- STATS STYLE STRAVA -->
+<section class="stats">
+  <div class="stat">⚡ Allure</div>
+  <div class="stat">📊 VO2 max</div>
+  <div class="stat">🏃 Plans</div>
+  <div class="stat">🔥 Chronos</div>
 </section>
 
-<!-- PUB 2 -->
+<!-- PUB MILIEU -->
 <div class="ad">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9530999475279577"
 crossorigin="anonymous"></script>
@@ -70,28 +60,34 @@ data-ad-format="auto"></ins>
 <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 </div>
 
-<section id="faq">
+<!-- FEATURES -->
+<section id="tools" class="grid">
+
+<div class="card">⚡ Calcul d’allure</div>
+<div class="card">📊 VO2 max estimée</div>
+<div class="card">🏃 Plans d’entraînement</div>
+<div class="card">🔥 Prédiction de chrono</div>
+
+</section>
+
+<!-- FAQ -->
+<section class="faq">
 
 <h2>FAQ</h2>
 
 <div class="faq-item">
-  <button class="faq-q">Comment calculer mon allure ? <span>+</span></button>
-  <div class="faq-a"><p>Temps ÷ distance = min/km</p></div>
+<button class="faq-q">Comment calculer mon allure ?</button>
+<div class="faq-a"><p>Temps ÷ distance = min/km</p></div>
 </div>
 
 <div class="faq-item">
-  <button class="faq-q">Comment progresser ? <span>+</span></button>
-  <div class="faq-a"><p>Fractionné + endurance + repos</p></div>
-</div>
-
-<div class="faq-item">
-  <button class="faq-q">Combien courir ? <span>+</span></button>
-  <div class="faq-a"><p>3 à 4 fois par semaine</p></div>
+<button class="faq-q">Comment progresser ?</button>
+<div class="faq-a"><p>Fractionné + endurance + repos</p></div>
 </div>
 
 </section>
 
-<!-- PUB 3 -->
+<!-- PUB BAS -->
 <div class="ad">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9530999475279577"
 crossorigin="anonymous"></script>
@@ -110,7 +106,7 @@ data-ad-format="auto"></ins>
 </footer>
 
 <script>
-/* JS PARTIE 3 */
+// JS PARTIE 3
 </script>
 
 </body>
@@ -118,43 +114,51 @@ data-ad-format="auto"></ins>
 body {
   margin: 0;
   font-family: Arial;
-  background: #0a0f1c;
+  background: #0b0f1a;
   color: white;
 }
 
 /* HERO */
 .hero {
   text-align: center;
-  padding: 70px 20px;
-  background: linear-gradient(135deg, #2563eb, #1e40af);
+  padding: 80px 20px;
+  background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
 }
 
-/* NAV */
-nav {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  padding: 15px;
-  background: #0f172a;
-  position: sticky;
-  top: 0;
+.badge {
+  background: rgba(255,255,255,0.15);
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  margin-bottom: 10px;
 }
 
-nav a {
+.btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 20px;
+  background: #22c55e;
+  border-radius: 10px;
   color: white;
   text-decoration: none;
-  opacity: 0.7;
+  font-weight: bold;
 }
 
-nav a:hover {
-  opacity: 1;
+/* STATS STRAVA STYLE */
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 20px;
+  flex-wrap: wrap;
 }
 
-/* SECTION */
-section {
-  max-width: 900px;
-  margin: auto;
-  padding: 40px 20px;
+.stat {
+  background: #111827;
+  padding: 10px 15px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.05);
 }
 
 /* GRID */
@@ -162,9 +166,11 @@ section {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 15px;
+  max-width: 900px;
+  margin: auto;
+  padding: 40px 20px;
 }
 
-/* CARDS */
 .card {
   background: #111827;
   padding: 20px;
@@ -174,11 +180,17 @@ section {
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  border-color: #3b82f6;
+  transform: translateY(-5px);
+  border-color: #38bdf8;
 }
 
 /* FAQ */
+.faq {
+  max-width: 900px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
 .faq-item {
   margin-bottom: 10px;
   background: #111827;
@@ -195,8 +207,6 @@ section {
   text-align: left;
   font-weight: bold;
   cursor: pointer;
-  display: flex;
-  justify-content: space-between;
 }
 
 .faq-a {
