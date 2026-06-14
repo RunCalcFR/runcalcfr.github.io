@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les Erreurs de Débutant en Course à Pied - RunCalc</title>
+    <style>
+        /* --- DESIGN GLOBAL (Style Strava Pro) --- */
+        :root {
+            --strava-orange: #FC4C02;
+            --dark-bg: #0B0F19;
+            --card-bg: #111827;
+            --text-main: #FFFFFF;
+            --text-muted: #9CA3AF;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --danger-color: #EF4444;
+            --success-color: #10B981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            background-color: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+
+        .logo span {
+            color: var(--strava-orange);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--strava-orange);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            text-align: center;
+            padding: 80px 20px 40px 20px;
+            background: radial-gradient(circle at top, rgba(239, 68, 68, 0.1) 0%, transparent 60%);
+        }
+
+        .badge {
+            background: rgba(239, 68, 68, 0.2);
+            color: #F87171;
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        /* --- CONTENEUR PRINCIPAL --- */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* --- LISTE DES ERREURS --- */
+        .error-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .error-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: var(--danger-color);
+        }
+
+        .error-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .error-number {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--danger-color);
+            font-weight: 800;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 0.95rem;
+        }
+
+        .error-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .error-description {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        /* COMPARATEUR FAUX VS VRAI */
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .box {
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .box-wrong {
+            background: rgba(239, 68, 68, 0.06);
+            border-left: 3px solid var(--danger-color);
+        }
+
+        .box-right {
+            background: rgba(16, 185, 129, 0.06);
+            border-left: 3px solid var(--success-color);
+        }
+
+        .box-title {
+            font-weight: 700;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .box-wrong .box-title { color: #F87171; }
+        .box-right .box-title { color: #34D399; }
+
+        /* --- PUBLICITÉS --- */
+        .ad-container {
+            margin: 30px auto;
+            text-align: center;
+            max-width: 728px;
+            min-height: 90px;
+            background: rgba(255,255,255,0.02);
+            border: 1px dashed rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo"><a href="index.html">RunCalc<span>FR</span></a></div>
+        <ul class="nav-links">
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="exécutercalc.html">Calculateur</a></li>
+            <li><a href="guide-of-course.html">Guide</a></li>
+            <li><a href="erreurs.html" class="active">Erreurs à éviter</a></li>
+        </ul>
+    </nav>
+
+    <header class="hero">
+        <div class="badge">Guide de Progression</div>
+        <h1>Les 5 Erreurs de Débutant</h1>
+        <p>Évitez ces pièges classiques pour progresser plus vite, courir plus longtemps et surtout : ne pas vous blesser.</p>
+    </header>
+
+    <div class="ad-container">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-9530999475279577"
+             data-ad-slot="5943686303"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <main class="container">
+
+        <article class="error-card">
+            <div class="error-header">
+                <div class="error-number">1</div>
+                <h2 class="error-title">Courir trop vite à chaque sortie</h2>
+            </div>
+            <p class="error-description">L'erreur numéro un est de penser que pour progresser, il faut finir chaque entraînement épuisé et essoufflé. Courir trop vite empêche de développer votre endurance fondamentale.</p>
+            <div class="comparison">
+                <div class="box box-wrong">
+                    <div class="box-title">❌ Mauvaise habitude</div>
+                    Être tout le temps à fond et ne pas pouvoir parler en courant.
+                </div>
+                <div class="box box-right">
+                    <div class="box-title">️✔️ La solution pro</div>
+                    75% de vos footings doivent être courus à une allure "confortable" (vous devez pouvoir tenir une conversation).
+                </div>
+            </div>
+        </article>
+
+        <article class="error-card">
+            <div class="error-header">
+                <div class="error-number">2</div>
+                <h2 class="error-title">Augmenter le volume trop rapidement</h2>
+            </div>
+            <p class="error-description">Votre cœur et vos muscles s'adaptent vite, mais vos tendons, articulations et os ont besoin de plusieurs mois pour se renforcer. Augmenter les distances trop vite mène droit à la blessure (périostite, tendinite).</p>
+            <div class="comparison">
+                <div class="box box-wrong">
+                    <div class="box-title">❌ Mauvaise habitude</div>
+                    Passer de 10 km à 30 km par semaine d'une semaine à l'autre.
+                </div>
+                <div class="box box-right">
+                    <div class="box-title">️✔️ La solution pro</div>
+                    Appliquez la règle des 10% : n'augmentez jamais votre kilométrage hebdomadaire de plus de 10% par rapport à la semaine précédente.
+                </div>
+            </div>
+        </article>
+
+        <div class="ad-container">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-9530999475279577"
+                 data-ad-slot="3976528740"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+
+        <article class="error-card">
+            <div class="error-header">
+                <div class="error-number">3</div>
+                <h2 class="error-title">Négliger le choix des chaussures</h2>
+                </div>
+            <p class="error-description">Courir avec de vieilles baskets de mode ou des chaussures non adaptées à votre foulée modifie votre posture et augmente dramatiquement les impacts sur vos genoux.</p>
+            <div class="comparison">
+                <div class="box box-wrong">
+                    <div class="box-title">❌ Mauvaise habitude</div>
+                    Prendre la première paire de running en solde sur internet sans connaître sa pointure running.
+                </div>
+                <div class="box box-right">
+                    <div class="box-title">️✔️ La solution pro</div>
+                    Allez en magasin spécialisé, faites analyser votre foulée et prenez souvent une demi-pointure ou une pointure au-dessus de votre taille habituelle.
+                </div>
+            </div>
+        </article>
+
+        <article class="error-card">
+            <div class="error-header">
+                <div class="error-number">4</div>
+                <h2 class="error-title">Sauter les jours de récupération</h2>
+            </div>
+            <p class="error-description">C'est pendant le repos que votre corps se reconstruit et devient plus fort (c'est le principe de surcompensation). Courir tous les jours sans pause fatigue le système nerveux.</p>
+            <div class="comparison">
+                <div class="box box-wrong">
+                    <div class="box-title">❌ Mauvaise habitude</div>
+                    Enchaîner les entraînements malgré les courbatures fortes ou une fatigue intense.
+                </div>
+                <div class="box box-right">
+                    <div class="box-title">️✔️ La solution pro</div>
+                    Prévoyez au minimum 1 à 2 jours de repos complets par semaine. Le sommeil est votre meilleur allié.
+                </div>
+            </div>
+        </article>
+
+        <article class="error-card">
+            <div class="error-header">
+                <div class="error-number">5</div>
+                <h2 class="error-title">Se comparer constamment aux autres</h2>
+            </div>
+            <p class="error-description">Sur les réseaux ou sur Strava, il y aura toujours quelqu'un de plus rapide. Se focaliser sur les chronos des autres provoque de la frustration et pousse à s'entraîner au-dessus de ses capacités.</p>
+            <div class="comparison">
+                <div class="box box-wrong">
+                    <div class="box-title">❌ Mauvaise habitude</div>
+                    Forcer pour suivre l'allure d'un ami ou d'un inconnu sur votre parcours.
+                </div>
+                <div class="box box-right">
+                    <div class="box-title">️✔️ La solution pro</div>
+                    Suivez vos propres métriques. Utilisez notre <a href="exécutercalc.html" style="color: var(--strava-orange); text-decoration: underline;">calculateur d'allure</a> pour connaître vos vraies zones d'entraînement.
+                </div>
+            </div>
+        </article>
+
+    </main>
+
+    <div class="ad-container">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-9530999475279577"
+             data-ad-slot="3125951274"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <footer>
+        <p>© 2026 RunCalc Pro Plus. Tous droits réservés.</p>
+    </footer>
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9530999475279577" crossorigin="anonymous"></script>
+
+</body>
+</html>
