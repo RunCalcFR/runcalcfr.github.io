@@ -319,7 +319,7 @@
         <ul class="nav-links">
             <li><a href="exécutercalc.html">Calculateur</a></li>
             <li><a href="guide-of-course.html">Guide</a></li>
-            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="erreurs.html">Erreurs à éviter</a></li> <li><a href="a-propos.html">À propos</a></li>
             <li><a href="contact.html">Contact</a></li>
         </ul>
     </nav>
@@ -381,6 +381,11 @@
                 <h3>Prédiction de chrono</h3>
                 <p>Anticipez votre prochain temps de course selon votre forme.</p>
             </a>
+            <a href="erreurs.html" class="card" style="border-color: rgba(252, 76, 2, 0.2);">
+                <div class="card-icon">⚠️</div>
+                <h3 style="color: var(--strava-orange);">Erreurs de débutant</h3>
+                <p>Découvrez les 5 pièges classiques à éviter pour progresser sans se blesser.</p>
+            </a>
         </div>
     </main>
 
@@ -429,13 +434,11 @@
                 const answer = item.querySelector(".faq-a");
                 const isOpen = item.classList.contains("open");
 
-                // Ferme toutes les autres questions ouverts
                 document.querySelectorAll(".faq-item").forEach(i => {
                     i.classList.remove("open");
                     i.querySelector(".faq-a").style.maxHeight = null;
                 });
 
-                // Si l'élément cliqué n'était pas ouvert, on l'ouvre
                 if (!isOpen) {
                     item.classList.add("open");
                     answer.style.maxHeight = answer.scrollHeight + "px";
