@@ -1,185 +1,474 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur d'Allure & Vitesse de Course | RunCalc Pro Plus</title>
+    <meta name="description" content="Calculez instantanément votre allure de course (min/km), votre vitesse (km/h) et vos temps de passage du 5 km au marathon.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        :root {
+            --strava-orange: #FC4C02;
+            --emerald: #22c55e;
+            --slate-950: #0f172a;
+            --slate-900: #1e293b;
+            --slate-800: #334155;
+            --slate-700: #475569;
+            --slate-400: #94a3b8;
+            --slate-50: #f8fafc;
+            --glass: rgba(15, 23, 42, 0.8);
+        }
 
-<title>Calcul allure running 5 km, 10 km, semi-marathon - VO2 max & entraînement | RunCalc Pro Plus</title>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-<meta name="description" content="RunCalc Pro Plus : calcule ton allure, vitesse, VO2 max, temps sur 5 km, 10 km, semi-marathon et marathon. Outils gratuits pour coureurs.">
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--slate-950);
+            color: var(--slate-50);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
-<meta name="keywords" content="running, allure course, 5 km, 10 km, semi marathon, marathon, VO2 max">
+        /* --- NAVIGATION --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-<meta name="author" content="RunCalc Pro Plus">
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            cursor: pointer;
+        }
+        .logo span { color: var(--strava-orange); }
 
-<meta property="og:title" content="RunCalc Pro Plus">
-<meta property="og:description" content="Outils gratuits pour coureurs : allure, vitesse, VO2 max">
-<meta property="og:type" content="website">
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
 
-<link rel="canonical" href="https://runcalcfr.github.io/">
+        .nav-links a {
+            color: var(--slate-400);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
 
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9530999475279577"
-crossorigin="anonymous"></script>
+        .nav-links a:hover, .nav-links a.active { color: var(--strava-orange); }
 
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-9530999475279577"
-     data-ad-slot="5943686303"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
+        /* --- CONTAINER PRINCIPAL --- */
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
 
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
 
-<style>
-body{
-font-family: Arial;
-margin:0;
-background:#0f172a;
-color:white;
-}
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-header{
-padding:60px 20px;
-text-align:center;
-background:linear-gradient(135deg,#2563eb,#1e40af);
-}
+        .page-header p {
+            color: var(--slate-400);
+        }
 
-h1{font-size:40px;margin-bottom:10px;}
-p{opacity:0.9}
+        /* --- CALCULATEUR CARD --- */
+        .calc-card {
+            background: var(--slate-900);
+            padding: 2.5rem;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
 
-.btn{
-display:inline-block;
-margin-top:20px;
-padding:15px 25px;
-background:#22c55e;
-color:white;
-text-decoration:none;
-border-radius:10px;
-font-weight:bold;
-}
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-section{
-padding:40px 20px;
-max-width:900px;
-margin:auto;
-}
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--slate-50);
+            font-size: 0.95rem;
+        }
 
-.card{
-background:#1e293b;
-padding:20px;
-border-radius:12px;
-margin-bottom:15px;
-}
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
 
-nav{
-display:flex;
-justify-content:center;
-gap:20px;
-padding:15px;
-background:#0b1220;
-position:sticky;
-top:0;
-}
+        .input-wrapper i {
+            position: absolute;
+            left: 15px;
+            color: var(--slate-400);
+        }
 
-nav a{
-color:white;
-text-decoration:none;
-opacity:0.8;
-}
+        .form-control {
+            width: 100%;
+            padding: 14px 14px 14px 45px;
+            background: var(--slate-950);
+            border: 1px solid var(--slate-800);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
 
-nav a:hover{
-opacity:1;
-}
+        .form-control:focus {
+            outline: none;
+            border-color: var(--strava-orange);
+            box-shadow: 0 0 0 3px rgba(252, 76, 2, 0.15);
+        }
 
-/* --- DESIGN DE LA FAQ ACCORDÉON --- */
-.faq-section {
-margin-top: 35px;
-}
-.faq-title {
-font-size: 28px;
-margin-bottom: 20px;
-text-align: center;
-}
-.faq-item {
-background: #1e293b;
-border-radius: 10px;
-margin-bottom: 10px;
-overflow: hidden;
-}
-.faq-question {
-width: 100%;
-background: none;
-border: none;
-color: white;
-padding: 18px 20px;
-text-align: left;
-font-size: 16px;
-font-weight: bold;
-cursor: pointer;
-display: flex;
-justify-content: space-between;
-align-items: center;
-}
-.faq-question::after {
-content: '+';
-color: #22c55e;
-font-size: 20px;
-transition: transform 0.2s;
-}
-.faq-item.active .faq-question::after {
-content: '−';
-}
-.faq-answer {
-max-height: 0;
-overflow: hidden;
-transition: max-height 0.3s ease-out;
-padding: 0 20px;
-color: #cbd5e1;
-font-size: 14px;
-line-height: 1.6;
-}
-.faq-item.active .faq-answer {
-padding-bottom: 18px;
-}
-</style>
+        .time-inputs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
 
+        .time-box {
+            position: relative;
+        }
+
+        .time-box input {
+            padding-left: 15px;
+        }
+
+        .time-box span {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.85rem;
+            color: var(--slate-400);
+            font-weight: 600;
+        }
+
+        .btn-calc {
+            width: 100%;
+            padding: 16px;
+            background: var(--emerald);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(34, 197, 94, 0.2);
+            margin-top: 10px;
+        }
+
+        .btn-calc:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px rgba(34, 197, 94, 0.3);
+        }
+
+        /* --- RESULTATS --- */
+        .results-box {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid var(--slate-800);
+            display: none;
+        }
+
+        .results-box.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .results-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--strava-orange);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .result-card {
+            background: var(--slate-950);
+            padding: 15px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            text-align: center;
+        }
+
+        .result-card .label {
+            font-size: 0.85rem;
+            color: var(--slate-400);
+            margin-bottom: 5px;
+        }
+
+        .result-card .value {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: white;
+        }
+
+        .result-card .value span {
+            font-size: 0.9rem;
+            color: var(--slate-400);
+            font-weight: 400;
+        }
+
+        /* --- PUBLICITÉS INTEGRÉES --- */
+        .ad-slot {
+            margin: 2.5rem auto;
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px dashed var(--slate-800);
+            border-radius: 12px;
+            max-width: 728px;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            margin-top: 5rem;
+            padding: 4rem 20px;
+            background: #020617;
+            text-align: center;
+            border-top: 1px solid var(--slate-900);
+        }
+
+        .footer-logo {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        .footer-logo span { color: var(--strava-orange); }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--slate-400);
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+
+        .footer-links a:hover { color: white; }
+
+        .copyright {
+            font-size: 0.8rem;
+            color: var(--slate-800);
+        }
+    </style>
 </head>
 
 <body>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9530999475279577"
-     crossorigin="anonymous"></script>
+    <div class="ad-slot">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9530999475279577" crossorigin="anonymous"></script>
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9530999475279577" data-ad-slot="5943686303" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
 
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-9530999475279577"
-     data-ad-slot="3976528740"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
+    <nav>
+        <div class="logo" onclick="window.location.href='index.html'">Run<span>Calc</span></div>
+        <div class="nav-links">
+            <a href="index.html">Accueil</a>
+            <a href="runcalc.html" class="active">Outils</a>
+            <a href="temps.html">Classement</a>
+            <a href="running-guide.html">Guide</a>
+            <a href="contact.html">Contact</a>
+        </div>
+    </nav>
 
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+    <div class="container">
+        <div class="page-header">
+            <h1>Calculateur d'Allure</h1>
+            <p>Renseignez deux variables pour obtenir instantanément la troisième.</p>
+        </div>
 
-<nav>
-  <a href="index.html">Accueil</a>
-  <a href="runcalc.html">Outils</a>
-  <a href="temps.html">Temps & Classement</a>
-  <a href="running-guide.html">Guide running</a>
-  <a href="contact.html">Contact</a>
-  <a href="confidentialite.html">Confidentialité</a>
-</nav>
+        <div class="calc-card">
+            <div class="form-group">
+                <label for="distance">Distance de course</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-route"></i>
+                    <input type="number" id="distance" step="0.01" class="form-control" placeholder="Ex: 10 ou 21.1">
+                </div>
+            </div>
 
-<header>
-<h1>RunCalc Pro Plus</h1>
-<p>Le site gratuit pour les coureurs : performance, calculs et entraînement</p>
+            <div class="form-group">
+                <label>Temps total (Durée)</label>
+                <div class="time-inputs">
+                    <div class="time-box">
+                        <input type="number" id="hours" min="0" class="form-control" placeholder="00">
+                        <span>h</span>
+                    </div>
+                    <div class="time-box">
+                        <input type="number" id="minutes" min="0" max="59" class="form-control" placeholder="00">
+                        <span>m</span>
+                    </div>
+                    <div class="time-box">
+                        <input type="number" id="seconds" min="0" max="59" class="form-control" placeholder="00">
+                        <span>s</span>
+                    </div>
+                </div>
+            </div>
 
-<a class="btn" href="runcalc.html">🚀 Accéder aux outils</a>
-</header>
+            <div class="form-group">
+                <label>Allure moyenne (Optionnel si Distance et Temps saisis)</label>
+                <div class="time-inputs">
+                    <div class="time-box" style="grid-column: span 1.5;">
+                        <input type="number" id="paceMin" min="0" class="form-control" placeholder="Min">
+                        <span>min</span>
+                    </div>
+                    <div class="time-box" style="grid-column: span 1.5;">
+                        <input type="number" id="paceSec" min="0" max="59" class="form-control" placeholder="Sec">
+                        <span>/km</span>
+                    </div>
+                </div>
+            </div>
 
-<section>
-<div class="card">
-<h2>⚡ Fonctionnalités</h2>
-<p>
+            <button class="btn-calc" onclick="calculateRunningData()">⚡ Lancer le calcul</button>
+
+            <div class="results-box" id="resultsBox">
+                <div class="results-title"><i class="fa-solid fa-square-poll-vertical"></i> Vos Analyses de Course</div>
+                <div class="results-grid">
+                    <div class="result-card">
+                        <div class="label">Vitesse Moyenne</div>
+                        <div class="value" id="resSpeed">- <span>km/h</span></div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">Allure Exacte</div>
+                        <div class="value" id="resPace">- <span>/km</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ad-slot">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9530999475279577" data-ad-slot="3976528740" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <div class="ad-slot">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9530999475279577" data-ad-slot="3125951274" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <footer>
+        <div class="footer-logo">Run<span>Calc</span> Pro Plus</div>
+        <div class="footer-links">
+            <a href="confidentialite.html">Confidentialité</a>
+            <a href="contact.html">Contact</a>
+            <a href="index.html">Accueil</a>
+            <a href="running-guide.html">Guide</a>
+        </div>
+        <p class="copyright">© 2026 RunCalc Pro Plus. Tous droits réservés.</p>
+    </footer>
+
+    <script>
+        function calculateRunningData() {
+            const distance = parseFloat(document.getElementById('distance').value);
+            const h = parseInt(document.getElementById('hours').value) || 0;
+            const m = parseInt(document.getElementById('minutes').value) || 0;
+            const s = parseInt(document.getElementById('seconds').value) || 0;
+            
+            const pMin = parseInt(document.getElementById('paceMin').value) || 0;
+            const pSec = parseInt(document.getElementById('paceSec').value) || 0;
+
+            const totalSeconds = (h * 3600) + (m * 60) + s;
+            const paceInSeconds = (pMin * 60) + pSec;
+
+            let finalSpeed = 0;
+            let finalPaceStr = "";
+
+            // Cas 1 : Calcul de l'allure et de la vitesse à partir du Temps et de la Distance
+            if (distance > 0 && totalSeconds > 0) {
+                const speed = (distance / (totalSeconds / 3600));
+                const secondsPerKm = totalSeconds / distance;
+                const minPart = Math.floor(secondsPerKm / 60);
+                const secPart = Math.round(secondsPerKm % 60).toString().padStart(2, '0');
+
+                finalSpeed = speed.toFixed(2);
+                finalPaceStr = `${minPart}:${secPart}`;
+            } 
+            // Cas 2 : Calcul du temps à partir de la distance et de l'allure
+            else if (distance > 0 && paceInSeconds > 0) {
+                const calculatedSeconds = distance * paceInSeconds;
+                const speed = 3600 / paceInSeconds;
+
+                const resH = Math.floor(calculatedSeconds / 3600);
+                const resM = Math.floor((calculatedSeconds % 3600) / 60);
+                const resS = Math.round(calculatedSeconds % 60);
+
+                document.getElementById('hours').value = resH || "";
+                document.getElementById('minutes').value = resM || "";
+                document.getElementById('seconds').value = resS || "";
+
+                finalSpeed = speed.toFixed(2);
+                finalPaceStr = `${pMin}:${pSec.toString().padStart(2, '0')}`;
+            }
+            // Cas 3 : Calcul de la distance à partir du temps et de l'allure
+            else if (totalSeconds > 0 && paceInSeconds > 0) {
+                const calculatedDist = totalSeconds / paceInSeconds;
+                const speed = 3600 / paceInSeconds;
+
+                document.getElementById('distance').value = calculatedDist.toFixed(2);
+                finalSpeed = speed.toFixed(2);
+                finalPaceStr = `${pMin}:${pSec.toString().padStart(2, '0')}`;
+            } else {
+                alert("Veuillez remplir au moins deux critères (ex: Distance et Temps).");
+                return;
+            }
+
+            // Affichage des résultats dynamiques
+            document.getElementById('resSpeed').innerHTML = `${finalSpeed} <span>km/h</span>`;
+            document.getElementById('resPace').innerHTML = `${finalPaceStr} <span>min/km</span>`;
+            document.getElementById('resultsBox').classList.add('active');
+        }
+    </script>
+</body>
+</html>
