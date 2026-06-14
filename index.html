@@ -1,251 +1,450 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RunCalc Pro Plus - L'outil des coureurs</title>
+    <style>
+        /* --- DESIGN GLOBAL (Inspiré Strava Pro) --- */
+        :root {
+            --strava-orange: #FC4C02;
+            --dark-bg: #0B0F19;
+            --card-bg: #111827;
+            --text-main: #FFFFFF;
+            --text-muted: #9CA3AF;
+            --border-color: rgba(255, 255, 255, 0.08);
+        }
 
-<title>RunCalc Pro Plus</title>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-<style>
-/* CSS PARTIE 2 */
-</style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
 
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            background-color: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: var(--strava-orange);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--strava-orange);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            text-align: center;
+            padding: 100px 20px 80px 20px;
+            background: radial-gradient(circle at top, rgba(252, 76, 2, 0.15) 0%, transparent 60%);
+        }
+
+        .badge {
+            background: rgba(252, 76, 2, 0.2);
+            color: #FF6624;
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background-color: var(--strava-orange);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: transform 0.2s, background-color 0.2s;
+            box-shadow: 0 4px 14px rgba(252, 76, 2, 0.3);
+        }
+
+        .btn-primary:hover {
+            background-color: #E04302;
+            transform: translateY(-2px);
+        }
+
+        /* --- CHRIFFRES CLÉS (Strava Dashboard Style) --- */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            max-width: 1000px;
+            margin: -20px auto 40px auto;
+            padding: 0 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-tag {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* --- ZONE DES OUTILS (Grid) --- */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 16px;
+            text-align: left;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: var(--strava-orange);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(252, 76, 2, 0.4);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            font-size: 1.15rem;
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* --- FAQ --- */
+        .faq-section {
+            background-color: rgba(17, 24, 39, 0.4);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 60px 20px;
+            margin: 50px 0;
+        }
+
+        .faq-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            margin-bottom: 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .faq-q {
+            width: 100%;
+            padding: 18px 20px;
+            background: none;
+            border: none;
+            color: var(--text-main);
+            text-align: left;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-q::after {
+            content: '+';
+            color: var(--strava-orange);
+            font-size: 1.2rem;
+            transition: transform 0.2s;
+        }
+
+        .faq-item.open .faq-q::after {
+            content: '−';
+        }
+
+        .faq-a {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            padding: 0 20px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .faq-item.open .faq-a {
+            padding-bottom: 18px;
+        }
+
+        /* --- PUBLICITÉS --- */
+        .ad-container {
+            margin: 30px auto;
+            text-align: center;
+            max-width: 728px;
+            min-height: 90px;
+            background: rgba(255,255,255,0.02);
+            border: 1px dashed rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-links {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            font-size: 0.8rem;
+        }
+        
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
-
 <body>
 
-<!-- PUB HAUT -->
-<div class="ad">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9530999475279577"
-crossorigin="anonymous"></script>
+    <nav>
+        <div class="logo"><a href="index.html">RunCalc<span>FR</span></a></div>
+        <ul class="nav-links">
+            <li><a href="exécutercalc.html">Calculateur</a></li>
+            <li><a href="guide-of-course.html">Guide</a></li>
+            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
 
-<ins class="adsbygoogle"
-style="display:block"
-data-ad-client="ca-pub-9530999475279577"
-data-ad-slot="5943686303"
-data-ad-format="auto"></ins>
+    <div class="ad-container">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-9530999475279577"
+             data-ad-slot="5943686303"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
 
-<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-</div>
+    <header class="hero">
+        <div class="badge">Performance & Running</div>
+        <h1>RunCalc Pro Plus</h1>
+        <p>Prenez le contrôle de vos chronos avec les meilleurs outils de calcul d'allure et de VO2 max.</p>
+        <a href="#outils" class="btn-primary">Accéder aux outils</a>
+    </header>
 
-<!-- HERO STRAVA STYLE -->
-<header class="hero">
-  <div class="badge">RUN • PERFORMANCE</div>
-  <h1>RunCalc Pro Plus</h1>
-  <p>Ton coach running intelligent pour progresser plus vite</p>
+    <div class="stats-bar">
+        <div class="stat-tag">⚡ Allure</div>
+        <div class="stat-tag">📊 VO2 max</div>
+        <div class="stat-tag">🏃 Plans</div>
+        <div class="stat-tag">🔥 Chronos</div>
+    </div>
 
-  <a href="#tools" class="btn">Commencer</a>
-</header>
+    <div class="ad-container">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-9530999475279577"
+             data-ad-slot="3976528740"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
 
-<!-- STATS STYLE STRAVA -->
-<section class="stats">
-  <div class="stat">⚡ Allure</div>
-  <div class="stat">📊 VO2 max</div>
-  <div class="stat">🏃 Plans</div>
-  <div class="stat">🔥 Chronos</div>
-</section>
+    <main class="container" id="outils">
+        <h2 class="section-title">Outils de calcul gratuits</h2>
+        <div class="grid">
+            <a href="exécutercalc.html" class="card">
+                <div class="card-icon">⚡</div>
+                <h3>Calcul d’allure</h3>
+                <p>Estimez votre vitesse cible en min/km pour vos prochaines courses.</p>
+            </a>
+            <a href="exécutercalc.html" class="card">
+                <div class="card-icon">📊</div>
+                <h3>VO2 max estimée</h3>
+                <p>Évaluez votre potentiel d'endurance d'après vos records.</p>
+            </a>
+            <a href="guide-of-course.html" class="card">
+                <div class="card-icon">🏃</div>
+                <h3>Plans d’entraînement</h3>
+                <p>Des structures de séances adaptées du 5km au Marathon.</p>
+            </a>
+            <a href="exécutercalc.html" class="card">
+                <div class="card-icon">🔥</div>
+                <h3>Prédiction de chrono</h3>
+                <p>Anticipez votre prochain temps de course selon votre forme.</p>
+            </a>
+        </div>
+    </main>
 
-<!-- PUB MILIEU -->
-<div class="ad">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9530999475279577"
-crossorigin="anonymous"></script>
+    <section class="faq-section">
+        <div class="faq-container">
+            <h2 class="section-title" style="text-align: left; margin-bottom: 30px;">Foire aux questions</h2>
+            
+            <div class="faq-item">
+                <button class="faq-q">Comment calculer mon allure de course ?</button>
+                <div class="faq-a">
+                    <p>La formule de base est simple : <strong>Temps de course ÷ Distance parcourue</strong>. Notre calculateur automatique s'en charge pour vous en quelques clics afin d'éviter les erreurs de calcul mental.</p>
+                </div>
+            </div>
 
-<ins class="adsbygoogle"
-style="display:block"
-data-ad-client="ca-pub-9530999475279577"
-data-ad-slot="3976528740"
-data-ad-format="auto"></ins>
+            <div class="faq-item">
+                <button class="faq-q">Comment progresser efficacement ?</button>
+                <div class="faq-a">
+                    <p>Pour progresser, misez sur la régularité : combinez des séances d'endurance fondamentale (courir lentement), du fractionné (haute intensité) et surtout, accordez-vous de vrais jours de repos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-</div>
+    <div class="ad-container">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-9530999475279577"
+             data-ad-slot="3125951274"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
 
-<!-- FEATURES -->
-<section id="tools" class="grid">
+    <footer>
+        <p>© 2026 RunCalc Pro Plus. Tous droits réservés.</p>
+        <div class="footer-links">
+            <a href="conditions.html">Conditions d'utilisation</a> • 
+            <a href="confidentielle.html">Confidentialité</a>
+        </div>
+    </footer>
 
-<div class="card">⚡ Calcul d’allure</div>
-<div class="card">📊 VO2 max estimée</div>
-<div class="card">🏃 Plans d’entraînement</div>
-<div class="card">🔥 Prédiction de chrono</div>
+    <script>
+        document.querySelectorAll(".faq-q").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const item = btn.parentElement;
+                const answer = item.querySelector(".faq-a");
+                const isOpen = item.classList.contains("open");
 
-</section>
+                // Ferme toutes les autres questions ouverts
+                document.querySelectorAll(".faq-item").forEach(i => {
+                    i.classList.remove("open");
+                    i.querySelector(".faq-a").style.maxHeight = null;
+                });
 
-<!-- FAQ -->
-<section class="faq">
-
-<h2>FAQ</h2>
-
-<div class="faq-item">
-<button class="faq-q">Comment calculer mon allure ?</button>
-<div class="faq-a"><p>Temps ÷ distance = min/km</p></div>
-</div>
-
-<div class="faq-item">
-<button class="faq-q">Comment progresser ?</button>
-<div class="faq-a"><p>Fractionné + endurance + repos</p></div>
-</div>
-
-</section>
-
-<!-- PUB BAS -->
-<div class="ad">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9530999475279577"
-crossorigin="anonymous"></script>
-
-<ins class="adsbygoogle"
-style="display:block"
-data-ad-client="ca-pub-9530999475279577"
-data-ad-slot="3125951274"
-data-ad-format="auto"></ins>
-
-<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-</div>
-
-<footer>
-<p>© RunCalc Pro Plus</p>
-</footer>
-
-<script>
-// JS PARTIE 3
-</script>
+                // Si l'élément cliqué n'était pas ouvert, on l'ouvre
+                if (!isOpen) {
+                    item.classList.add("open");
+                    answer.style.maxHeight = answer.scrollHeight + "px";
+                }
+            });
+        });
+    </script>
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9530999475279577" crossorigin="anonymous"></script>
 
 </body>
 </html>
-body {
-  margin: 0;
-  font-family: Arial;
-  background: #0b0f1a;
-  color: white;
-}
-
-/* HERO */
-.hero {
-  text-align: center;
-  padding: 80px 20px;
-  background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
-}
-
-.badge {
-  background: rgba(255,255,255,0.15);
-  display: inline-block;
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  margin-bottom: 10px;
-}
-
-.btn {
-  display: inline-block;
-  margin-top: 20px;
-  padding: 12px 20px;
-  background: #22c55e;
-  border-radius: 10px;
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-/* STATS STRAVA STYLE */
-.stats {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  padding: 20px;
-  flex-wrap: wrap;
-}
-
-.stat {
-  background: #111827;
-  padding: 10px 15px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.05);
-}
-
-/* GRID */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
-  max-width: 900px;
-  margin: auto;
-  padding: 40px 20px;
-}
-
-.card {
-  background: #111827;
-  padding: 20px;
-  border-radius: 12px;
-  transition: 0.3s;
-  border: 1px solid rgba(255,255,255,0.05);
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  border-color: #38bdf8;
-}
-
-/* FAQ */
-.faq {
-  max-width: 900px;
-  margin: auto;
-  padding: 40px 20px;
-}
-
-.faq-item {
-  margin-bottom: 10px;
-  background: #111827;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.faq-q {
-  width: 100%;
-  padding: 15px;
-  background: none;
-  border: none;
-  color: white;
-  text-align: left;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.faq-a {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease;
-  padding: 0 15px;
-  color: #cbd5e1;
-}
-
-/* ADS */
-.ad {
-  margin: 20px auto;
-  text-align: center;
-}
-
-/* FOOTER */
-footer {
-  text-align: center;
-  padding: 20px;
-  opacity: 0.6;
-}
-<script>
-document.querySelectorAll(".faq-q").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const item = btn.parentElement;
-    const answer = item.querySelector(".faq-a");
-
-    const open = item.classList.contains("open");
-
-    document.querySelectorAll(".faq-item").forEach(i => {
-      i.classList.remove("open");
-      i.querySelector(".faq-a").style.maxHeight = null;
-    });
-
-    if (!open) {
-      item.classList.add("open");
-      answer.style.maxHeight = answer.scrollHeight + "px";
-    }
-  });
-});
-</script>
