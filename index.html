@@ -1,322 +1,185 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RunCalc Pro Plus</title>
-    <meta name="description" content="Calculateur de course à pied : allure, vitesse, VO2 Max, prédictions, entraînements et suivi des performances.">
-    <link rel="stylesheet" href="style.css">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9530999475279577" crossorigin="anonymous"></script>
-</head>
-<body>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<nav>
-    <div class="logo">Run<span>Calc</span></div>
-    <ul class="nav-links">
-        <li><a href="index.html">Calculateur</a></li>
-        <li><a href="guide-de-course.html">Guide de Course</a></li>
-    </ul>
-</nav>
+<title>Calcul allure running 5 km, 10 km, semi-marathon - VO2 max & entraînement | RunCalc Pro Plus</title>
 
-<header class="hero">
-    <span class="badge">Outil Performance</span>
-    <h1>🏃 RunCalc Pro Plus</h1>
-    <p>Calculateur Running • VO2 Max • Allure • Vitesse • Prédictions</p>
-</header>
+<meta name="description" content="RunCalc Pro Plus : calcule ton allure, vitesse, VO2 max, temps sur 5 km, 10 km, semi-marathon et marathon. Outils gratuits pour coureurs.">
 
-<div class="container">
+<meta name="keywords" content="running, allure course, 5 km, 10 km, semi marathon, marathon, VO2 max">
 
-    <div class="ad-container">
-        <ins class="adsbygoogle" style="display:block"
-          data-ad-client="ca-pub-9530999475279577"
-          data-ad-slot="8262360329"
-          data-ad-format="auto"
-          data-full-width-responsive="true"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
+<meta name="author" content="RunCalc Pro Plus">
 
-    <section id="dash" class="section">
-        <h2 class="section-title">📊 Dashboard Performance</h2>
-        <div class="grid">
-            <div class="card">VO2 Max estimé<div class="stat" id="dashVO2">--</div><div class="label">Calculé depuis le dernier effort</div></div>
-            <div class="card">Niveau<div class="stat" id="dashLevel">--</div><div class="label">Basé sur le VO2 Max</div></div>
-            <div class="card">Score de forme<div class="stat" id="dashScore">--</div><div class="label">Basé sur l'allure</div></div>
-            <div class="card">Zone FC<div class="stat" id="dashZone">--</div><div class="label">Dernière analyse cardiaque</div></div>
-            <div class="card">Dernière performance<div class="stat" id="dashLast">--</div></div>
-        </div>
+<meta property="og:title" content="RunCalc Pro Plus">
+<meta property="og:description" content="Outils gratuits pour coureurs : allure, vitesse, VO2 max">
+<meta property="og:type" content="website">
 
-        <div class="card" style="margin-top:20px;">
-            <h3>📈 Prédictions automatiques</h3>
-            <p style="color:var(--text-muted); font-size:13px; margin: 6px 0 15px 0;">Basées sur la dernière allure enregistrée (via "Calcul d'allure").</p>
-            <button class="btn-primary" onclick="predict()">Calculer les prédictions</button>
-            <div style="margin-top:15px; line-height: 2;">
-                <div id="pred5k">5 km : --</div>
-                <div id="pred10k">10 km : --</div>
-                <div id="pred21k">Semi-marathon : --</div>
-                <div id="pred42k">Marathon : --</div>
-            </div>
-        </div>
-    </section>
+<link rel="canonical" href="https://runcalcfr.github.io/">
 
-    <section id="calc" class="section">
-        <h2 class="section-title">🧮 Outils de Calcul</h2>
-        <div class="grid">
-            <div class="card">
-                <h3>🏃 Calcul d'allure</h3>
-                <input id="dist" placeholder="Distance (ex : 5 ou 10)">
-                <input id="time" placeholder="Temps (ex : 17:56 ou 45:30)">
-                <button class="btn-primary" onclick="calcPace()">Calculer l'allure</button>
-                <div class="result" id="paceOut">Allure : --</div>
-                <div class="result" id="speedOut">Vitesse : --</div>
-            </div>
-            <div class="card">
-                <h3>⚡ Allure → Vitesse</h3>
-                <input id="paceInput" placeholder="Allure (ex : 3:35)">
-                <button class="btn-primary" onclick="calcSpeed()">Calculer la vitesse</button>
-                <div class="result" id="speedOnlyOut">Vitesse : --</div>
-            </div>
-            <div class="card">
-                <h3>📏 Distance parcourue</h3>
-                <input id="distancePace" placeholder="Allure (ex : 4:30)">
-                <input id="distanceTime" placeholder="Temps total (ex : 45:00)">
-                <button class="btn-primary" onclick="calcDistance()">Calculer la distance</button>
-                <div class="result" id="distanceOut">Distance : --</div>
-            </div>
-            <div class="card">
-                <h3>📊 Analyse de séance complète</h3>
-                <input id="fc_session" placeholder="FC moyenne séance (ex : 155)">
-                <input id="fc_max" placeholder="FC max (ex : 195)">
-                <input id="pace_session" placeholder="Allure (ex : 4:30)">
-                <input id="time_session" placeholder="Temps total (ex : 45:00)">
-                <button class="btn-primary" onclick="analyseSeance()">Analyser la séance</button>
-                <div class="result" id="session_result">Résultat : --</div>
-            </div>
-            <div class="card">
-                <h3>❤️ Fréquence cardiaque</h3>
-                <input id="fcmax" placeholder="FC max (ex : 205)">
-                <input id="fcavg" placeholder="FC moyenne (ex : 170)">
-                <button class="btn-primary" onclick="calcFC()">Analyser</button>
-                <div class="result" id="fcOut">Zone : --</div>
-            </div>
-            <div class="card">
-                <h3>🧪 Test VO2 Max</h3>
-                <input id="vo2dist" placeholder="Distance (ex : 5)">
-                <input id="vo2time" placeholder="Temps (ex : 17:56)">
-                <button class="btn-primary" onclick="calcVO2Test()">Calculer VO2 Max</button>
-                <div class="result" id="vo2testOut">VO2 Max : --</div>
-            </div>
-        </div>
-    </section>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9530999475279577"
+crossorigin="anonymous"></script>
 
-    <section id="runs" class="section">
-        <h2 class="section-title">📋 Mes Sorties</h2>
-        <div class="card">
-            <h3>➕ Ajouter une sortie</h3>
-            <input id="rDist" placeholder="Distance (ex : 10)">
-            <input id="rTime" placeholder="Temps (ex : 48:30)">
-            <button class="btn-primary" onclick="addRun()">Enregistrer la sortie</button>
-        </div>
-        <div id="runList" style="margin-top:15px;"></div>
-        <div style="margin-top:15px;">
-            <button style="background:#c0392b;" onclick="resetAll()">🗑 Réinitialiser toutes les données</button>
-        </div>
-    </section>
-
-    <section id="plan" class="section">
-        <h2 class="section-title">📅 Plans d'Entraînement</h2>
-        <div class="grid" style="grid-template-columns: 1fr;">
-            <div class="card">
-                <h3>🏁 Programme 5 km — 4 semaines</h3>
-                <input id="best5k" placeholder="Meilleur 5 km (ex : 22:30)">
-                <button class="btn-primary" onclick="generateSmartPlan()">Générer mon plan 5 km</button>
-                <div class="plan-output" id="planOut"></div>
-            </div>
-            <div class="card">
-                <h3>🗓 Plan personnalisé</h3>
-                <input id="goalDistPlan" placeholder="Distance objectif (5 / 10 / 21 / 42)">
-                <input id="goalTimePlan" placeholder="Temps cible (ex: 45:00)">
-                <input id="levelInput" placeholder="Niveau : débutant / moyen / fort">
-                <button class="btn-primary" onclick="generateCustomPlan()">Créer mon plan personnalisé</button>
-                <div class="plan-output" id="customPlanOut"></div>
-            </div>
-        </div>
-    </section>
-
-    <section id="stats" class="section">
-        <h2 class="section-title">📈 Progression VO2 Max</h2>
-        <canvas id="chart" height="200"></canvas>
-    </section>
-
-    <footer>
-        RunCalc Pro Plus — Tous droits réservés
-    </footer>
-</div>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9530999475279577"
+     data-ad-slot="5943686303"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 
 <script>
-let runs = JSON.parse(localStorage.getItem("runs") || "[]");
-let history = JSON.parse(localStorage.getItem("history") || "[]");
-
-function safeNum(v) { const n = parseFloat(v); return isNaN(n) ? null : n; }
-
-function parseTime(t) {
-    if (!t) return null;
-    t = t.trim();
-    if (t.includes(":")) {
-        const p = t.split(":");
-        if (p.length === 2) return (parseFloat(p[0]) || 0) + (parseFloat(p[1]) || 0) / 60;
-        if (p.length === 3) return (parseFloat(p[0]) || 0) * 60 + (parseFloat(p[1]) || 0) + (parseFloat(p[2]) || 0) / 60;
-    }
-    return safeNum(t);
-}
-
-function formatPace(min) {
-    if (min == null || isNaN(min)) return "--";
-    const m = Math.floor(min);
-    const s = Math.round((min - m) * 60);
-    if (s === 60) return `${m+1}:00/km`;
-    return `${m}:${s < 10 ? "0" : ""}${s}/km`;
-}
-
-function formatDuration(min) {
-    if (min == null || isNaN(min)) return "--";
-    const h = Math.floor(min / 60);
-    const m = Math.round(min % 60);
-    if (h > 0) return `${h}h${m < 10 ? "0" : ""}${m}`;
-    return `${m} min`;
-}
-
-function getBadge(vo2) {
-    if (vo2 < 35) return "Débutant";
-    if (vo2 < 45) return "Intermédiaire";
-    if (vo2 < 55) return "Bon niveau";
-    return "Athlète";
-}
-
-function saveHistory(vo2, pace) {
-    history.push({ vo2, pace, date: new Date().toISOString() });
-    if (history.length > 200) history.shift();
-    localStorage.setItem("history", JSON.stringify(history));
-    drawChart();
-}
-
-function calcPace() {
-    const d = safeNum(document.getElementById("dist").value);
-    const t = parseTime(document.getElementById("time").value);
-    if (!d || !t) { alert("Remplis la distance et le temps."); return; }
-    const pace = t / d;
-    const speed = d / (t / 60);
-    const vo2 = 3.5 * speed * 1.1;
-    const score = Math.max(0, 100 - pace * 10).toFixed(1);
-
-    document.getElementById("paceOut").innerText = `Allure : ${formatPace(pace)}`;
-    document.getElementById("speedOut").innerText = `Vitesse : ${speed.toFixed(2)} km/h`;
-    document.getElementById("dashVO2").innerText = vo2.toFixed(1);
-    document.getElementById("dashLevel").innerText = getBadge(vo2);
-    document.getElementById("dashScore").innerText = score;
-    document.getElementById("dashLast").innerText = `${d} km — ${formatPace(pace)}`;
-    saveHistory(vo2, pace);
-}
-
-function calcSpeed() {
-    const t = parseTime(document.getElementById("paceInput").value);
-    if (!t) { alert("Entre une allure valide (ex : 4:30)."); return; }
-    document.getElementById("speedOnlyOut").innerText = `Vitesse : ${(60 / t).toFixed(2)} km/h`;
-}
-
-function calcDistance() {
-    const pace = parseTime(document.getElementById("distancePace").value);
-    const time = parseTime(document.getElementById("distanceTime").value);
-    if (!pace || !time) { alert("Remplis l'allure et le temps."); return; }
-    document.getElementById("distanceOut").innerText = `Distance : ${(time / pace).toFixed(2)} km`;
-}
-
-function calcFC() {
-    const max = safeNum(document.getElementById("fcmax").value);
-    const avg = safeNum(document.getElementById("fcavg").value);
-    if (!max || !avg) { alert("Entre la FC max et la FC moyenne."); return; }
-    const p = (avg / max) * 100;
-    const zone = p < 60 ? "Récupération active" : p < 70 ? "Endurance fondamentale" : p < 80 ? "Endurance active" : p < 88 ? "Seuil" : "VO2 max / intensité max";
-    document.getElementById("fcOut").innerText = `${p.toFixed(1)}% FC max — ${zone}`;
-    document.getElementById("dashZone").innerText = zone;
-}
-
-function analyseSeance(){
-    const fc = parseFloat(document.getElementById("fc_session").value);
-    const fcmax = parseFloat(document.getElementById("fc_max").value);
-    const pace = parseTime(document.getElementById("pace_session").value);
-    const time = parseTime(document.getElementById("time_session").value);
-    if(!fc || !fcmax || !pace || !time){ alert("Remplis tous les champs."); return; }
-    let pct = (fc / fcmax) * 100;
-    let zone = pct < 70 ? "Endurance fondamentale" : pct < 85 ? "Seuil / tempo" : "Intensité élevée (VMA)";
-    let gain = pct < 70 ? "Amélioration endurance de base" : pct < 85 ? "Amélioration du seuil lactique" : "Amélioration vitesse + VO2 max";
-    document.getElementById("session_result").innerHTML = `❤️ Zone : ${zone}<br>📊 % FC max : ${pct.toFixed(1)}%<br>🔥 Gain : ${gain}`;
-}
-
-function calcVO2Test() {
-    const d = safeNum(document.getElementById("vo2dist").value);
-    const t = parseTime(document.getElementById("vo2time").value);
-    if (!d || !t) { alert("Remplis la distance et le temps."); return; }
-    const vo2 = 3.5 * ((d / t) * 60) * 1.1;
-    document.getElementById("vo2testOut").innerText = `VO2 Max : ${vo2.toFixed(1)} — ${getBadge(vo2)}`;
-}
-
-function predict() {
-    if (history.length === 0) { alert("Calcule d'abord une allure."); return; }
-    const pace = history[history.length - 1].pace || 5;
-    document.getElementById("pred5k").innerText = `5 km : ${formatDuration(pace * 5)}`;
-    document.getElementById("pred10k").innerText = `10 km : ${formatDuration(pace * 10 * 1.045)}`;
-    document.getElementById("pred21k").innerText = `Semi-marathon : ${formatDuration(pace * 21.1 * 1.09)}`;
-    document.getElementById("pred42k").innerText = `Marathon : ${formatDuration(pace * 42.2 * 1.18)}`;
-}
-
-function addRun() {
-    const d = safeNum(document.getElementById("rDist").value);
-    const t = parseTime(document.getElementById("rTime").value);
-    if (!d || !t) { alert("Remplis la distance et le temps."); return; }
-    runs.push({ d, t, date: new Date().toLocaleDateString() });
-    localStorage.setItem("runs", JSON.stringify(runs));
-    renderRuns();
-}
-
-function renderRuns() {
-    const el = document.getElementById("runList");
-    if (!el) return;
-    if (runs.length === 0) { el.innerHTML = "<p>Aucune sortie.</p>"; return; }
-    el.innerHTML = runs.slice(-20).reverse().map(r => `<div class="card" style="margin-top:10px;">🏃 <b>${r.d} km</b> — ${formatDuration(r.t)} (Allure: ${formatPace(r.t/r.d)})</div>`).join("");
-}
-
-function resetAll() { if (confirm("Tout supprimer ?")) { runs = []; history = []; localStorage.clear(); renderRuns(); drawChart(); } }
-
-function drawChart() {
-    const canvas = document.getElementById("chart");
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const data = history.slice(-30);
-    if (data.length < 2) return;
-    ctx.beginPath();
-    data.forEach((h, i) => {
-        const x = (i / (data.length - 1)) * canvas.width;
-        const y = canvas.height - ((h.vo2 - 30) / 30) * (canvas.height - 20) - 10;
-        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-    });
-    ctx.strokeStyle = "#fc4c02";
-    ctx.lineWidth = 3;
-    ctx.stroke();
-}
-
-function generateSmartPlan() {
-    const input = document.getElementById("best5k").value;
-    const paces = parseTime(input) ? (parseTime(input)/5) : 5;
-    document.getElementById("planOut").innerText = `Plan 5k généré !\nAllure endurance : ${formatPace(paces + 1)}\nAllure fractionné : ${formatPace(paces - 0.2)}`;
-}
-
-function generateCustomPlan() {
-    const lvl = document.getElementById("levelInput").value;
-    document.getElementById("customPlanOut").innerText = `Plan personnalisé disponible pour le niveau : ${lvl}`;
-}
-
-window.onload = function() { renderRuns(); drawChart(); };
+     (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
-</body>
-</html>
+
+<style>
+body{
+font-family: Arial;
+margin:0;
+background:#0f172a;
+color:white;
+}
+
+header{
+padding:60px 20px;
+text-align:center;
+background:linear-gradient(135deg,#2563eb,#1e40af);
+}
+
+h1{font-size:40px;margin-bottom:10px;}
+p{opacity:0.9}
+
+.btn{
+display:inline-block;
+margin-top:20px;
+padding:15px 25px;
+background:#22c55e;
+color:white;
+text-decoration:none;
+border-radius:10px;
+font-weight:bold;
+}
+
+section{
+padding:40px 20px;
+max-width:900px;
+margin:auto;
+}
+
+.card{
+background:#1e293b;
+padding:20px;
+border-radius:12px;
+margin-bottom:15px;
+}
+
+nav{
+display:flex;
+justify-content:center;
+gap:20px;
+padding:15px;
+background:#0b1220;
+position:sticky;
+top:0;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+opacity:0.8;
+}
+
+nav a:hover{
+opacity:1;
+}
+
+/* --- DESIGN DE LA FAQ ACCORDÉON --- */
+.faq-section {
+margin-top: 35px;
+}
+.faq-title {
+font-size: 28px;
+margin-bottom: 20px;
+text-align: center;
+}
+.faq-item {
+background: #1e293b;
+border-radius: 10px;
+margin-bottom: 10px;
+overflow: hidden;
+}
+.faq-question {
+width: 100%;
+background: none;
+border: none;
+color: white;
+padding: 18px 20px;
+text-align: left;
+font-size: 16px;
+font-weight: bold;
+cursor: pointer;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+.faq-question::after {
+content: '+';
+color: #22c55e;
+font-size: 20px;
+transition: transform 0.2s;
+}
+.faq-item.active .faq-question::after {
+content: '−';
+}
+.faq-answer {
+max-height: 0;
+overflow: hidden;
+transition: max-height 0.3s ease-out;
+padding: 0 20px;
+color: #cbd5e1;
+font-size: 14px;
+line-height: 1.6;
+}
+.faq-item.active .faq-answer {
+padding-bottom: 18px;
+}
+</style>
+
+</head>
+
+<body>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9530999475279577"
+     crossorigin="anonymous"></script>
+
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9530999475279577"
+     data-ad-slot="3976528740"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<nav>
+  <a href="index.html">Accueil</a>
+  <a href="runcalc.html">Outils</a>
+  <a href="temps.html">Temps & Classement</a>
+  <a href="running-guide.html">Guide running</a>
+  <a href="contact.html">Contact</a>
+  <a href="confidentialite.html">Confidentialité</a>
+</nav>
+
+<header>
+<h1>RunCalc Pro Plus</h1>
+<p>Le site gratuit pour les coureurs : performance, calculs et entraînement</p>
+
+<a class="btn" href="runcalc.html">🚀 Accéder aux outils</a>
+</header>
+
+<section>
+<div class="card">
+<h2>⚡ Fonctionnalités</h2>
+<p>
