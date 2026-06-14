@@ -7,9 +7,7 @@
 
 <title>RunCalc Pro Plus</title>
 
-<meta name="description" content="Outils running gratuits : allure, VO2 max, entraînement et performance.">
-
-<link rel="canonical" href="https://runcalcfr.github.io/">
+<meta name="description" content="Outils running : allure, VO2 max, entraînement et performance">
 
 <style>
 /* CSS PARTIE 2 */
@@ -19,7 +17,17 @@
 
 <body>
 
-<!-- HEADER PUB -->
+<header class="hero">
+  <h1>RunCalc Pro Plus</h1>
+  <p>Ton outil de performance running</p>
+</header>
+
+<nav>
+  <a href="#tools">Outils</a>
+  <a href="#faq">FAQ</a>
+</nav>
+
+<!-- PUB 1 -->
 <div class="ad">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9530999475279577"
 crossorigin="anonymous"></script>
@@ -33,47 +41,22 @@ data-ad-format="auto"></ins>
 <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 </div>
 
-<header>
-<h1>RunCalc Pro Plus</h1>
-<p>Ton coach running simple, rapide et gratuit</p>
-</header>
+<section id="tools">
 
-<nav>
-<a href="#features">Outils</a>
-<a href="#faq">FAQ</a>
-</nav>
-
-<section id="features">
-
-<h2>⚡ Outils principaux</h2>
+<h2>Outils</h2>
 
 <div class="grid">
 
-<div class="card">
-<h3>Allure running</h3>
-<p>Calcule ton min/km automatiquement</p>
-</div>
-
-<div class="card">
-<h3>VO2 max</h3>
-<p>Estime ton niveau de performance</p>
-</div>
-
-<div class="card">
-<h3>Plans entraînement</h3>
-<p>Progresse sur 5 km, 10 km, semi</p>
-</div>
-
-<div class="card">
-<h3>Prédiction chrono</h3>
-<p>Estime tes futures performances</p>
-</div>
+<div class="card">⚡ Allure running</div>
+<div class="card">📊 VO2 max</div>
+<div class="card">🏃 Plans entraînement</div>
+<div class="card">🔥 Prédictions chrono</div>
 
 </div>
 
 </section>
 
-<!-- PUB MILIEU -->
+<!-- PUB 2 -->
 <div class="ad">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9530999475279577"
 crossorigin="anonymous"></script>
@@ -89,26 +72,26 @@ data-ad-format="auto"></ins>
 
 <section id="faq">
 
-<h2>❓ FAQ</h2>
+<h2>FAQ</h2>
 
 <div class="faq-item">
-<button class="faq-question">Comment calculer mon allure ? <span>+</span></button>
-<div class="faq-answer"><p>Temps ÷ distance = min/km.</p></div>
+  <button class="faq-q">Comment calculer mon allure ? <span>+</span></button>
+  <div class="faq-a"><p>Temps ÷ distance = min/km</p></div>
 </div>
 
 <div class="faq-item">
-<button class="faq-question">Comment progresser au 5 km ? <span>+</span></button>
-<div class="faq-answer"><p>Fractionné + footing + repos.</p></div>
+  <button class="faq-q">Comment progresser ? <span>+</span></button>
+  <div class="faq-a"><p>Fractionné + endurance + repos</p></div>
 </div>
 
 <div class="faq-item">
-<button class="faq-question">Combien courir par semaine ? <span>+</span></button>
-<div class="faq-answer"><p>3 à 4 séances.</p></div>
+  <button class="faq-q">Combien courir ? <span>+</span></button>
+  <div class="faq-a"><p>3 à 4 fois par semaine</p></div>
 </div>
 
 </section>
 
-<!-- PUB BAS -->
+<!-- PUB 3 -->
 <div class="ad">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9530999475279577"
 crossorigin="anonymous"></script>
@@ -127,25 +110,7 @@ data-ad-format="auto"></ins>
 </footer>
 
 <script>
-// JS FAQ
-document.querySelectorAll(".faq-question").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const item = btn.parentElement;
-    const answer = item.querySelector(".faq-answer");
-
-    const open = item.classList.contains("open");
-
-    document.querySelectorAll(".faq-item").forEach(i => {
-      i.classList.remove("open");
-      i.querySelector(".faq-answer").style.maxHeight = null;
-    });
-
-    if (!open) {
-      item.classList.add("open");
-      answer.style.maxHeight = answer.scrollHeight + "px";
-    }
-  });
-});
+/* JS PARTIE 3 */
 </script>
 
 </body>
@@ -157,8 +122,8 @@ body {
   color: white;
 }
 
-/* HEADER */
-header {
+/* HERO */
+.hero {
   text-align: center;
   padding: 70px 20px;
   background: linear-gradient(135deg, #2563eb, #1e40af);
@@ -168,7 +133,7 @@ header {
 nav {
   display: flex;
   justify-content: center;
-  gap: 25px;
+  gap: 20px;
   padding: 15px;
   background: #0f172a;
   position: sticky;
@@ -178,23 +143,21 @@ nav {
 nav a {
   color: white;
   text-decoration: none;
-  opacity: 0.8;
-  transition: 0.3s;
+  opacity: 0.7;
 }
 
 nav a:hover {
   opacity: 1;
-  color: #38bdf8;
 }
 
-/* SECTIONS */
+/* SECTION */
 section {
   max-width: 900px;
   margin: auto;
   padding: 40px 20px;
 }
 
-/* GRILLE */
+/* GRID */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -211,8 +174,8 @@ section {
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  border-color: #2563eb;
+  transform: translateY(-4px);
+  border-color: #3b82f6;
 }
 
 /* FAQ */
@@ -221,23 +184,22 @@ section {
   background: #111827;
   border-radius: 10px;
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.05);
 }
 
-.faq-question {
+.faq-q {
   width: 100%;
   padding: 15px;
   background: none;
   border: none;
   color: white;
   text-align: left;
+  font-weight: bold;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
-  font-weight: bold;
 }
 
-.faq-answer {
+.faq-a {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s ease;
@@ -245,7 +207,7 @@ section {
   color: #cbd5e1;
 }
 
-/* PUB */
+/* ADS */
 .ad {
   margin: 20px auto;
   text-align: center;
@@ -257,3 +219,23 @@ footer {
   padding: 20px;
   opacity: 0.6;
 }
+<script>
+document.querySelectorAll(".faq-q").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const item = btn.parentElement;
+    const answer = item.querySelector(".faq-a");
+
+    const open = item.classList.contains("open");
+
+    document.querySelectorAll(".faq-item").forEach(i => {
+      i.classList.remove("open");
+      i.querySelector(".faq-a").style.maxHeight = null;
+    });
+
+    if (!open) {
+      item.classList.add("open");
+      answer.style.maxHeight = answer.scrollHeight + "px";
+    }
+  });
+});
+</script>
