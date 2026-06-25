@@ -1,201 +1,188 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Temps & Classement - RunCalc</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Temps moyens & Classement Running | RunCalc Pro Plus</title>
+  <meta name="description" content="Compare tes chronos de course à pied sur 5 km, 10 km, semi et marathon. Découvre ton classement et ton niveau réel selon ton âge.">
+  
+  <link rel="stylesheet" href="style.css">
 
-<style>
-body{
-font-family: Arial;
-margin:0;
-background:#0f172a;
-color:white;
-}
-
-header{
-padding:50px 20px;
-text-align:center;
-background:linear-gradient(135deg,#2563eb,#1e40af);
-}
-
-h1{font-size:35px;margin-bottom:10px;}
-p{opacity:0.9}
-
-.container{
-max-width:900px;
-margin:auto;
-padding:20px;
-}
-
-.card{
-background:#1e293b;
-padding:20px;
-border-radius:12px;
-margin-bottom:20px;
-}
-
-table{
-width:100%;
-border-collapse:collapse;
-margin-top:15px;
-}
-
-th,td{
-border:1px solid #334155;
-padding:10px;
-text-align:center;
-}
-
-input,select,button{
-padding:10px;
-margin:5px;
-border-radius:8px;
-border:none;
-}
-
-button{
-background:#22c55e;
-color:white;
-cursor:pointer;
-font-weight:bold;
-}
-
-.result{
-margin-top:15px;
-font-size:18px;
-}
-</style>
-
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9530999475279577" crossorigin="anonymous"></script>
 </head>
-
 <body>
 
-<header>
-<h1>Temps moyens & Classement</h1>
-<p>Compare tes performances et découvre ton niveau selon ton âge</p>
-</header>
+  <nav>
+    <a href="index.html">Accueil</a>
+    <a href="executercalc.html">Outils Avancés</a>
+    <a href="temps.html" class="active">Temps & Allures</a>
+    <a href="guide-de-course.html">Guide Running</a>
+    <a href="contact.html">Contact</a>
+  </nav>
 
-<div class="container">
+  <header>
+    <h1>Temps Moyens & Classement</h1>
+    <p>Compare tes performances à la moyenne et évalue ton niveau running selon ton profil.</p>
+  </header>
 
-<!-- TABLEAU TEMPS MOYENS -->
-<div class="card">
-<h2>📊 Temps moyens (général)</h2>
+  <div class="container">
 
-<table>
-<tr>
-<th>Distance</th>
-<th>Hommes</th>
-<th>Femmes</th>
-</tr>
+    <div class="ads">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9530999475279577" data-ad-slot="5943686303" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
 
-<tr>
-<td>5 km</td>
-<td>22 - 26 min</td>
-<td>26 - 32 min</td>
-</tr>
+    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
+      
+      <div class="card">
+        <h3>🏃 Évalue ton niveau réel</h3>
+        
+        <label class="label">Ton Âge</label>
+        <input type="number" id="age" placeholder="Ex: 28" min="1" max="100">
 
-<tr>
-<td>10 km</td>
-<td>45 - 55 min</td>
-<td>55 - 65 min</td>
-</tr>
+        <label class="label">Sexe</label>
+        <select id="sexe">
+          <option value="H">Homme</option>
+          <option value="F">Femme</option>
+        </select>
 
-<tr>
-<td>Semi (21 km)</td>
-<td>1h40 - 2h00</td>
-<td>1h55 - 2h20</td>
-</tr>
+        <label class="label">Distance</label>
+        <select id="distance">
+          <option value="5">5 km</option>
+          <option value="10">10 km</option>
+          <option value="21">Semi-marathon (21.1 km)</option>
+          <option value="42">Marathon (42.195 km)</option>
+        </select>
 
-<tr>
-<td>Marathon</td>
-<td>3h30 - 4h30</td>
-<td>4h00 - 5h30</td>
-</tr>
+        <label class="label">Ton Temps Chrono</label>
+        <input type="text" id="time" placeholder="Format MM:SS ou HH:MM:SS (ex: 24:30 ou 1:45:00)">
 
-</table>
-</div>
+        <button onclick="calculNiveau()">Calculer mon classement</button>
 
-<!-- CALCUL CLASSEMENT -->
-<div class="card">
-<h2>🏃 Ton classement</h2>
+        <div class="result" id="result" style="display: none; margin-top: 20px; line-height: 1.6;"></div>
+      </div>
 
-<input type="number" id="age" placeholder="Âge">
-<select id="distance">
-<option value="5">5 km</option>
-<option value="10">10 km</option>
-<option value="21">Semi-marathon</option>
-<option value="42">Marathon</option>
-</select>
+      <div class="card">
+        <h3>📊 Repères : Temps Moyens Globaux</h3>
+        <p style="color:var(--text-muted); font-size:13px; margin-bottom:15px;">Voici les moyennes mondiales constatées en compétition pour les coureurs amateurs :</p>
+        
+        <table style="width:100%; border-collapse:collapse; font-size:14px; text-align:left;">
+          <thead>
+            <tr style="border-bottom: 2px solid var(--border); color:var(--orange);">
+              <th style="padding:10px 5px;">Distance</th>
+              <th style="padding:10px 5px;">Hommes</th>
+              <th style="padding:10px 5px;">Femmes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid var(--border);">
+              <td style="padding:12px 5px; font-weight:600;">5 km</td>
+              <td style="padding:12px 5px; color:#eee;">22 - 26 min</td>
+              <td style="padding:12px 5px; color:#eee;">26 - 32 min</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border);">
+              <td style="padding:12px 5px; font-weight:600;">10 km</td>
+              <td style="padding:12px 5px; color:#eee;">45 - 55 min</td>
+              <td style="padding:12px 5px; color:#eee;">55 - 65 min</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border);">
+              <td style="padding:12px 5px; font-weight:600;">Semi</td>
+              <td style="padding:12px 5px; color:#eee;">1h40 - 2h00</td>
+              <td style="padding:12px 5px; color:#eee;">1h55 - 2h20</td>
+            </tr>
+            <tr>
+              <td style="padding:12px 5px; font-weight:600;">Marathon</td>
+              <td style="padding:12px 5px; color:#eee;">3h30 - 4h30</td>
+              <td style="padding:12px 5px; color:#eee;">4h00 - 5h30</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-<input type="text" id="time" placeholder="Temps (ex: 25.30 = 25 min 30 sec)">
+    </div>
 
-<button onclick="calcul()">Calculer</button>
+    <div class="ads">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9530999475279577" data-ad-slot="7452209090" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
 
-<div class="result" id="result"></div>
-</div>
+    <div class="footer">
+      © 2026 RunCalc Pro Plus — Tous droits réservés.
+    </div>
+  </div>
 
-</div>
+  <script>
+    // Convertisseur de temps intelligent (gère mm:ss et hh:mm:ss)
+    function parseTimeToMinutes(tStr) {
+      if (!tStr) return null;
+      let parts = tStr.trim().split(":");
+      if (parts.length === 2) {
+        // mm:ss
+        return (parseFloat(parts[0]) || 0) + (parseFloat(parts[1]) || 0) / 60;
+      } else if (parts.length === 3) {
+        // hh:mm:ss
+        return (parseFloat(parts[0]) || 0) * 60 + (parseFloat(parts[1]) || 0) + (parseFloat(parts[2]) || 0) / 60;
+      }
+      return parseFloat(tStr) || null;
+    }
 
-<script>
-function calcul(){
+    function calculNiveau() {
+      let age = parseInt(document.getElementById("age").value);
+      let sexe = document.getElementById("sexe").value;
+      let dist = document.getElementById("distance").value;
+      let timeStr = document.getElementById("time").value;
+      let resultDiv = document.getElementById("result");
 
-let age = parseInt(document.getElementById("age").value);
-let dist = document.getElementById("distance").value;
-let time = parseFloat(document.getElementById("time").value);
+      let totalMinutes = parseTimeToMinutes(timeStr);
 
-if(!age || !time){
-document.getElementById("result").innerHTML = "Remplis tous les champs.";
-return;
-}
+      if (!age || !totalMinutes) {
+        resultDiv.style.display = "block";
+        resultDiv.innerHTML = "⚠️ Remplis l'âge et le temps correctement (ex: 24:30).";
+        return;
+      }
 
-let score = 0;
+      // Base de chronos de référence mondiaux (en minutes)
+      let refTime = 0;
+      if (dist === "5")   refTime = (sexe === "H") ? 13.0 : 14.5;
+      if (dist === "10")  refTime = (sexe === "H") ? 27.0 : 30.0;
+      if (dist === "21")  refTime = (sexe === "H") ? 58.0 : 65.0;
+      if (dist === "42")  refTime = (sexe === "H") ? 122.0 : 135.0;
 
-// logique simple par niveau
-if(dist == 5){
-if(time < 20) score = 90;
-else if(time < 25) score = 70;
-else if(time < 30) score = 50;
-else score = 30;
-}
+      // Calcul du coefficient de performance de base
+      let performanceRatio = (refTime / totalMinutes) * 100;
 
-if(dist == 10){
-if(time < 42) score = 90;
-else if(time < 50) score = 70;
-else if(time < 60) score = 50;
-else score = 30;
-}
+      // Ajustement réaliste selon l'âge
+      if (age < 18) performanceRatio += (18 - age) * 1.2;
+      if (age > 38) performanceRatio += (age - 38) * 0.7;
 
-if(dist == 21){
-if(time < 95) score = 90;
-else if(time < 120) score = 70;
-else if(time < 150) score = 50;
-else score = 30;
-}
+      // Borner le score final entre 10 et 100
+      let scoreFinal = Math.min(100, Math.max(10, Math.round(performanceRatio)));
 
-if(dist == 42){
-if(time < 210) score = 90;
-else if(time < 270) score = 70;
-else if(time < 330) score = 50;
-else score = 30;
-}
+      // Attribution du niveau
+      let niveau = "";
+      let description = "";
+      if (scoreFinal >= 85) {
+        niveau = "🥇 Athlète Élite / Régional";
+        description = "Ton chrono est exceptionnel pour ton profil. Tu te situes dans le haut du panier des compétiteurs.";
+      } else if (scoreFinal >= 70) {
+        niveau = "🥈 Excellent niveau (Top 20%)";
+        description = "Trés solide performance ! Tu cours nettement plus vite que la moyenne des pratiquants.";
+      } else if (scoreFinal >= 50) {
+        niveau = "🥉 Niveau Moyen Régulier";
+        description = "Bonne performance. Tu es parfaitement calé dans le peloton global des coureurs amateurs.";
+      } else {
+        niveau = "🏃 Niveau Débutant / Reprise";
+        description = "C'est un bon point de départ ! Continue l'entraînement régulier pour voir ton score grimper.";
+      }
 
-// ajustement par âge (simple)
-if(age < 16) score += 5;
-if(age > 40) score -= 5;
-
-let niveau = "";
-
-if(score >= 85) niveau = "Top niveau (élite âge)";
-else if(score >= 70) niveau = "Très bon niveau (Top 25%)";
-else if(score >= 50) niveau = "Niveau moyen";
-else niveau = "Niveau débutant";
-
-document.getElementById("result").innerHTML =
-"Score : " + score + "/100<br>Niveau : " + niveau;
-}
-</script>
-
+      // Affichage du résultat enrichi
+      resultDiv.style.display = "block";
+      resultDiv.innerHTML = `
+        <div style="font-size:16px; color:#fff; margin-bottom:8px;">Score d'Efficacité : <strong style="color:var(--orange); font-size:22px;">${scoreFinal}/100</strong></div>
+        <div style="font-weight:700; color:#fff; margin-bottom:10px;">Rang estimé : ${niveau}</div>
+        <p style="color:var(--text-muted); font-size:13px; margin:0;">${description}</p>
+      `;
+    }
+  </script>
 </body>
 </html>
