@@ -20,6 +20,7 @@ font-family:Arial,sans-serif;
 
 body{
 background:#0b0f14;
+color:#ffffff;
 }
 color:white;
 line-height:1.7;
@@ -29,16 +30,32 @@ nav{
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:20px 8%;
+padding:18px 8%;
 background:#111827;
 position:sticky;
 top:0;
 z-index:100;
+border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+.nav-links a{
+color:#ffffff;
+text-decoration:none;
+font-weight:600;
+padding:8px 12px;
+border-radius:8px;
+transition:0.2s;
+}
+
+.nav-links a:hover{
+background:#fc4c02;
+color:white;
 }
 
 .logo{
-font-size:28px;
-font-weight:700;
+font-size:26px;
+font-weight:800;
+letter-spacing:0.5px;
 }
 
 .logo span{
@@ -100,6 +117,8 @@ margin-bottom:70px;
 font-size:38px;
 text-align:center;
 margin-bottom:40px;
+color:#ffffff;
+font-weight:800;
 }
 
 .grid{
@@ -109,16 +128,17 @@ gap:20px;
 }
 
 .card{
-background:#1e293b;
+background:#121826;
 padding:25px;
-border-radius:18px;
-border:1px solid rgba(255,255,255,.08);
-transition:.3s;
+border-radius:16px;
+border:1px solid rgba(255,255,255,0.06);
+transition:0.25s ease;
 }
 
 .card:hover{
 transform:translateY(-5px);
-box-shadow:0 15px 35px rgba(252,76,2,.25);
+box-shadow:0 12px 30px rgba(252,76,2,0.18);
+border:1px solid rgba(252,76,2,0.25);
 }
 
 .card-icon{
@@ -192,7 +212,7 @@ font-size:30px;
 <body>
 
 <nav>
-<div class="logo">Run<span>Calc</span></div>
+<div class="logo">Run<span>Calc Pro Plus</span></div>
 
 <ul class="nav-links">
 <li><a href="index.html">Calculateur</a></li>
