@@ -1,66 +1,495 @@
 <!DOCTYPE html>
+
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guide Running - Comprendre la Course à Pied</title>
-    <meta name="description" content="Guide complet du running : VO2 Max, endurance fondamentale, seuil, VMA et conseils pour progresser.">
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Guide Running Complet - RunCalc Pro Plus</title>
+
+<meta name="description" content="Guide complet du running : endurance fondamentale, VMA, VO2 Max, seuil lactique, fréquence cardiaque, erreurs de débutant et conseils d'entraînement.">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#0f172a;
+color:white;
+line-height:1.7;
+}
+
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 8%;
+background:#111827;
+position:sticky;
+top:0;
+z-index:100;
+}
+
+.logo{
+font-size:28px;
+font-weight:700;
+}
+
+.logo span{
+color:#22c55e;
+}
+
+.nav-links{
+display:flex;
+gap:20px;
+list-style:none;
+}
+
+.nav-links a{
+color:white;
+text-decoration:none;
+font-weight:600;
+}
+
+.nav-links a:hover{
+color:#22c55e;
+}
+
+.hero{
+padding:90px 20px;
+text-align:center;
+background:linear-gradient(135deg,#2563eb,#1d4ed8);
+}
+
+.badge{
+display:inline-block;
+padding:8px 16px;
+background:rgba(255,255,255,.15);
+border-radius:999px;
+margin-bottom:20px;
+}
+
+.hero h1{
+font-size:55px;
+margin-bottom:20px;
+}
+
+.hero p{
+max-width:700px;
+margin:auto;
+font-size:20px;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:50px 20px;
+}
+
+.section{
+margin-bottom:70px;
+}
+
+.section-title{
+font-size:38px;
+text-align:center;
+margin-bottom:40px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:20px;
+}
+
+.card{
+background:#1e293b;
+padding:25px;
+border-radius:18px;
+border:1px solid rgba(255,255,255,.08);
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+box-shadow:0 15px 35px rgba(37,99,235,.25);
+}
+
+.card-icon{
+font-size:40px;
+margin-bottom:15px;
+}
+
+.card h3{
+margin-bottom:10px;
+color:#22c55e;
+}
+
+.guide-menu{
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+gap:12px;
+margin-bottom:50px;
+}
+
+.guide-menu a{
+background:#1e293b;
+padding:12px 18px;
+border-radius:999px;
+color:white;
+text-decoration:none;
+font-weight:600;
+}
+
+.guide-menu a:hover{
+background:#2563eb;
+}
+
+.tip-box{
+background:linear-gradient(135deg,#2563eb,#1d4ed8);
+padding:35px;
+border-radius:20px;
+text-align:center;
+}
+
+.tip-box h2{
+margin-bottom:15px;
+}
+
+footer{
+padding:40px;
+text-align:center;
+color:#94a3b8;
+}
+
+@media(max-width:768px){
+
+.hero h1{
+font-size:38px;
+}
+
+.hero p{
+font-size:17px;
+}
+
+.section-title{
+font-size:30px;
+}
+
+}
+
+</style>
+
 </head>
+
 <body>
 
 <nav>
-    <div class="logo">Run<span>Calc</span></div>
-    <ul class="nav-links">
-        <li><a href="index.html">Calculateur</a></li>
-        <li><a href="guide-de-course.html">Guide de Course</a></li>
-    </ul>
+<div class="logo">Run<span>Calc</span></div>
+
+<ul class="nav-links">
+<li><a href="index.html">Calculateur</a></li>
+<li><a href="guide-running.html">Guide Running</a></li>
+</ul>
 </nav>
 
 <header class="hero">
-    <span class="badge">Espace Coaching</span>
-    <h1>🏃 Le Guide Officiel du Coureur</h1>
-    <p>Comprendre le vocabulaire, les zones d'intensité et les secrets de l'entraînement.</p>
+
+<span class="badge">🏃 Espace Coaching RunCalc</span>
+
+<h1>Le Guide Ultime du Running</h1>
+
+<p>
+Comprendre la course à pied, progresser plus vite, éviter les erreurs et découvrir les méthodes utilisées par les meilleurs coureurs.
+</p>
+
 </header>
 
 <div class="container">
-    <section class="section">
-        <h2 class="section-title">⏱️ Les Notions Clés du Running</h2>
-        <div class="grid">
-            <div class="card">
-                <div class="card-icon">🐢</div>
-                <h3>L'Endurance Fondamentale (EF)</h3>
-                <p>C'est l'allure ultra-confortable où vous pouvez parler sans être essoufflé. Elle doit représenter 80% de votre volume d'entraînement pour muscler votre cœur.</p>
-            </div>
-            <div class="card">
-                <div class="card-icon">⚡</div>
-                <h3>La VMA (Vitesse Maximale Aérobie)</h3>
-                <p>La vitesse limite à laquelle un coureur consomme le maximum d'oxygène. On la travaille avec du fractionné (ex: 30s rapide / 30s lent) pour devenir plus rapide.</p>
-            </div>
-            <div class="card">
-                <div class="card-icon">🔥</div>
-                <h3>Le Seuil Lactique</h3>
-                <p>La zone rouge limite où l'acide lactique commence à s'accumuler dans vos muscles. S'entraîner ici permet de maintenir une vitesse élevée beaucoup plus longtemps.</p>
-            </div>
-        </div>
-    </section>
 
-    <section class="section">
-        <h2 class="section-title">❤️ Maîtriser vos Zones Cardiaques</h2>
-        <div class="card">
-            <h3>Comment utiliser votre Fréquence Cardiaque (FC) ?</h3>
-            <p style="margin-top:10px; color:var(--text-muted);">
-                • <b>Moins de 70% FCMax :</b> Récupération et endurance fondamentale.<br>
-                • <b>70% à 85% FCMax :</b> Travail au tempo et endurance active (allure Marathon / Semi).<br>
-                • <b>Plus de 85% FCMax :</b> Zone anaérobie, réservée au fractionné court et au développement de la VO2 Max.
-            </p>
-        </div>
-    </section>
-
-    <footer>
-        RunCalc Pro Plus — Guide de Course
-    </footer>
+<div class="guide-menu">
+<a href="#notions">Notions</a>
+<a href="#zones">FC</a>
+<a href="#allures">Allures</a>
+<a href="#vo2">VO₂ Max</a>
+<a href="#erreurs">Erreurs</a>
+<a href="#conseils">Conseils</a>
 </div>
+
+<section class="section" id="notions">
+
+<h2 class="section-title">📚 Les Notions Essentielles</h2>
+
+<div class="grid">
+
+<div class="card">
+<div class="card-icon">🐢</div>
+<h3>Endurance Fondamentale</h3>
+<p>
+Allure très facile permettant de discuter sans être essoufflé.
+Elle représente environ 80% de l'entraînement.
+</p>
+</div>
+
+<div class="card">
+<div class="card-icon">⚡</div>
+<h3>VMA</h3>
+<p>
+Vitesse Maximale Aérobie. Plus votre VMA est élevée, plus votre potentiel de vitesse est important.
+</p>
+</div>
+
+<div class="card">
+<div class="card-icon">🔥</div>
+<h3>Seuil Lactique</h3>
+<p>
+Zone d'effort soutenue permettant de courir vite longtemps sans exploser.
+</p>
+</div>
+
+</div>
+
+</section>
+
+<section class="section" id="zones">
+
+<h2 class="section-title">❤️ Zones Cardiaques</h2>
+
+<div class="card">
+
+<p>
+
+<b>Zone 1 :</b> 50-60% FCMax → récupération
+
+<br><br>
+
+<b>Zone 2 :</b> 60-75% FCMax → endurance fondamentale
+
+<br><br>
+
+<b>Zone 3 :</b> 75-85% FCMax → endurance active
+
+<br><br>
+
+<b>Zone 4 :</b> 85-92% FCMax → seuil
+
+<br><br>
+
+<b>Zone 5 :</b> 92-100% FCMax → VMA et sprint
+
+</p>
+
+</div>
+
+</section>
+
+<section class="section" id="allures">
+
+<h2 class="section-title">🏃 Les Allures Importantes</h2>
+
+<div class="grid">
+
+<div class="card">
+<div class="card-icon">🐌</div>
+<h3>Footing</h3>
+<p>Allure facile pour développer l'endurance.</p>
+</div>
+
+<div class="card">
+<div class="card-icon">🏃</div>
+<h3>Tempo</h3>
+<p>Effort soutenu mais contrôlé.</p>
+</div>
+
+<div class="card">
+<div class="card-icon">⚡</div>
+<h3>Fractionné</h3>
+<p>Alternance d'efforts rapides et de récupération.</p>
+</div>
+
+</div>
+
+</section>
+
+<section class="section" id="vo2">
+
+<h2 class="section-title">📊 Comprendre la VO₂ Max</h2>
+
+<div class="card">
+
+<p>
+
+La VO₂ Max représente la quantité maximale d'oxygène utilisée par votre organisme.
+
+<br><br>
+
+35 à 45 → Débutant
+
+<br>
+
+45 à 55 → Bon niveau
+
+<br>
+
+55 à 65 → Très bon niveau
+
+<br>
+
+65+ → Niveau élite
+
+</p>
+
+</div>
+
+</section>
+
+<section class="section" id="erreurs">
+
+<h2 class="section-title">❌ Les Erreurs des Débutants</h2>
+
+<div class="grid">
+
+<div class="card">
+<div class="card-icon">🚀</div>
+<h3>Toujours courir vite</h3>
+<p>
+La plus grosse erreur. La majorité des sorties doivent être faciles.
+</p>
+</div>
+
+<div class="card">
+<div class="card-icon">📈</div>
+<h3>Augmenter trop vite</h3>
+<p>
+Monter brutalement le kilométrage augmente fortement le risque de blessure.
+</p>
+</div>
+
+<div class="card">
+<div class="card-icon">😴</div>
+<h3>Ignorer la récupération</h3>
+<p>
+Les progrès arrivent pendant le repos.
+</p>
+</div>
+
+<div class="card">
+<div class="card-icon">👟</div>
+<h3>Mauvaises chaussures</h3>
+<p>
+Des chaussures usées ou inadaptées favorisent les blessures.
+</p>
+</div>
+
+<div class="card">
+<div class="card-icon">💧</div>
+<h3>Boire trop peu</h3>
+<p>
+Une mauvaise hydratation réduit les performances.
+</p>
+</div>
+
+<div class="card">
+<div class="card-icon">🔥</div>
+<h3>Copier les élites</h3>
+<p>
+Leur entraînement n'est pas adapté à un débutant.
+</p>
+</div>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<h2 class="section-title">📅 Exemple de Semaine</h2>
+
+<div class="card">
+
+<p>
+
+Lundi → Repos
+
+<br><br>
+
+Mardi → Fractionné
+
+<br><br>
+
+Mercredi → Footing facile
+
+<br><br>
+
+Jeudi → Seuil
+
+<br><br>
+
+Vendredi → Repos
+
+<br><br>
+
+Samedi → Footing facile
+
+<br><br>
+
+Dimanche → Sortie longue
+
+</p>
+
+</div>
+
+</section>
+
+<section class="section" id="conseils">
+
+<div class="tip-box">
+
+<h2>💡 Conseils pour Progresser</h2>
+
+<p>
+
+✅ Courir régulièrement
+
+<br><br>
+
+✅ Dormir 8h minimum
+
+<br><br>
+
+✅ Faire 80% d'endurance fondamentale
+
+<br><br>
+
+✅ Être patient
+
+<br><br>
+
+✅ Augmenter progressivement le volume
+
+<br><br>
+
+✅ Garder du plaisir à courir
+
+</p>
+
+</div>
+
+</section>
+
+</div>
+
+<footer>
+
+© 2026 RunCalc Pro Plus — Guide Running
+
+</footer>
 
 </body>
 </html>
