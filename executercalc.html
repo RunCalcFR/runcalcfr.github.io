@@ -1,280 +1,198 @@
 <!DOCTYPE html>
 <html lang="fr">
+  <link rel="stylesheet" href="style.css">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RunCalc Pro Plus</title>
 <meta name="description" content="Calculateur de course à pied : allure, vitesse, VO2 Max, prédictions, entraînements et suivi des performances.">
-<link rel="stylesheet" href="style.css">
 
+<!-- ADSENSE -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9530999475279577" crossorigin="anonymous"></script>
 
 <style>
 :root {
   --orange: #fc4c02;
   --orange2: #ff6b2c;
-  --bg: #0d0d0d;
-  --card: #161616;
-  --card2: #1e1e1e;
+  --bg: #111111;
+  --card: #1b1b1b;
+  --card2: #242424;
   --text: #ffffff;
   --gray: #a0a0a0;
-  --border: #262626;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   background: var(--bg);
   color: var(--text);
-  line-height: 1.5;
 }
 
 header {
-  background: linear-gradient(135deg, #111111, #1a1a1a);
-  padding: 40px 20px;
+  background: linear-gradient(90deg, var(--orange), var(--orange2));
+  padding: 25px;
   text-align: center;
-  border-bottom: 1px solid var(--border);
+  font-size: 28px;
+  font-weight: bold;
+  box-shadow: 0 3px 15px rgba(0,0,0,.4);
 }
 
-header h1 {
-  font-size: 32px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  margin-bottom: 8px;
-}
-
-.subtitle { font-size: 15px; color: var(--gray); font-weight: 400; }
+.subtitle { font-size: 14px; margin-top: 6px; opacity: .9; }
 
 nav {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(13, 13, 13, 0.9);
-  backdrop-filter: blur(10px);
+  background: #171717;
   display: flex;
   justify-content: center;
-  gap: 8px;
-  padding: 14px;
+  gap: 10px;
+  padding: 12px;
   flex-wrap: wrap;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid #2f2f2f;
 }
 
 nav a {
-  color: #eee;
-  text-decoration: none;
-  padding: 8px 16px;
-  background: #161616;
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  transition: all .2s ease;
-  font-size: 13px;
-  font-weight: 500;
-}
-
-nav a:hover { 
-  background: var(--orange); 
-  border-color: var(--orange);
   color: white;
+  text-decoration: none;
+  padding: 10px 14px;
+  background: #222;
+  border-radius: 10px;
+  transition: .2s;
+  font-size: 14px;
 }
 
-.container { max-width: 1200px; margin: auto; padding: 20px; }
+nav a:hover { background: var(--orange); }
 
-.section { margin-top: 50px; }
+.container { max-width: 1300px; margin: auto; padding: 20px; }
+
+.section { margin-top: 35px; }
 
 .section-title {
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  font-size: 24px;
+  margin-bottom: 15px;
+  border-left: 5px solid var(--orange);
+  padding-left: 10px;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 15px;
 }
 
 .card {
   background: var(--card);
-  padding: 24px;
-  border-radius: 16px;
-  border: 1px solid var(--border);
-  transition: all .25s ease;
+  padding: 18px;
+  border-radius: 15px;
+  box-shadow: 0 3px 12px rgba(0,0,0,.3);
+  transition: .2s;
 }
 
 .card:hover {
-  border-color: #3a3a3a;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-
-.card h3 {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 14px;
-  color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(252,76,2,.15);
 }
 
 .stat {
-  font-size: 36px;
-  font-weight: 800;
-  margin-top: 8px;
+  font-size: 30px;
+  font-weight: bold;
+  margin-top: 10px;
   color: var(--orange);
-  letter-spacing: -1px;
 }
 
-.label { color: var(--gray); font-size: 13px; margin-top: 6px; }
+.label { color: var(--gray); font-size: 13px; margin-top: 4px; }
 
 input {
   width: 100%;
-  padding: 12px 14px;
-  margin-top: 10px;
-  border: 1px solid var(--border);
+  padding: 12px;
+  margin-top: 8px;
+  border: none;
   border-radius: 10px;
-  background: #202020;
+  background: #2a2a2a;
   color: white;
   font-size: 14px;
-  transition: border .2s;
-}
-
-input:focus {
-  outline: none;
-  border-color: var(--orange);
 }
 
 button {
   width: 100%;
   padding: 12px;
-  margin-top: 12px;
+  margin-top: 10px;
   border: none;
   border-radius: 10px;
   background: var(--orange);
   color: white;
-  font-weight: 600;
+  font-weight: bold;
   cursor: pointer;
   font-size: 14px;
-  transition: background .2s;
+  transition: .2s;
 }
 
 button:hover { background: var(--orange2); }
 
-button.danger { background: #2a1414; color: #f87171; border: 1px solid #451a1a; }
-button.danger:hover { background: #451a1a; }
+button.danger { background: #c0392b; }
+button.danger:hover { background: #e74c3c; }
 
 .result {
-  margin-top: 14px;
-  padding: 12px;
-  background: #1e1e1e;
-  border-radius: 10px;
+  margin-top: 12px;
+  padding: 10px;
+  background: #2a2a2a;
+  border-radius: 8px;
   color: var(--orange);
-  font-weight: 600;
-  font-size: 14px;
-  border-left: 3px solid var(--orange);
+  font-weight: bold;
+  min-height: 38px;
 }
 
 .plan-output {
   white-space: pre-line;
-  margin-top: 20px;
+  margin-top: 15px;
   font-size: 13px;
   line-height: 1.7;
-  color: #e0e0e0;
-  background: #111;
-  padding: 15px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
+  color: #ddd;
 }
 
 .run-item {
-  background: var(--card);
-  padding: 14px;
+  background: #242424;
+  padding: 10px;
   margin-top: 10px;
   border-radius: 10px;
-  border: 1px solid var(--border);
+  border-left: 4px solid var(--orange);
   font-size: 13px;
   line-height: 1.6;
 }
 
-.ads { margin: 30px 0; text-align: center; }
+.ads { margin: 25px 0; }
 
 canvas {
-  background: var(--card);
-  border-radius: 16px;
-  border: 1px solid var(--border);
+  background: #1a1a1a;
+  border-radius: 12px;
   width: 100%;
   display: block;
-  padding: 10px;
 }
 
-/* FAQS ACCORDEONS INTERACTIFS */
-.faq-section {
-  margin-top: 60px;
-  border-top: 1px solid var(--border);
-  padding-top: 40px;
-}
-
-details {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  margin-bottom: 12px;
-  overflow: hidden;
-  transition: all .3s ease;
-}
-
-summary {
-  padding: 18px;
-  font-weight: 600;
-  cursor: pointer;
-  list-style: none;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  user-select: none;
-}
-
-summary::-webkit-details-marker { display: none; }
-
-summary::after {
-  content: '＋';
-  color: var(--orange);
-  font-weight: bold;
-  font-size: 16px;
-}
-
-details[open] summary::after { content: '✕'; }
-details[open] { border-color: #333; }
-
-.faq-content {
-  padding: 0 18px 18px 18px;
-  color: var(--gray);
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-.footer { margin-top: 60px; padding: 30px; text-align: center; color: #666; font-size: 13px; border-top: 1px solid var(--border); }
+.footer { margin-top: 40px; padding: 20px; text-align: center; color: #888; font-size: 13px; }
 </style>
 </head>
 
 <body>
 
 <header>
-  <h1>🏃 RunCalc Pro Plus</h1>
+  🏃 RunCalc Pro Plus
   <div class="subtitle">Calculateur Running • VO2 Max • Allure • Vitesse • Prédictions</div>
 </header>
 
 <nav>
   <a href="#dash">Dashboard</a>
-  <a href="#calc">Outils</a>
+  <a href="#calc">Calculs</a>
   <a href="#runs">Runs</a>
   <a href="#plan">Programme</a>
   <a href="#stats">Stats</a>
-  <a href="#faq">FAQ</a>
 </nav>
 
 <div class="container">
 
+  <!-- PUB 1 -->
   <div class="ads">
     <ins class="adsbygoogle" style="display:block"
       data-ad-client="ca-pub-9530999475279577"
@@ -284,10 +202,12 @@ details[open] { border-color: #333; }
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
+  <!-- ===== DASHBOARD ===== -->
   <section id="dash" class="section">
     <h2 class="section-title">📊 Dashboard Performance</h2>
 
     <div class="grid">
+
       <div class="card">
         VO2 Max estimé
         <div class="stat" id="dashVO2">--</div>
@@ -316,23 +236,26 @@ details[open] { border-color: #333; }
         Dernière performance
         <div class="stat" id="dashLast">--</div>
       </div>
+
     </div>
 
-    <div class="card" style="margin-top:20px;">
+    <!-- Prédictions automatiques -->
+    <div class="card" style="margin-top:15px;">
       <h3>📈 Prédictions automatiques</h3>
-      <p style="color:var(--gray); font-size:13px; margin-bottom:10px;">
+      <p style="color:var(--gray); font-size:13px; margin-top:6px;">
         Basées sur la dernière allure enregistrée (via "Calcul d'allure").
       </p>
       <button onclick="predict()">Calculer les prédictions</button>
-      <div style="margin-top: 15px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
-        <div id="pred5k" style="background:#1e1e1e; padding:10px; border-radius:8px;">5 km : --</div>
-        <div id="pred10k" style="background:#1e1e1e; padding:10px; border-radius:8px;">10 km : --</div>
-        <div id="pred21k" style="background:#1e1e1e; padding:10px; border-radius:8px;">Semi-marathon : --</div>
-        <div id="pred42k" style="background:#1e1e1e; padding:10px; border-radius:8px;">Marathon : --</div>
-      </div>
+      <br><br>
+      <div id="pred5k">5 km : --</div><br>
+      <div id="pred10k">10 km : --</div><br>
+      <div id="pred21k">Semi-marathon : --</div><br>
+      <div id="pred42k">Marathon : --</div>
     </div>
+
   </section>
 
+  <!-- PUB 2 -->
   <div class="ads">
     <ins class="adsbygoogle" style="display:block"
       data-ad-client="ca-pub-9530999475279577"
@@ -342,10 +265,13 @@ details[open] { border-color: #333; }
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
+  <!-- ===== CALCULS ===== -->
   <section id="calc" class="section">
     <h2 class="section-title">🧮 Outils de Calcul</h2>
 
     <div class="grid">
+
+      <!-- ALLURE -->
       <div class="card">
         <h3>🏃 Calcul d'allure</h3>
         <input id="dist" placeholder="Distance (ex : 5 ou 10)">
@@ -355,6 +281,7 @@ details[open] { border-color: #333; }
         <div class="result" id="speedOut">Vitesse : --</div>
       </div>
 
+      <!-- VITESSE depuis allure -->
       <div class="card">
         <h3>⚡ Allure → Vitesse</h3>
         <input id="paceInput" placeholder="Allure (ex : 3:35)">
@@ -362,6 +289,7 @@ details[open] { border-color: #333; }
         <div class="result" id="speedOnlyOut">Vitesse : --</div>
       </div>
 
+      <!-- DISTANCE depuis allure + temps -->
       <div class="card">
         <h3>📏 Distance parcourue</h3>
         <input id="distancePace" placeholder="Allure (ex : 4:30)">
@@ -370,16 +298,21 @@ details[open] { border-color: #333; }
         <div class="result" id="distanceOut">Distance : --</div>
       </div>
 
-      <div class="card">
-        <h3>📊 Analyse de séance complète</h3>
-        <input id="fc_session" placeholder="FC moyenne séance (ex : 155)">
-        <input id="fc_max" placeholder="FC max (ex : 195)">
-        <input id="pace_session" placeholder="Allure (ex : 4:30)">
-        <input id="time_session" placeholder="Temps total (ex : 45:00)">
-        <button onclick="analyseSeance()">Analyser la séance</button>
-        <div class="result" id="session_result">Résultat : --</div>
-      </div>
+      <!-- ANALYSE SEANCE COMPLETE -->
+<div class="card">
+  <h3>📊 Analyse de séance complète</h3>
+
+  <input id="fc_session" placeholder="FC moyenne séance (ex : 155)">
+  <input id="fc_max" placeholder="FC max (ex : 195)">
+  <input id="pace_session" placeholder="Allure (ex : 4:30)">
+  <input id="time_session" placeholder="Temps total (ex : 45:00)">
+
+  <button onclick="analyseSeance()">Analyser la séance</button>
+
+  <div class="result" id="session_result">Résultat : --</div>
+</div>
       
+      <!-- FC -->
       <div class="card">
         <h3>❤️ Fréquence cardiaque</h3>
         <input id="fcmax" placeholder="FC max (ex : 205)">
@@ -388,6 +321,7 @@ details[open] { border-color: #333; }
         <div class="result" id="fcOut">Zone : --</div>
       </div>
 
+      <!-- VO2 Max -->
       <div class="card">
         <h3>🧪 Test VO2 Max</h3>
         <input id="vo2dist" placeholder="Distance (ex : 5)">
@@ -396,16 +330,19 @@ details[open] { border-color: #333; }
         <div class="result" id="vo2testOut">VO2 Max : --</div>
       </div>
 
+      <!-- Convertisseur km ↔ miles -->
       <div class="card">
         <h3>🔄 Convertisseur km ↔ miles</h3>
         <input id="kmInput" placeholder="Kilomètres (ex : 10)">
         <button onclick="convertKm()">Convertir en miles</button>
         <div class="result" id="mileOut">Miles : --</div>
+        <br>
         <input id="milesInput" placeholder="Miles (ex : 6.2)">
         <button onclick="convertMiles()">Convertir en km</button>
         <div class="result" id="kmOut">Km : --</div>
       </div>
 
+      <!-- Temps cible -->
       <div class="card">
         <h3>🎯 Temps cible</h3>
         <input id="goalDist" placeholder="Distance (ex : 10)">
@@ -414,65 +351,73 @@ details[open] { border-color: #333; }
         <div class="result" id="goalOut">Temps final : --</div>
       </div>
 
+      <!-- Prédiction manuelle depuis 5 km -->
       <div class="card">
         <h3>📈 Prédiction depuis 5 km</h3>
         <input id="predInput" placeholder="Temps 5 km (ex: 25:00)">
         <button onclick="manualPredict()">Générer les prédictions</button>
-        <div style="margin-top:12px; font-size:13px; line-height:2; background:#1e1e1e; padding:12px; border-radius:10px;">
+        <div style="margin-top:12px; font-size:13px; line-height:2;">
           <div id="mPred5k">5 km : --</div>
           <div id="mPred10k">10 km : --</div>
           <div id="mPred21k">Semi-marathon : --</div>
           <div id="mPred42k">Marathon : --</div>
         </div>
       </div>
+
     </div>
   </section>
 
+  <!-- ===== RUNS ===== -->
   <section id="runs" class="section">
     <h2 class="section-title">📋 Mes Sorties</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>➕ Ajouter une sortie</h3>
-        <input id="rDist" placeholder="Distance (ex : 10)">
-        <input id="rTime" placeholder="Temps (ex : 48:30)">
-        <button onclick="addRun()">Enregistrer la sortie</button>
-      </div>
-      <div class="card">
-        <h3>⚙️ Gestion des données</h3>
-        <p style="color:var(--gray); font-size:13px; margin-bottom:15px;">Attention, la réinitialisation effacera de manière définitive votre historique local.</p>
-        <button class="danger" onclick="resetAll()">🗑 Réinitialiser toutes les données</button>
-      </div>
+
+    <div class="card">
+      <h3>➕ Ajouter une sortie</h3>
+      <input id="rDist" placeholder="Distance (ex : 10)">
+      <input id="rTime" placeholder="Temps (ex : 48:30)">
+      <button onclick="addRun()">Enregistrer la sortie</button>
     </div>
-    <div id="runList" style="margin-top:20px;"></div>
+
+    <div id="runList" style="margin-top:15px;"></div>
+
+    <div class="card" style="margin-top:15px;">
+      <button class="danger" onclick="resetAll()">🗑 Réinitialiser toutes les données</button>
+    </div>
   </section>
 
+  <!-- ===== PROGRAMME ===== -->
   <section id="plan" class="section">
     <h2 class="section-title">📅 Plans d'Entraînement</h2>
 
     <div class="grid">
+
+      <!-- Plan 5 km sur 4 semaines -->
       <div class="card" style="grid-column: 1 / -1;">
         <h3>🏁 Programme 5 km — 4 semaines</h3>
-        <p style="color:var(--gray); font-size:13px; margin-top:4px;">
+        <p style="color:var(--gray); font-size:13px; margin-top:6px;">
           Entre ton record actuel sur 5 km pour obtenir un plan complet avec allures personnalisées.
         </p>
         <input id="best5k" placeholder="Meilleur 5 km (ex : 22:30)">
         <button onclick="generateSmartPlan()">Générer mon plan 5 km</button>
-        <div class="plan-output" id="planOut">Le plan généré s'affichera ici...</div>
+        <div class="plan-output" id="planOut"></div>
       </div>
 
+      <!-- Plan personnalisé -->
       <div class="card" style="grid-column: 1 / -1;">
         <h3>🗓 Plan personnalisé</h3>
         <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap:10px;">
           <input id="goalDistPlan" placeholder="Distance objectif (5 / 10 / 21 / 42)">
-          <input id="goalTimePlan" placeholder="Temps cible (ex: 45:00)">
+          <input id="goalTimePlan" placeholder="Temps cible (ex: 45:00 ou 1:40:00)">
           <input id="levelInput" placeholder="Niveau : débutant / moyen / fort">
         </div>
         <button onclick="generateCustomPlan()">Créer mon plan personnalisé</button>
-        <div class="plan-output" id="customPlanOut">Le plan personnalisé s'affichera ici...</div>
+        <div class="plan-output" id="customPlanOut"></div>
       </div>
+
     </div>
   </section>
 
+  <!-- PUB 3 -->
   <div class="ads">
     <ins class="adsbygoogle" style="display:block"
       data-ad-client="ca-pub-9530999475279577"
@@ -482,50 +427,22 @@ details[open] { border-color: #333; }
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
+  <!-- ===== STATS ===== -->
   <section id="stats" class="section">
     <h2 class="section-title">📈 Progression VO2 Max</h2>
     <canvas id="chart" height="200"></canvas>
-  </section>
-
-  <section id="faq" class="section faq-section">
-    <h2 class="section-title">❓ Foire Aux Questions</h2>
-    
-    <details>
-      <summary>Comment fonctionne le calcul de la VO2 Max ?</summary>
-      <div class="faq-content">
-        La VO2 Max est estimée à l'aide d'une formule mathématique basée sur votre vitesse moyenne de course. Plus vous parcourez de distance en un minimum de temps, plus votre VO2 Max estimée s'élève.
-      </div>
-    </details>
-
-    <details>
-      <summary>Qu'est-ce que l'endurance fondamentale ?</summary>
-      <div class="faq-content">
-        L'endurance fondamentale correspond à une allure de course confortable où vous êtes en totale aisance respiratoire (capacité à parler sans être essoufflé). Elle se situe généralement sous la barre des 70% à 75% de votre FC max.
-      </div>
-    </details>
-
-    <details>
-      <summary>Comment sont enregistrées mes données de course ?</summary>
-      <div class="faq-content">
-        Toutes vos données (historique et sorties) sont enregistrées localement dans la mémoire de votre navigateur (via le LocalStorage). Aucune donnée n'est envoyée vers un serveur externe, assurant une confidentialité totale.
-      </div>
-    </details>
-
-    <details>
-      <summary>Pourquoi faire des entraînements au seuil ?</summary>
-      <div class="faq-content">
-        L'entraînement au seuil habitue votre corps à recycler l'acide lactique produit lors d'un effort intense. Cela vous permet de maintenir une vitesse élevée beaucoup plus longtemps sans ressentir de fatigue musculaire précoce.
-      </div>
-    </details>
   </section>
 
   <div class="footer">
     RunCalc Pro Plus — Tous droits réservés
   </div>
 
-</div><script>
+</div><!-- /container -->
+
+
+<script>
 /* ============================================================
-   DONNÉES GLOBALES 
+   DONNÉES GLOBALES (une seule déclaration)
    ============================================================ */
 let runs    = JSON.parse(localStorage.getItem("runs")    || "[]");
 let history = JSON.parse(localStorage.getItem("history") || "[]");
@@ -538,6 +455,7 @@ function safeNum(v) {
   return isNaN(n) ? null : n;
 }
 
+// Convertit "mm:ss" ou "hh:mm:ss" ou un nombre en minutes
 function parseTime(t) {
   if (!t) return null;
   t = t.trim();
@@ -553,6 +471,7 @@ function parseTime(t) {
   return safeNum(t);
 }
 
+// Formate des minutes en "mm:ss"
 function formatPace(min) {
   if (min == null || isNaN(min)) return "--";
   const m = Math.floor(min);
@@ -561,6 +480,7 @@ function formatPace(min) {
   return `${m}:${s < 10 ? "0" : ""}${s}/km`;
 }
 
+// Formate des minutes en "Xh YY" ou "Y min"
 function formatDuration(min) {
   if (min == null || isNaN(min)) return "--";
   const h = Math.floor(min / 60);
@@ -606,6 +526,7 @@ function calcPace() {
   document.getElementById("paceOut").innerText  = `Allure : ${formatPace(pace)}`;
   document.getElementById("speedOut").innerText = `Vitesse : ${speed.toFixed(2)} km/h`;
 
+  // Mise à jour dashboard
   document.getElementById("dashVO2").innerText   = vo2.toFixed(1);
   document.getElementById("dashLevel").innerText = getBadge(vo2);
   document.getElementById("dashScore").innerText = score;
@@ -656,48 +577,74 @@ function calcFC() {
 }
 
 function analyseSeance(){
-  const fc = parseFloat(document.getElementById("fc_session").value);
-  const fcmax = parseFloat(document.getElementById("fc_max").value);
-  const pace = parseTime(document.getElementById("pace_session").value);
-  const time = parseTime(document.getElementById("time_session").value);
 
-  if(!fc || !fcmax || !pace || !time){
-    document.getElementById("session_result").innerText = "Remplis tous les champs.";
-    return;
-  }
+const fc = parseFloat(document.getElementById("fc_session").value);
+const fcmax = parseFloat(document.getElementById("fc_max").value);
+const pace = parseTime(document.getElementById("pace_session").value);
+const time = parseTime(document.getElementById("time_session").value);
 
-  let pct = (fc / fcmax) * 100;
-  let zone = "";
-  let gain = "";
+if(!fc || !fcmax || !pace || !time){
+document.getElementById("session_result").innerText = "Remplis tous les champs.";
+return;
+}
 
-  if(pct < 70){
-    zone = "Endurance fondamentale";
-    gain = "Amélioration endurance de base + récupération + efficacité cardiaque";
-  } else if(pct < 85){
-    zone = "Seuil / tempo";
-    gain = "Amélioration du seuil lactique + capacité à tenir un effort rapide longtemps";
-  } else {
-    zone = "Intensité élevée (VMA)";
-    gain = "Amélioration vitesse + VO2 max + puissance";
-  }
+let pct = (fc / fcmax) * 100;
 
-  let perf = "";
-  if(pace > 6){ perf = "Séance récupération / footing très lent"; }
-  else if(pace > 5){ perf = "Endurance fondamentale"; }
-  else if(pace > 4){ perf = "Travail soutenu / seuil"; }
-  else { perf = "Séance intense / VMA"; }
+let zone = "";
+let gain = "";
 
-  let volume = "";
-  if(time < 30){ volume = "petite séance → récupération ou activation"; }
-  else if(time < 60){ volume = "séance normale → bon développement"; }
-  else { volume = "grosse séance → forte adaptation endurance"; }
+/* ZONES */
+if(pct < 70){
+zone = "Endurance fondamentale";
+gain = "Amélioration endurance de base + récupération + efficacité cardiaque";
+}
 
-  document.getElementById("session_result").innerHTML =
-  "❤️ Zone FC : " + zone + "<br>" +
-  "📊 % FC max : " + pct.toFixed(1) + "%<br>" +
-  "🏃 Allure : " + perf + "<br>" +
-  "⏱ Volume : " + volume + "<br><br>" +
-  "🔥 Amélioration principale : " + gain;
+else if(pct < 85){
+zone = "Seuil / tempo";
+gain = "Amélioration du seuil lactique + capacité à tenir un effort rapide longtemps";
+}
+
+else{
+zone = "Intensité élevée (VMA)";
+gain = "Amélioration vitesse + VO2 max + puissance";
+}
+
+/* analyse allure */
+let perf = "";
+
+if(pace > 6){
+perf = "Séance récupération / footing très lent";
+}
+else if(pace > 5){
+perf = "Endurance fondamentale";
+}
+else if(pace > 4){
+perf = "Travail soutenu / seuil";
+}
+else{
+perf = "Séance intense / VMA";
+}
+
+/* volume */
+let volume = "";
+
+if(time < 30){
+volume = "petite séance → récupération ou activation";
+}
+else if(time < 60){
+volume = "séance normale → bon développement";
+}
+else{
+volume = "grosse séance → forte adaptation endurance";
+}
+
+document.getElementById("session_result").innerHTML =
+"❤️ Zone FC : " + zone + "<br>" +
+"📊 % FC max : " + pct.toFixed(1) + "%<br>" +
+"🏃 Allure : " + perf + "<br>" +
+"⏱ Volume : " + volume + "<br><br>" +
+"🔥 Amélioration principale : " + gain;
+
 }
   
 /* ============================================================
@@ -748,6 +695,8 @@ function manualPredict() {
   const t = parseTime(document.getElementById("predInput").value);
   if (!t) { alert("Entre un temps 5 km valide."); return; }
 
+  const pace = t / 5; // allure min/km
+
   document.getElementById("mPred5k").innerText  = `5 km : ${formatDuration(t)}`;
   document.getElementById("mPred10k").innerText = `10 km : ${formatDuration(t * 2.09)}`;
   document.getElementById("mPred21k").innerText = `Semi-marathon : ${formatDuration(t * 4.5)}`;
@@ -762,6 +711,7 @@ function predict() {
     alert("Calcule d'abord une allure pour générer des prédictions.");
     return;
   }
+
   const last = history[history.length - 1];
   const pace = last.pace || 5;
 
@@ -806,7 +756,7 @@ function renderRuns() {
     return `
       <div class="run-item">
         <b>🏃 ${r.d} km</b> — ${formatDuration(r.t)}<br>
-        📅 ${r.date} &nbsp;·&nbsp; ⚡ ${formatPace(pace)}
+        📅 ${r.date} &nbsp;•&nbsp; ⚡ ${formatPace(pace)}
       </div>
     `;
   }).join("");
@@ -845,6 +795,7 @@ function drawChart() {
   const minVo2 = Math.min(...data.map(h => h.vo2 || 0), 0);
   const range  = maxVo2 - minVo2 || 1;
 
+  // Remplissage sous la courbe
   ctx.beginPath();
   data.forEach((h, i) => {
     const x = (i / (data.length - 1)) * W;
@@ -858,6 +809,7 @@ function drawChart() {
   ctx.fillStyle = "rgba(252,76,2,0.1)";
   ctx.fill();
 
+  // Ligne principale
   ctx.beginPath();
   data.forEach((h, i) => {
     const x = (i / (data.length - 1)) * W;
@@ -870,6 +822,7 @@ function drawChart() {
   ctx.lineJoin    = "round";
   ctx.stroke();
 
+  // Points
   data.forEach((h, i) => {
     const x = (i / (data.length - 1)) * W;
     const y = H - ((h.vo2 - minVo2) / range) * (H - 20) - 10;
@@ -886,6 +839,7 @@ function drawChart() {
 function getTrainingPacesFrom5k(timeStr) {
   const t = parseTime(timeStr);
   if (!t || t <= 0) return null;
+
   const racePace = t / 5;
 
   return {
@@ -903,6 +857,7 @@ function generateSmartPlan() {
   const out   = document.getElementById("planOut");
 
   if (!input) { out.innerText = "Entre un temps valide, ex : 22:30"; return; }
+
   const paces = getTrainingPacesFrom5k(input);
   if (!paces) { out.innerText = "Format invalide. Utilise mm:ss (ex : 22:30)."; return; }
 
@@ -982,7 +937,10 @@ function generateCustomPlan() {
   const level = (document.getElementById("levelInput").value || "").toLowerCase().trim();
   const out   = document.getElementById("customPlanOut");
 
-  if (!dist || !level) { out.innerText = "Remplis la distance et le niveau."; return; }
+  if (!dist || !level) {
+    out.innerText = "Remplis la distance et le niveau.";
+    return;
+  }
 
   let targetPace = null;
   if (time) {
@@ -991,15 +949,65 @@ function generateCustomPlan() {
   }
 
   const paceStr = targetPace ? `Allure cible : ${formatPace(targetPace)}\n` : "";
+
   let base = "";
 
   if (level === "débutant" || level === "debutant") {
-    base = `NIVEAU DÉBUTANT\n\n${paceStr}Principe : construire l'endurance progressivement, 3 séances/semaine max.\n\n  Semaine type :\n  Mardi    — Footing 25-35 min en endurance\n  Jeudi    — Footing 30 min + 4 x 1 min d'effort\n  Samedi   — Sortie longue 40-50 min tranquille`;
-  } else if (level === "moyen" || level === "intermédiaire" || level === "intermediaire") {
-    base = `NIVEAU INTERMÉDIAIRE\n\n${paceStr}Principe : 4 séances/semaine avec une séance qualitative.\n\n  Semaine type :\n  Mardi    — Footing 45 min endurance\n  Mercredi — Fractionné : 6 x 3 min effort\n  Vendredi — Seuil : 20-25 min continu\n  Samedi   — Sortie longue 1h à 1h15`;
-  } else if (level === "fort" || level === "avancé" || level === "avance") {
-    base = `NIVEAU AVANCÉ\n\n${paceStr}Principe : 5-6 séances/semaine, travail spécifique.\n\n  Semaine type :\n  Mardi    — Fractionné court : 10 x 400 m à VMA\n  Jeudi    — Seuil : 2 x 15 min\n  Samedi   — Sortie longue 1h30 à 2h`;
-  } else {
+    base =
+`NIVEAU DÉBUTANT
+
+${paceStr}Principe : construire l'endurance progressivement, 3 séances/semaine max.
+
+  Semaine type :
+  Mardi    — Footing 25-35 min en endurance (conversation possible)
+  Jeudi    — Footing 30 min + 4 x 1 min d'effort / 2 min récup
+  Samedi   — Sortie longue 40-50 min très tranquille
+
+  Conseils :
+  • Ne jamais dépasser 10 % de volume en plus par semaine
+  • Priorité au temps sur pied, pas à la vitesse
+  • 2 jours de repos minimum`;
+  }
+
+  else if (level === "moyen" || level === "intermédiaire" || level === "intermediaire") {
+    base =
+`NIVEAU INTERMÉDIAIRE
+
+${paceStr}Principe : 4 séances/semaine avec une séance qualitative.
+
+  Semaine type :
+  Lundi    — Repos
+  Mardi    — Footing 45 min endurance fondamentale
+  Mercredi — Fractionné : 6 x 3 min effort / 2 min récup
+  Vendredi — Seuil : 20-25 min continu à allure soutenue
+  Samedi   — Sortie longue 1h à 1h15
+
+  Conseils :
+  • Alterner semaines chargées et semaines allégées
+  • Contrôler l'allure en sortie longue (on doit pouvoir parler)`;
+  }
+
+  else if (level === "fort" || level === "avancé" || level === "avance") {
+    base =
+`NIVEAU AVANCÉ
+
+${paceStr}Principe : 5-6 séances/semaine, travail spécifique à l'objectif.
+
+  Semaine type :
+  Lundi    — Récupération active 30 min
+  Mardi    — Fractionné court : 10 x 400 m à VMA
+  Mercredi — Endurance 1h à allure cool
+  Jeudi    — Seuil : 2 x 15 min / récup 3 min
+  Vendredi — Repos ou 30 min léger
+  Samedi   — Sortie longue 1h30 à 2h
+  Dimanche — Footing actif 45 min
+
+  Conseils :
+  • Planifier une semaine de récup toutes les 3-4 semaines
+  • Inclure des séances spécifiques à l'allure de course`;
+  }
+
+  else {
     out.innerText = "Niveau non reconnu. Tape : débutant, moyen ou fort.";
     return;
   }
