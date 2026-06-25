@@ -1,15 +1,25 @@
 <!DOCTYPE html>
+
 <html lang="fr">
 
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Contact - RunCalc Pro Plus</title>
 
+<meta name="description" content="Contactez RunCalc Pro Plus pour signaler un bug, proposer une amélioration ou poser une question.">
+
 <style>
-body{
-font-family: Arial, sans-serif;
+
+*{
 margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
 background:#0f172a;
 color:white;
 }
@@ -17,104 +27,198 @@ color:white;
 nav{
 display:flex;
 justify-content:center;
-gap:20px;
-padding:15px;
-background:#0b1220;
+gap:25px;
+padding:18px;
+background:#111827;
 position:sticky;
 top:0;
+z-index:100;
 }
 
 nav a{
 color:white;
 text-decoration:none;
-opacity:0.8;
-font-size:14px;
+font-weight:600;
+opacity:.85;
+transition:.2s;
 }
 
 nav a:hover{
 opacity:1;
+color:#fc5200;
+}
+
+.hero{
+background:linear-gradient(135deg,#fc5200,#ff6b1a);
+padding:90px 20px;
+text-align:center;
+}
+
+.badge{
+display:inline-block;
+padding:10px 18px;
+border-radius:999px;
+background:rgba(255,255,255,.18);
+margin-bottom:20px;
+font-size:14px;
+}
+
+.hero h1{
+font-size:60px;
+margin-bottom:15px;
+}
+
+.hero p{
+max-width:700px;
+margin:auto;
+font-size:20px;
+opacity:.95;
+}
+
+.stats{
+display:flex;
+justify-content:center;
+gap:25px;
+margin-top:40px;
+flex-wrap:wrap;
+}
+
+.stat{
+background:rgba(255,255,255,.15);
+padding:20px 25px;
+border-radius:18px;
+min-width:150px;
+}
+
+.stat strong{
+display:block;
+font-size:32px;
+margin-bottom:5px;
 }
 
 .container{
-max-width:750px;
+max-width:1000px;
 margin:auto;
-padding:40px 20px;
+padding:60px 20px;
 }
 
-h1{
-text-align:center;
-margin-bottom:10px;
-}
-
-.subtitle{
-text-align:center;
-color:#9ca3af;
+.contact-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:25px;
 margin-bottom:30px;
-font-size:14px;
 }
 
-.card{
+.info-card{
 background:#1e293b;
 padding:25px;
-border-radius:12px;
-box-shadow:0 3px 12px rgba(0,0,0,0.3);
+border-radius:20px;
+border:1px solid rgba(255,255,255,.08);
+}
+
+.info-card h3{
+margin-bottom:10px;
+color:#fc5200;
+}
+
+.form-card{
+background:#1e293b;
+padding:35px;
+border-radius:24px;
+border:1px solid rgba(255,255,255,.08);
+}
+
+.form-card h2{
+margin-bottom:25px;
 }
 
 label{
-font-size:13px;
+display:block;
+margin-bottom:8px;
+font-size:14px;
 color:#cbd5e1;
 }
 
-input, textarea{
+input,
+textarea{
 width:100%;
-padding:12px;
-margin-top:6px;
-margin-bottom:15px;
-border-radius:10px;
+padding:15px;
 border:none;
-background:#2a2a2a;
+border-radius:14px;
+background:#0f172a;
 color:white;
-font-size:14px;
+margin-bottom:20px;
+font-size:15px;
 outline:none;
+border:1px solid transparent;
 }
 
-input:focus, textarea:focus{
-border:1px solid #22c55e;
+input:focus,
+textarea:focus{
+border-color:#fc5200;
 }
 
 button{
 width:100%;
-padding:12px;
-background:#22c55e;
+padding:16px;
 border:none;
+border-radius:14px;
+background:#fc5200;
 color:white;
-border-radius:10px;
+font-size:16px;
+font-weight:700;
 cursor:pointer;
-font-weight:bold;
-font-size:15px;
-transition:0.2s;
+transition:.3s;
 }
 
 button:hover{
-background:#16a34a;
-transform:scale(1.02);
-}
-
-.info{
-margin-top:20px;
-font-size:13px;
-color:#9ca3af;
-line-height:1.6;
+transform:translateY(-2px);
+background:#ff6b1a;
 }
 
 .email-box{
-margin-top:20px;
-padding:15px;
+margin-top:25px;
+padding:20px;
 background:#111827;
-border-left:4px solid #22c55e;
-border-radius:8px;
-font-size:14px;
+border-left:5px solid #fc5200;
+border-radius:12px;
 }
+
+.promise{
+margin-top:40px;
+padding:40px;
+text-align:center;
+border-radius:24px;
+background:linear-gradient(135deg,#fc5200,#ff6b1a);
+}
+
+.promise h2{
+margin-bottom:15px;
+font-size:35px;
+}
+
+footer{
+text-align:center;
+padding:40px;
+color:#94a3b8;
+}
+
+@media(max-width:768px){
+
+.hero h1{
+font-size:42px;
+}
+
+.hero p{
+font-size:17px;
+}
+
+.contact-grid{
+grid-template-columns:1fr;
+}
+
+}
+
 </style>
 
 </head>
@@ -124,51 +228,125 @@ font-size:14px;
 <nav>
 <a href="index.html">Accueil</a>
 <a href="runcalc.html">Outils</a>
-<a href="temps.html">Temps</a>
+<a href="guide-running.html">Guide</a>
 <a href="contact.html">Contact</a>
 <a href="confidentialite.html">Confidentialité</a>
 </nav>
 
-<div class="container">
+<header class="hero">
 
-<h1>📩 Contact</h1>
-<div class="subtitle">
-Une question, un bug ou une idée ? Réponse rapide.
+<span class="badge">💬 Support RunCalc</span>
+
+<h1>Nous contacter</h1>
+
+<p>
+Une question, un bug, une suggestion ou une idée pour améliorer RunCalc ?
+Nous lisons chaque message.
+</p>
+
+<div class="stats">
+
+<div class="stat">
+<strong>24-48h</strong>
+Réponse moyenne
 </div>
 
-<div class="card">
+<div class="stat">
+<strong>100%</strong>
+Messages lus
+</div>
+
+<div class="stat">
+<strong>∞</strong>
+Idées acceptées
+</div>
+
+</div>
+
+</header>
+
+<div class="container">
+
+<div class="contact-grid">
+
+<div class="info-card">
+<h3>🐛 Signaler un bug</h3>
+<p>
+Un calcul incorrect, un problème d'affichage ou une erreur sur le site ?
+Décrivez précisément le problème rencontré.
+</p>
+</div>
+
+<div class="info-card">
+<h3>💡 Proposer une amélioration</h3>
+<p>
+RunCalc évolue grâce aux retours des coureurs.
+Toutes les suggestions sont étudiées.
+</p>
+</div>
+
+<div class="info-card">
+<h3>🏃 Questions Running</h3>
+<p>
+Besoin d'aide pour comprendre une allure, une séance ou un calcul ?
+Nous pouvons vous orienter.
+</p>
+</div>
+
+<div class="info-card">
+<h3>⚡ Réponse rapide</h3>
+<p>
+La majorité des demandes reçoivent une réponse sous 24 à 48 heures.
+</p>
+</div>
+
+</div>
+
+<div class="form-card">
+
+<h2>📩 Envoyer un message</h2>
 
 <form action="https://formsubmit.co/esteban.doublet74@gmail.com" method="POST">
 
-<!-- protection anti-spam simple -->
 <input type="hidden" name="_captcha" value="false">
 
-<label>Ton nom</label>
-<input type="text" name="name" placeholder="Ex : Lucas" required>
+<label>Nom</label> <input type="text" name="name" placeholder="Votre nom" required>
 
-<label>Ton email</label>
-<input type="email" name="email" placeholder="exemple@gmail.com" required>
+<label>Email</label> <input type="email" name="email" placeholder="votre@email.com" required>
 
-<label>Ton message</label>
-<textarea name="message" rows="6" placeholder="Explique ton problème ou ton idée..." required></textarea>
+<label>Message</label>
 
-<button type="submit">Envoyer le message</button>
+<textarea name="message" rows="7" placeholder="Décrivez votre demande..." required></textarea>
+
+<button type="submit">
+Envoyer le message
+</button>
 
 </form>
 
 <div class="email-box">
-📧 Email direct : <b>esteban.doublet74@gmail.com</b>
-</div>
-
-<div class="info">
-✔ Réponse sous 24 à 48h<br>
-✔ Support pour bugs / calculs / site<br>
-✔ Idées d’amélioration acceptées
+📧 Contact direct : <strong>esteban.doublet74@gmail.com</strong>
 </div>
 
 </div>
 
+<div class="promise">
+
+<h2>Notre engagement</h2>
+
+<p>
+Chaque retour permet d'améliorer RunCalc.
+Que ce soit un bug, une suggestion ou une question,
+nous faisons notre maximum pour répondre rapidement.
+</p>
+
 </div>
+
+</div>
+
+<footer>
+© 2026 RunCalc Pro Plus — Contact & Support
+</footer>
 
 </body>
 </html>
