@@ -1,305 +1,196 @@
-/* --- DESIGN GLOBAL (Inspiré Strava Pro) --- */
+/* ============================================================
+   DESIGN SYSTÈME GLOBAL - RUNCALC PRO (style.css)
+   ============================================================ */
 :root {
-    --strava-orange: #FC4C02;
-    --dark-bg: #0B0F19;
-    --card-bg: #111827;
-    --text-main: #FFFFFF;
-    --text-muted: #9CA3AF;
-    --border-color: rgba(255, 255, 255, 0.08);
+  --orange: #fc4c02;
+  --orange-hover: #ff6b2c;
+  --bg: #0d0d0d;
+  --card: #161616;
+  --card-hover: #1e1e1e;
+  --text: #ffffff;
+  --text-muted: #a0a0a0;
+  --border: #262626;
+  --success: #10b981;
 }
 
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: var(--dark-bg);
-    color: var(--text-main);
-    line-height: 1.6;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  padding-bottom: 60px;
 }
 
-a {
-    color: inherit;
-    text-decoration: none;
+/* Header & Navigation */
+header {
+  background: linear-gradient(135deg, #111111, #1a1a1a);
+  padding: 30px 20px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
 }
 
-/* --- NAVIGATION --- */
+header h1 {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
+
+header p {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
 nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 5%;
-    background-color: rgba(17, 24, 39, 0.8);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border-color);
-    position: sticky;
-    top: 0;
-    z-index: 100;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(13, 13, 13, 0.9);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
 }
 
-.logo {
-    font-size: 1.3rem;
-    font-weight: 800;
-    letter-spacing: -0.5px;
+nav a {
+  color: #eee;
+  text-decoration: none;
+  padding: 8px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  transition: all .2s ease;
+  font-size: 13px;
+  font-weight: 500;
 }
 
-.logo span {
-    color: var(--strava-orange);
+nav a:hover, nav a.active { 
+  background: var(--orange); 
+  border-color: var(--orange);
+  color: white;
 }
 
-.nav-links {
-    display: flex;
-    gap: 20px;
-    list-style: none;
-}
-
-.nav-links a {
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: var(--text-muted);
-    transition: color 0.2s;
-}
-
-.nav-links a:hover {
-    color: var(--strava-orange);
-}
-
-/* --- HERO SECTION --- */
-.hero {
-    text-align: center;
-    padding: 100px 20px 80px 20px;
-    background: radial-gradient(circle at top, rgba(252, 76, 2, 0.15) 0%, transparent 60%);
-}
-
-.badge {
-    background: rgba(252, 76, 2, 0.2);
-    color: #FF6624;
-    display: inline-block;
-    padding: 6px 14px;
-    border-radius: 50px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 20px;
-}
-
-.hero h1 {
-    font-size: 3rem;
-    font-weight: 800;
-    margin-bottom: 15px;
-    letter-spacing: -1px;
-}
-
-.hero p {
-    font-size: 1.2rem;
-    color: var(--text-muted);
-    max-width: 600px;
-    margin: 0 auto 30px auto;
-}
-
-.btn-primary {
-    display: inline-block;
-    background-color: var(--strava-orange);
-    color: white;
-    padding: 14px 28px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 1rem;
-    transition: transform 0.2s, background-color 0.2s;
-    box-shadow: 0 4px 14px rgba(252, 76, 2, 0.3);
-}
-
-.btn-primary:hover {
-    background-color: #E04302;
-    transform: translateY(-2px);
-}
-
-/* --- CHIFFRES CLÉS --- */
-.stats-bar {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    max-width: 1000px;
-    margin: -20px auto 40px auto;
-    padding: 0 20px;
-    flex-wrap: wrap;
-}
-
-.stat-tag {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    padding: 12px 20px;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-/* --- ZONE DES OUTILS (Grid) --- */
+/* Layout */
 .container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 40px 20px;
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
 }
 
 .section-title {
-    font-size: 1.75rem;
-    font-weight: 700;
-    margin-bottom: 25px;
-    text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 35px 0 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
 }
 
+/* Cards & Formulaires */
 .card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    padding: 25px;
-    border-radius: 16px;
-    text-align: left;
-    transition: all 0.25s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 4px;
-    height: 100%;
-    background-color: var(--strava-orange);
-    opacity: 0;
-    transition: opacity 0.2s;
+  background: var(--card);
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  transition: all .25s ease;
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    border-color: rgba(252, 76, 2, 0.4);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-}
-
-.card:hover::before {
-    opacity: 1;
-}
-
-.card-icon {
-    font-size: 1.5rem;
-    margin-bottom: 15px;
+  border-color: #3a3a3a;
+  background-color: var(--card-hover);
 }
 
 .card h3 {
-    font-size: 1.15rem;
-    margin-bottom: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 14px;
 }
 
-.card p {
-    font-size: 0.85rem;
-    color: var(--text-muted);
+.stat {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--orange);
+  letter-spacing: -1px;
+  margin: 5px 0;
 }
 
-/* --- FAQ --- */
-.faq-section {
-    background-color: rgba(17, 24, 39, 0.4);
-    border-top: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
-    padding: 60px 20px;
-    margin: 50px 0;
+.label {
+  color: var(--text-muted);
+  font-size: 12px;
 }
 
-.faq-container {
-    max-width: 700px;
-    margin: 0 auto;
+input, select {
+  width: 100%;
+  padding: 12px 14px;
+  margin-top: 8px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #202020;
+  color: white;
+  font-size: 14px;
+  transition: border .2s;
 }
 
-.faq-item {
-    margin-bottom: 12px;
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    overflow: hidden;
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--orange);
 }
 
-.faq-q {
-    width: 100%;
-    padding: 18px 20px;
-    background: none;
-    border: none;
-    color: var(--text-main);
-    text-align: left;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: var(--orange);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background .2s;
 }
 
-.faq-q::after {
-    content: '+';
-    color: var(--strava-orange);
-    font-size: 1.2rem;
-    transition: transform 0.2s;
+button:hover { background: var(--orange-hover); }
+
+button.danger { background: #2a1414; color: #f87171; border: 1px solid #451a1a; }
+button.danger:hover { background: #451a1a; }
+
+/* Résultats & Listes */
+.result {
+  margin-top: 14px;
+  padding: 12px;
+  background: #1e1e1e;
+  border-radius: 10px;
+  color: var(--orange);
+  font-weight: 600;
+  font-size: 14px;
+  border-left: 3px solid var(--orange);
 }
 
-.faq-item.open .faq-q::after {
-    content: '−';
+.run-item {
+  background: var(--card);
+  padding: 14px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  font-size: 13px;
 }
 
-.faq-a {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease-out;
-    padding: 0 20px;
-    color: var(--text-muted);
-    font-size: 0.95rem;
-}
-
-.faq-item.open .faq-a {
-    padding-bottom: 18px;
-}
-
-/* --- PUBLICITÉS --- */
-.ad-container {
-    margin: 30px auto;
-    text-align: center;
-    max-width: 728px;
-    min-height: 90px;
-    background: rgba(255,255,255,0.02);
-    border: 1px dashed rgba(255,255,255,0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* --- FOOTER --- */
-footer {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    border-top: 1px solid var(--border-color);
-}
-
-.footer-links {
-    margin-top: 10px;
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    font-size: 0.8rem;
-}
-
-.footer-links a:hover {
-    text-decoration: underline;
-}
+/* Pubs & Footer */
+.ads { margin: 30px 0; text-align: center; }
+.footer { margin-top: 60px; padding: 30px; text-align: center; color: #666; font-size: 13px; border-top: 1px solid var(--border); }
