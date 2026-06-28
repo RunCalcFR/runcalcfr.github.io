@@ -4,6 +4,3 @@ Allow: /
 Disallow: /confidentielle.html
 
 Sitemap: https://runcalcfr.github.io/sitemap.xml
-Host: https://runcalcfr.github.io
-
-Crawl-delay: 0
