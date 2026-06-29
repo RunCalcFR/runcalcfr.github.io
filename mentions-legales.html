@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mentions légales | RunCalc Pro Plus</title>
+  <meta name="description" content="Mentions légales de RunCalc Pro Plus — éditeur, hébergeur, propriété intellectuelle et responsabilités." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── NAV ── */
+    nav {
+      background: rgba(15,17,23,0.95);
+      border-bottom: 1px solid rgba(252,76,2,0.2);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+    nav .brand {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #FC4C02;
+      text-decoration: none;
+      margin-right: auto;
+    }
+    nav a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color .2s;
+    }
+    nav a:hover { color: #FC4C02; }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 3.5rem 1.5rem 2rem;
+      background: linear-gradient(135deg, rgba(252,76,2,0.08) 0%, rgba(255,106,53,0.05) 100%);
+      border-bottom: 1px solid rgba(252,76,2,0.15);
+    }
+    .hero .badge {
+      display: inline-block;
+      background: rgba(252,76,2,0.15);
+      color: #FC4C02;
+      border: 1px solid rgba(252,76,2,0.3);
+      border-radius: 999px;
+      padding: .35rem 1rem;
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .hero h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      background: linear-gradient(135deg, #FC4C02, #FF6A35);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: .75rem;
+    }
+    .hero p {
+      color: #94a3b8;
+      font-size: 1rem;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* ── MAIN ── */
+    main {
+      flex: 1;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+      width: 100%;
+    }
+
+    /* ── SECTIONS ── */
+    .section {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(252,76,2,0.12);
+      border-radius: 14px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      transition: border-color .2s;
+    }
+    .section:hover { border-color: rgba(252,76,2,0.28); }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #FFD0B5;
+      margin-bottom: 1.2rem;
+    }
+    .section-title .icon {
+      font-size: 1.2rem;
+    }
+
+    .section p, .section li {
+      color: #94a3b8;
+      font-size: .93rem;
+      line-height: 1.75;
+    }
+    .section p + p { margin-top: .75rem; }
+
+    .section ul {
+      list-style: none;
+      padding: 0;
+    }
+    .section ul li {
+      padding: .3rem 0 .3rem 1.2rem;
+      position: relative;
+    }
+    .section ul li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: #FC4C02;
+      font-weight: 700;
+    }
+
+    .info-row {
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+    .info-item {
+      display: flex;
+      gap: .75rem;
+      align-items: baseline;
+      font-size: .93rem;
+    }
+    .info-label {
+      color: #FC4C02;
+      font-weight: 600;
+      min-width: 160px;
+      flex-shrink: 0;
+    }
+    .info-value {
+      color: #94a3b8;
+    }
+    .info-value a {
+      color: #FC4C02;
+      text-decoration: none;
+    }
+    .info-value a:hover { text-decoration: underline; }
+
+    .update-note {
+      text-align: center;
+      color: #475569;
+      font-size: .8rem;
+      margin-top: 2.5rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      border-top: 1px solid rgba(252,76,2,0.15);
+      color: #475569;
+      font-size: .83rem;
+    }
+    footer a { color: #FC4C02; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 600px) {
+      .info-item { flex-direction: column; gap: .1rem; }
+      .info-label { min-width: unset; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="brand" href="https://runcalcfr.github.io/index.html">⚡ RunCalc Pro Plus</a>
+    <a href="https://runcalcfr.github.io/index.html">Accueil</a>
+    <a href="https://runcalcfr.github.io/executercalc.html">Outils</a>
+    <a href="https://runcalcfr.github.io/temps.html">Temps &amp; Allures</a>
+    <a href="https://runcalcfr.github.io/guide-running.html">Guide Running</a>
+    <a href="https://runcalcfr.github.io/contact.html">Contact</a>
+  </nav>
+
+  <div class="hero">
+    <div class="badge">⚖️ Transparence</div>
+    <h1>Mentions légales</h1>
+    <p>Informations légales relatives à l'éditeur, l'hébergeur et l'utilisation du site RunCalc Pro Plus.</p>
+  </div>
+
+  <main>
+
+    <!-- Éditeur -->
+    <div class="section">
+      <div class="section-title"><span class="icon">👤</span> Éditeur du site</div>
+      <div class="info-row">
+        <div class="info-item">
+          <span class="info-label">Nom du site</span>
+          <span class="info-value">RunCalc Pro Plus</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Responsable</span>
+          <span class="info-value">Esteban Doublet</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Statut</span>
+          <span class="info-value">Particulier — site non commercial</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Contact</span>
+          <span class="info-value"><a href="mailto:esteban.doublet74@gmail.com">esteban.doublet74@gmail.com</a></span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">URL du site</span>
+          <span class="info-value"><a href="https://runcalcfr.github.io/" target="_blank" rel="noopener">https://runcalcfr.github.io/</a></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hébergeur -->
+    <div class="section">
+      <div class="section-title"><span class="icon">🖥️</span> Hébergeur</div>
+      <div class="info-row">
+        <div class="info-item">
+          <span class="info-label">Société</span>
+          <span class="info-value">GitHub, Inc.</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Service</span>
+          <span class="info-value">GitHub Pages</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Adresse</span>
+          <span class="info-value">88 Colin P Kelly Jr St, San Francisco, CA 94107, États-Unis</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Site web</span>
+          <span class="info-value"><a href="https://pages.github.com" target="_blank" rel="noopener">pages.github.com</a></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Propriété intellectuelle -->
+    <div class="section">
+      <div class="section-title"><span class="icon">🛡️</span> Propriété intellectuelle</div>
+      <p>L'ensemble des contenus présents sur RunCalc Pro Plus — textes, outils de calcul, design, structure et code source — est la propriété exclusive de l'éditeur du site, sauf mention contraire.</p>
+      <p>Toute reproduction, distribution, modification ou utilisation de ces contenus, même partielle, sans autorisation préalable écrite de l'éditeur est strictement interdite et constitue une contrefaçon au sens des articles L.335-2 et suivants du Code de la propriété intellectuelle.</p>
+    </div>
+
+    <!-- Responsabilité -->
+    <div class="section">
+      <div class="section-title"><span class="icon">⚠️</span> Limitation de responsabilité</div>
+      <p>Les résultats fournis par les calculateurs de RunCalc Pro Plus sont des estimations à but informatif. Ils ne constituent pas un avis médical ou sportif professionnel.</p>
+      <p>L'éditeur ne saurait être tenu responsable :</p>
+      <ul>
+        <li>d'une utilisation inappropriée des résultats fournis par les outils ;</li>
+        <li>de blessures ou de dommages résultant de l'application des données calculées ;</li>
+        <li>d'une indisponibilité temporaire du site ;</li>
+        <li>du contenu des sites tiers accessibles via des liens hypertextes présents sur le site.</li>
+      </ul>
+    </div>
+
+    <!-- Données personnelles -->
+    <div class="section">
+      <div class="section-title"><span class="icon">🔒</span> Données personnelles</div>
+      <p>RunCalc Pro Plus ne collecte aucune donnée personnelle identifiable sans le consentement de l'utilisateur. Les calculs sont effectués directement dans le navigateur et aucune donnée sensible n'est transmise à des serveurs tiers.</p>
+      <p>Pour toute information sur le traitement des données, consultez notre <a href="https://runcalcfr.github.io/confidentialite.html" style="color:#FC4C02;">politique de confidentialité</a>.</p>
+    </div>
+
+    <!-- Cookies -->
+    <div class="section">
+      <div class="section-title"><span class="icon">🍪</span> Cookies</div>
+      <p>Le site peut utiliser des cookies techniques nécessaires à son bon fonctionnement, ainsi que des cookies de mesure d'audience (statistiques anonymes) et des cookies publicitaires via Google AdSense afin de financer le développement des outils gratuits proposés.</p>
+      <p>Vous pouvez configurer votre navigateur pour refuser les cookies à tout moment. Certaines fonctionnalités du site peuvent alors être affectées.</p>
+    </div>
+
+    <!-- Droit applicable -->
+    <div class="section">
+      <div class="section-title"><span class="icon">⚖️</span> Droit applicable</div>
+      <p>Les présentes mentions légales sont régies par le droit français. En cas de litige, les tribunaux compétents sont ceux du ressort de la juridiction française, sous réserve d'une attribution de compétence spécifique découlant d'un texte de loi ou réglementaire particulier.</p>
+    </div>
+
+    <!-- Contact -->
+    <div class="section">
+      <div class="section-title"><span class="icon">💬</span> Contact</div>
+      <p>Pour toute question relative aux présentes mentions légales ou pour exercer vos droits, vous pouvez contacter l'éditeur à l'adresse suivante : <a href="mailto:esteban.doublet74@gmail.com" style="color:#FC4C02;">esteban.doublet74@gmail.com</a></p>
+      <p>Vous pouvez également utiliser le <a href="https://runcalcfr.github.io/contact.html" style="color:#FC4C02;">formulaire de contact</a> disponible sur le site.</p>
+    </div>
+
+    <p class="update-note">Dernière mise à jour : juin 2026</p>
+
+  </main>
+
+  <footer>
+    © 2026 RunCalc Pro Plus —
+    <a href="https://runcalcfr.github.io/confidentialite.html">Confidentialité</a> ·
+    <a href="https://runcalcfr.github.io/contact.html">Contact</a>
+  </footer>
+
+</body>
+</html>
